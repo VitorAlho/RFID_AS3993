@@ -84,26 +84,26 @@ int main(void)
     SYSTEM_Initialize();
     
     // Seleciona a antena 1
-    SEL_BBA(1);
-    SEL_A1_4(1);
-    SEL_A1_2(1);
-    SEL_A3_4(0);
+    SEL_BBA_SetHigh();
+    SEL_A1_4_SetHigh();
+    SEL_A1_2_SetHigh();
+    SEL_A3_4_SetLow();
     
     Frequencies.freq[0] = 915000;
     Frequencies.numFreqs = 1;
         readerInitStatus = as3993Initialize(Frequencies.freq[0]);
         
     while(1){     
-        LIGA_PA(1);
+        LIGA_PA_SetHigh();
         num_of_tags = inventoryGen2();
         if(num_of_tags>=1){
             int i=0;
-            LED_TAG(1);
+            LED_TAG_SetHigh();
             i=1;
         }
-        LIGA_PA(0);
+        LIGA_PA_SetLow();
         __delay_ms(10);
-        LED_TAG(0);
+        LED_TAG_SetLow();
     } 
     
     return 0;

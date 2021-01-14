@@ -4,13 +4,13 @@ Tool Name:
   c:\program files\microchip\xc16\v1.61\bin\bin\..\bin/elf-ld.exe
 
 Command:
-  -TC:\\Users\\Vitor\\AppData\\Local\\Temp\\tmp00002678.00 \
-  -TC:\\Users\\Vitor\\AppData\\Local\\Temp\\tmp00002678.01 \
-  -TC:\\Users\\Vitor\\AppData\\Local\\Temp\\tmp00002678.02 \
-  -TC:\\Users\\Vitor\\AppData\\Local\\Temp\\tmp00002678.03 \
-  -TC:\\Users\\Vitor\\AppData\\Local\\Temp\\tmp00002678.04 \
-  -TC:\\Users\\Vitor\\AppData\\Local\\Temp\\tmp00002678.05 \
-  -TC:\\Users\\Vitor\\AppData\\Local\\Temp\\tmp00002678.06 \
+  -TC:\\Users\\Vitor\\AppData\\Local\\Temp\\tmp000023dc.00 \
+  -TC:\\Users\\Vitor\\AppData\\Local\\Temp\\tmp000023dc.01 \
+  -TC:\\Users\\Vitor\\AppData\\Local\\Temp\\tmp000023dc.02 \
+  -TC:\\Users\\Vitor\\AppData\\Local\\Temp\\tmp000023dc.03 \
+  -TC:\\Users\\Vitor\\AppData\\Local\\Temp\\tmp000023dc.04 \
+  -TC:\\Users\\Vitor\\AppData\\Local\\Temp\\tmp000023dc.05 \
+  -TC:\\Users\\Vitor\\AppData\\Local\\Temp\\tmp000023dc.06 \
   -p24FJ256DA210 \
   --mdfp=C:/Users/Vitor/.mchp_packs/Microchip/PIC24F-DA-GB_DFP/1.3.63/xc16 \
   -o \
@@ -134,11 +134,11 @@ section                    address   length (PC units)   length (bytes) (dec)
 .text                        0x200               0x694           0x9de  (2526)
 .text                        0x894              0x423a          0x6357  (25431)
 .dinit                      0x4ace                0x76            0xb1  (177)
-.text                       0x4b44                0xfa           0x177  (375)
-.init.delay32               0x4c3e                0x1c            0x2a  (42)
-.text                       0x4c5a                0x58            0x84  (132)
+.text                       0x4b44                0xfc           0x17a  (378)
+.init.delay32               0x4c40                0x1c            0x2a  (42)
+.text                       0x4c5c                0x58            0x84  (132)
 
-                 Total "program" memory used (bytes):         0x700b  (28683) 10%
+                 Total "program" memory used (bytes):         0x700e  (28686) 10%
 
 
 "data" Memory  [Origin = 0x800, Length = 0x18000]
@@ -400,10 +400,10 @@ External Symbols in Program Memory (by address):
                   0x004b9a                  _ligaTimer2
                   0x004bae                  _CLOCK_Initialize
                   0x004bfa                  _main
-                  0x004c3e                  ___delay32
-                  0x004c5a                  _INTERRUPT_Initialize
-                  0x004c8e                  _SYSTEM_Initialize
-                  0x004ca6                  _EXT_INT_Initialize
+                  0x004c40                  ___delay32
+                  0x004c5c                  _INTERRUPT_Initialize
+                  0x004c90                  _SYSTEM_Initialize
+                  0x004ca8                  _EXT_INT_Initialize
 
 External Symbols in Program Memory (by name):
 
@@ -412,9 +412,9 @@ External Symbols in Program Memory (by name):
                   0x0046f0                  _AS3993_Enable
                   0x004700                  _AS3993_EnableSpiSlaveSelect
                   0x004bae                  _CLOCK_Initialize
-                  0x004ca6                  _EXT_INT_Initialize
+                  0x004ca8                  _EXT_INT_Initialize
                   0x002fe6                  _EX_INT1_CallBack
-                  0x004c5a                  _INTERRUPT_Initialize
+                  0x004c5c                  _INTERRUPT_Initialize
                   0x00485e                  _InitSPI1
                   0x00494a                  _PIN_MANAGER_Initialize
                   0x004722                  _SPI1_Exchange
@@ -424,7 +424,7 @@ External Symbols in Program Memory (by name):
                   0x004710                  _SPI1_Initialize
                   0x004856                  _SPI1_StatusGet
                   0x004840                  _SPI1_TransferModeGet
-                  0x004c8e                  _SYSTEM_Initialize
+                  0x004c90                  _SYSTEM_Initialize
                   0x004b8c                  _TMR3_CallBack
                   0x004a66                  _TMR3_Counter16BitGet
                   0x004a54                  _TMR3_Counter16BitSet
@@ -447,7 +447,7 @@ External Symbols in Program Memory (by name):
                   0x00032c                  __StackError
                   0x0003e2                  __T2Interrupt
                   0x0003ac                  __T3Interrupt
-                  0x004c3e                  ___delay32
+                  0x004c40                  ___delay32
                   0x0005cc                  ___divdi3
                   0x0003f0                  ___eqsf2
                   0x000710                  ___floatundisf
@@ -864,7 +864,7 @@ __CONFIG1
  .debug_abbrev    0x0012a7        0x145 build/default/debug/platform.o
  .debug_abbrev    0x0013ec        0x10c build/default/debug/spi1.o
 
-.debug_line       0x000000       0x1d2a
+.debug_line       0x000000       0x1d2b
  *(.debug_line)
  .debug_line      0x000000        0x112 build/default/debug/mcc_generated_files/clock.o
  .debug_line      0x000112        0x113 build/default/debug/mcc_generated_files/interrupt_manager.o
@@ -875,16 +875,16 @@ __CONFIG1
  .debug_line      0x0005c0        0x157 build/default/debug/mcc_generated_files/spi1.o
  .debug_line      0x000717        0x121 build/default/debug/mcc_generated_files/ext_int.o
  .debug_line      0x000838        0x14f build/default/debug/mcc_generated_files/tmr3.o
- .debug_line      0x000987        0x123 build/default/debug/main.o
- .debug_line      0x000aaa        0x51a build/default/debug/appl_commands.o
- .debug_line      0x000fc4        0x391 build/default/debug/as3993.o
- .debug_line      0x001355        0x2c2 build/default/debug/gen2.o
- .debug_line      0x001617         0xb6 build/default/debug/global.o
- .debug_line      0x0016cd         0xc5 build/default/debug/tags.o
- .debug_line      0x001792        0x132 build/default/debug/timer.o
- .debug_line      0x0018c4        0x189 build/default/debug/bsp.o
- .debug_line      0x001a4d        0x1ab build/default/debug/platform.o
- .debug_line      0x001bf8        0x132 build/default/debug/spi1.o
+ .debug_line      0x000987        0x124 build/default/debug/main.o
+ .debug_line      0x000aab        0x51a build/default/debug/appl_commands.o
+ .debug_line      0x000fc5        0x391 build/default/debug/as3993.o
+ .debug_line      0x001356        0x2c2 build/default/debug/gen2.o
+ .debug_line      0x001618         0xb6 build/default/debug/global.o
+ .debug_line      0x0016ce         0xc5 build/default/debug/tags.o
+ .debug_line      0x001793        0x132 build/default/debug/timer.o
+ .debug_line      0x0018c5        0x189 build/default/debug/bsp.o
+ .debug_line      0x001a4e        0x1ab build/default/debug/platform.o
+ .debug_line      0x001bf9        0x132 build/default/debug/spi1.o
 
 .debug_frame      0x000000       0x157a
  *(.debug_frame)
@@ -2699,7 +2699,7 @@ __c30_signature
 .dinit            0x004ace         0x76
  .dinit           0x004ace         0x76 data_init
 
-.text             0x004b44         0xfa
+.text             0x004b44         0xfc
  .text            0x004b44         0x6a build/default/debug/timer.o
                   0x004b44                  _slowTimerStart
                   0x004b58                  _slowTimerValue
@@ -2709,19 +2709,19 @@ __c30_signature
                   0x004b9a                  _ligaTimer2
  .text            0x004bae         0x4c build/default/debug/mcc_generated_files/clock.o
                   0x004bae                  _CLOCK_Initialize
- .text            0x004bfa         0x44 build/default/debug/main.o
+ .text            0x004bfa         0x46 build/default/debug/main.o
                   0x004bfa                  _main
 
-.init.delay32     0x004c3e         0x1c
- .init.delay32    0x004c3e         0x1c c:/program files/microchip/xc16/v1.61/bin/bin/../../lib\liblega-pic30-elf.a(delay32da.Leo)
-                  0x004c3e                  ___delay32
+.init.delay32     0x004c40         0x1c
+ .init.delay32    0x004c40         0x1c c:/program files/microchip/xc16/v1.61/bin/bin/../../lib\liblega-pic30-elf.a(delay32da.Leo)
+                  0x004c40                  ___delay32
 
-.text             0x004c5a         0x58
- .text            0x004c5a         0x1a build/default/debug/mcc_generated_files/interrupt_manager.o
-                  0x004c5a                  _INTERRUPT_Initialize
- .text            0x004c74         0x1a build/default/debug/mcc_generated_files/traps.o
-                  0x004c74                  _TRAPS_halt_on_error
- .text            0x004c8e         0x12 build/default/debug/mcc_generated_files/system.o
-                  0x004c8e                  _SYSTEM_Initialize
- .text            0x004ca0         0x12 build/default/debug/mcc_generated_files/ext_int.o
-                  0x004ca6                  _EXT_INT_Initialize
+.text             0x004c5c         0x58
+ .text            0x004c5c         0x1a build/default/debug/mcc_generated_files/interrupt_manager.o
+                  0x004c5c                  _INTERRUPT_Initialize
+ .text            0x004c76         0x1a build/default/debug/mcc_generated_files/traps.o
+                  0x004c76                  _TRAPS_halt_on_error
+ .text            0x004c90         0x12 build/default/debug/mcc_generated_files/system.o
+                  0x004c90                  _SYSTEM_Initialize
+ .text            0x004ca2         0x12 build/default/debug/mcc_generated_files/ext_int.o
+                  0x004ca8                  _EXT_INT_Initialize

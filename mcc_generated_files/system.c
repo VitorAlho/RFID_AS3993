@@ -55,12 +55,12 @@
 
 // CONFIG2
 #pragma config POSCMOD = HS    //Primary Oscillator Select->HS Oscillator mode is selected
-#pragma config IOL1WAY = OFF    //IOLOCK One-Way Set Enable->The IOLOCK bit (OSCCON<6>) can be set once, provided the unlock sequence has been completed. Once set, the Peripheral Pin Select registers cannot be written to a second time.
-#pragma config OSCIOFNC = OFF    //OSCO Pin Configuration->OSCO/CLKO/RC15 functions as port I/O (RC15)
-#pragma config FCKSM = CSDCMD    //Clock Switching and Fail-Safe Clock Monitor->Clock switching is enabled, Fail-Safe Clock Monitor is disabled
-#pragma config FNOSC = PRIPLL    //Initial Oscillator Select->FRC
+#pragma config IOL1WAY = OFF    //IOLOCK One-Way Set Enable->The IOLOCK bit can be set and cleared as needed, provided the unlock sequence has been completed
+#pragma config OSCIOFNC = OFF    //OSCO Pin Configuration->OSCO/CLKO/RC15 functions as CLKO (FOSC/2)
+#pragma config FCKSM = CSECMD    //Clock Switching and Fail-Safe Clock Monitor->Clock switching is enabled, Fail-Safe Clock Monitor is disabled
+#pragma config FNOSC = FRC    //Initial Oscillator Select->FRC
 #pragma config PLL96MHZ = ON    //96MHz PLL Startup Select->96 MHz PLL is enabled automatically on start-up
-#pragma config PLLDIV = DIV4    //96 MHz PLL Prescaler Select->Oscillator input is divided by 4 (16 MHz input)
+#pragma config PLLDIV = DIV3    //96 MHz PLL Prescaler Select->Oscillator input is divided by 3 (12 MHz input)
 #pragma config IESO = OFF    //Internal External Switchover->IESO mode (Two-Speed Start-up) is disabled
 
 // CONFIG1
@@ -77,19 +77,19 @@
 #include "pin_manager.h"
 #include "clock.h"
 #include "system.h"
-#include "tmr3.h"
-#include "spi1.h"
-#include "ext_int.h"
 #include "interrupt_manager.h"
 #include "traps.h"
+#include "ext_int.h"
+#include "tmr3.h"
+#include "spi1.h"
 
 void SYSTEM_Initialize(void)
 {
     PIN_MANAGER_Initialize();
     CLOCK_Initialize();
     INTERRUPT_Initialize();
-    SPI1_Initialize();
     TMR3_Initialize();
+    SPI1_Initialize();
     EXT_INT_Initialize();
 }
 
