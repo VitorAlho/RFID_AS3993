@@ -57,6 +57,7 @@
 #include "string.h"
 #include <limits.h>
 #include "as3993.h"
+#include <stdint.h>
 
 /*
  ******************************************************************************
@@ -91,11 +92,11 @@
 /** Local structure, which provides access to parameters of command() to all
  * appl command functions (call*()). */
 struct CmdBuffer{
-    const u8 *rxData;
-    u16 rxSize;
-    u8 *txData;
-    u16 txSize;
-    s8 result;
+    const uint8_t *rxData;
+    uint16_t rxSize;
+    uint8_t *txData;
+    uint16_t txSize;
+    int8_t result;
 };
 
 /*
@@ -107,19 +108,19 @@ struct CmdBuffer{
 /** Default Gen2 configuration, this is the only supported configuration for AS3980. */
 static struct gen2Config gen2Configuration = {TARI_25, GEN2_LF_40, GEN2_COD_MILLER8, TREXT_ON, 0, GEN2_SESSION_S0, 0};
 /** Start value for Q for Gen2 inventory rounds, this is the only supported value for AS3980. */
-u8 gen2qbegin = 0;
+uint8_t gen2qbegin = 0;
 #else
 
 #if FEMTO2 || FEMTO2_1 || RADON
 /** Default Gen2 configuration, can be changed callConfigGen2(). */
 static struct gen2Config gen2Configuration = {TARI_25, GEN2_LF_256, GEN2_COD_MILLER4, TREXT_OFF, 0, GEN2_SESSION_S0, 0};
 /** Start value for Q for Gen2 inventory rounds, can be changed callConfigGen2(). */
-u8 gen2qbegin = 4;
+uint8_t gen2qbegin = 4;
 #else
 /** Default Gen2 configuration, can be changed callConfigGen2(). */
 static struct gen2Config gen2Configuration = {TARI_125, GEN2_LF_256, GEN2_COD_MILLER4, TREXT_OFF, 0, GEN2_SESSION_S0, 0};
 /** Start value for Q for Gen2 inventory rounds, can be changed callConfigGen2(). */
-u8 gen2qbegin = 4;
+uint8_t gen2qbegin = 4;
 #endif
 
 #endif
@@ -130,12 +131,12 @@ static int num_selects;
 static struct gen2SelectParams selParams[MAX_SELECTS];
 
 /** Internal variable which contains the number of received tags in the last inventory round. */
-static u8 num_of_tags;
+static uint8_t num_of_tags;
 /** New tag data has been received in last inventory round and can be sent in sendTagData() now.*/
-static u8 tagDataAvailable;
+static uint8_t tagDataAvailable;
 
 /** AS3993 init status. This is the return value of as3993Initialize() */
-//u16 readerInitStatus;
+//uint16_t readerInitStatus;
 
 /** Array of Structures which stores all necessary Information about the Tags.
  */
@@ -147,72 +148,72 @@ Tag *selectedTag;
 /**Contains the list of used frequencies.*/
 Freq Frequencies;
 /**Profile settings which can be set via GUI commands. We default to europe settings.*/
-//static u8 guiActiveProfile = 1;
-static u8 guiActiveProfile = 3; //3 = USA
+//static uint8_t guiActiveProfile = 1;
+static uint8_t guiActiveProfile = 3; //3 = USA
 /**Profile settings which can be set via GUI commands. We default to europe settings.*/
-//static u8 guiNumFreqs=4;
-//static u8 guiNumFreqs=50; //USA
-//static u8 guiNumFreqs=15;   //control-up
-//static u8 guiNumFreqs=1;   //control-up
-static u8 guiNumFreqs=39;   //ANATEL
+//static uint8_t guiNumFreqs=4;
+//static uint8_t guiNumFreqs=50; //USA
+//static uint8_t guiNumFreqs=15;   //control-up
+//static uint8_t guiNumFreqs=1;   //control-up
+static uint8_t guiNumFreqs=39;   //ANATEL
 /**Profile settings which can be set via GUI commands. We default to europe settings.*/
-//static u32 guiMinFreq = 865700;
-//static u32 guiMinFreq = 902750; //USA
-//static u32 guiMinFreq = 913750; //control-up
-//static u32 guiMinFreq = 915000; //control-up
-static u32 guiMinFreq = 902750; //ANATEL
+//static uint32_t guiMinFreq = 865700;
+//static uint32_t guiMinFreq = 902750; //USA
+//static uint32_t guiMinFreq = 913750; //control-up
+//static uint32_t guiMinFreq = 915000; //control-up
+static uint32_t guiMinFreq = 902750; //ANATEL
 /**Profile settings which can be set via GUI commands. We default to europe settings.*/
-//static u32 guiMaxFreq = 867500;
-//static u32 guiMaxFreq = 927250;   //USA
-//static u32 guiMaxFreq = 920750; //control-up
-//static u32 guiMaxFreq = 915000; //control-up
-static u32 guiMaxFreq = 928250; //ANATEL
+//static uint32_t guiMaxFreq = 867500;
+//static uint32_t guiMaxFreq = 927250;   //USA
+//static uint32_t guiMaxFreq = 920750; //control-up
+//static uint32_t guiMaxFreq = 915000; //control-up
+static uint32_t guiMaxFreq = 928250; //ANATEL
 /** If rssi measurement is above this threshold the channel is regarded as
     used and the system will hop to the next frequency. Otherwise this frequency is used */
-static s8 rssiThreshold;
+static int8_t rssiThreshold;
 /**Profile settings which can be set via GUI commands. We default to europe settings.\n
  Before starting the frequency hop this time (in ms) will be waited for.*/
-//static u16 idleTime = 0;
-static u16 idleTime = 0;
+//static uint16_t idleTime = 0;
+static uint16_t idleTime = 0;
 /**Profile settings which can be set via GUI commands. We default to europe settings.\n
  Maximum allocation time (in ms) of a channel.*/
-//static u16 maxSendingTime = 10000;
-static u16 maxSendingTime = 400;
+//static uint16_t maxSendingTime = 10000;
+static uint16_t maxSendingTime = 400;
 /**Profile settings which can be set via GUI commands. We default to europe settings.\n
  Measure rssi for this time (in ms) before deciding if the channel should be used.*/
-static u16 listeningTime = 1;
+static uint16_t listeningTime = 1;
 /** Maximal channel arbitration time in ms (internal value of maxSendingTime) */
-static u16 maxSendingLimit;
+static uint16_t maxSendingLimit;
 /** Will be set to 1 when #maxSendingLimit in continueCheckTimeout() timed out. */
-static u8 maxSendingLimitTimedOut;
+static uint8_t maxSendingLimitTimedOut;
 /** Will be set to 1 if a cyclic inventory is performed, see callStartStop(). */
-static u8 cyclicInventory;
+static uint8_t cyclicInventory;
 /** If set to 0 inventory round commandos will be triggered by the FW, otherwise
  * the autoACK feature of the reader will be used which sends the required Gen2
  * commands automatically.*/
-static u8 autoAckMode;
+static uint8_t autoAckMode;
 /** If set to 0 normal inventory round will be performed, if set to 1 fast inventory rounds will be performed.
  * The value is set in callStartStop() and callInventoryGen2().
  * For details on normal/fast inventory rounds see parameter singulate of gen2SearchForTags().*/
-static u8 fastInventory;
+static uint8_t fastInventory;
 /** Value for register #AS3993_REG_STATUSPAGE. This defines what RSSI value is sent
  * to the host along with the tag data. The value is set in callStartStop() and callInventoryGen2(). */
-static u8 rssiMode;
+static uint8_t rssiMode;
 /** Currently configured power down mode of reader. Available modes are: #POWER_DOWN, #POWER_NORMAL,
  *  #POWER_NORMAL_RF and #POWER_STANDBY */
-static u8 readerPowerDownMode;
+static uint8_t readerPowerDownMode;
 /** To be communicated to GUI, basically result of hopFrequencies(), having information on skipped rounds */
-static s8 inventoryResult;
+static int8_t inventoryResult;
 
-static u8 usedAntenna = 1;  //marte
-u32 nivel_ruido,pot_refletida;
+static uint8_t usedAntenna = 1;  //marte
+uint32_t nivel_ruido,pot_refletida;
 
 #ifdef ANTENNA_SWITCH
 /** Stores which antenna port is used atm. valid values are 1 and 2. */
 #if RADON || FEMTO2 || FEMTO2_1
-static u8 usedAntenna = 2;
+static uint8_t usedAntenna = 2;
 #else
-static u8 usedAntenna = 1;
+static uint8_t usedAntenna = 1;
 #endif
 #endif
 #ifdef TUNER
@@ -231,9 +232,9 @@ static TunerParameters tunerAnt1Params = {15, 15, 15};
  * Provides access to parameters of commands() to all appl command funtions (call*()). */
 static struct CmdBuffer cmdBuffer;
 /** Index of currently used frequency in frequency table #Frequencies. Used in hopFrequencies(). */
-static u16 currentFreqIdx;
+static uint16_t currentFreqIdx;
 /** Currently used protocol, valid values are: #SESSION_GEN2 and #SESSION_ISO6B. */
-static u8 currentSession = 0;      // start with invalid session (neither Gen2 nor ISO 6b)
+static uint8_t currentSession = 0;      // start with invalid session (neither Gen2 nor ISO 6b)
 
 void configTxRx(void);
 void readerConfig(void);
@@ -241,7 +242,7 @@ void antennaPower(void);
 void antennaTuner(void);
 void autoTuner(void);
 void tunerTable(void);
-u8 inventoryGen2(void);
+uint8_t inventoryGen2(void);
 void wrongCommand(void);
 void initCommands(void);
 
@@ -254,7 +255,7 @@ void executeGCMD(void);
 void executeRSSICMD(void);
 void lockUnlockTag(void);
 static void hopChannelRelease(void);
-static s8 hopFrequencies(void);
+static int8_t hopFrequencies(void);
 static void powerDownReader(void);
 static void powerUpReader(void);
 void pega_pot_refl(void);
@@ -262,9 +263,9 @@ void pega_pot_refl(void);
 
 void pega_pot_refl (void)
 {
-    u16 r,i,q;
-    u32 refl;
-    u32 freq = 915750;
+    uint16_t r,i,q;
+    uint32_t refl;
+    uint32_t freq = 915750;
 
     powerUpReader();
     as3993SetBaseFrequency(AS3993_REG_PLLMAIN1, freq);
@@ -283,8 +284,8 @@ void pega_pot_refl (void)
     //return pot_refletida;
 }
 /*
- u16 r; u32 refl;
-    s8 i, q;
+ uint16_t r; uint32_t refl;
+    int8_t i, q;
 #ifdef POWER_DETECTOR
     as3993CyclicPowerRegulation();
 #endif
@@ -306,7 +307,7 @@ void pega_pot_refl (void)
  * If allocation timeout has occured it will return 0.
  * @return 1 if allocation timeout has not been exceeded yet.
  */
-static BOOL continueCheckTimeout( ) 
+static uint8_t continueCheckTimeout( ) 
 {
     if (maxSendingLimit == 0) return 1;
     if ( slowTimerValue() >= maxSendingLimit )
@@ -321,14 +322,14 @@ static BOOL continueCheckTimeout( )
 
 /** This function can be used instead of continueCheckTimeout() to circumvent
  * allocation timeouts as this function always returns 1.  */
-//static BOOL continueAlways(void)
+//static uint8_t continueAlways(void)
 //{
 //    return 1;
 //}
 
 /** This funcition checks the current session, if necessary closes it
 and opens a new session. Valid session values are: #SESSION_GEN2 and #SESSION_ISO6B. */
-static void checkAndSetSession( u8 newSession)
+static void checkAndSetSession( uint8_t newSession)
 {
     if (currentSession == newSession) return;
     switch (currentSession)
@@ -568,11 +569,11 @@ void autoTuner(void)
 /**
  * adds data in current USB buffer to tuning table, should be only called from callAntennaTuner().
  */
-static u8 addToTuningTable(void)
+static uint8_t addToTuningTable(void)
 {
-    u8 idx;
-    u16 iq1 = 0, iq2 = 0;
-    u32 freq;
+    uint8_t idx;
+    uint16_t iq1 = 0, iq2 = 0;
+    uint32_t freq;
     freq = 0;
     freq += (long)cmdBuffer.rxData[1];
     freq += ((long)cmdBuffer.rxData[2]) << 8;
@@ -590,8 +591,8 @@ static u8 addToTuningTable(void)
         tuningTable.cin[0][idx] = cmdBuffer.rxData[5];
         tuningTable.clen[0][idx] = cmdBuffer.rxData[6];
         tuningTable.cout[0][idx] = cmdBuffer.rxData[7];
-        iq1 = (u16)cmdBuffer.rxData[8];
-        iq1 += ((u16)cmdBuffer.rxData[9]) << 8;
+        iq1 = (uint16_t)cmdBuffer.rxData[8];
+        iq1 += ((uint16_t)cmdBuffer.rxData[9]) << 8;
         tuningTable.tunedIQ[0][idx] = iq1;
     }
     if (cmdBuffer.rxData[10] > 0)
@@ -601,8 +602,8 @@ static u8 addToTuningTable(void)
         tuningTable.cin[1][idx] = cmdBuffer.rxData[11];
         tuningTable.clen[1][idx] = cmdBuffer.rxData[12];
         tuningTable.cout[1][idx] = cmdBuffer.rxData[13];
-        iq2 = (u16)cmdBuffer.rxData[14];
-        iq2 += ((u16)cmdBuffer.rxData[15]) << 8;
+        iq2 = (uint16_t)cmdBuffer.rxData[14];
+        iq2 += ((uint16_t)cmdBuffer.rxData[15]) << 8;
         tuningTable.tunedIQ[1][idx] = iq2;
     }
     if (tuningTable.tuneEnable[idx] > 0)    //if this tuning entry is used adjust size of table.
@@ -882,7 +883,7 @@ void callReaderConfig(void)
 
 void readerConfig(void)
 {
-    u8 result = ERR_NONE;
+    uint8_t result = ERR_NONE;
     //APPLOG("readerConfig\n");
     //APPLOGDUMP(cmdBuffer.rxData, cmdBuffer.rxSize);
 
@@ -912,7 +913,7 @@ void readerConfig(void)
  * @param txData buffer for reply
  * @return error code
  */
-u8 writeRegister(u8 addr, u8 value, u16 * txSize, u8 * txData)
+uint8_t writeRegister(uint8_t addr, uint8_t value, uint16_t * txSize, uint8_t * txData)
 {
     //APPLOG("WRITE\n");
     powerUpReader();
@@ -940,7 +941,7 @@ u8 writeRegister(u8 addr, u8 value, u16 * txSize, u8 * txData)
  * @param txData buffer for reply
  * @return error code
  */
-u8 readRegister(u8 addr, u16 * txSize, u8 * txData)
+uint8_t readRegister(uint8_t addr, uint16_t * txSize, uint8_t * txData)
 {
     //APPLOG("READ\n");
     powerUpReader();
@@ -1055,7 +1056,7 @@ void configTxRx()
 
     cmdBuffer.txSize = CMD_CONFIG_TX_RX_REPLY_SIZE;
 
-    cmdBuffer.txData[1] = (u8) as3993GetSensitivity();
+    cmdBuffer.txData[1] = (uint8_t) as3993GetSensitivity();
 #ifdef ANTENNA_SWITCH
     cmdBuffer.txData[3] = usedAntenna;
 #endif
@@ -1241,10 +1242,10 @@ void callConfigGen2(void)
  * @param txData buffer for reply
  * @return error code
  */
-u8 readRegisters(u16 * txSize, u8 * txData)
+uint8_t readRegisters(uint16_t * txSize, uint8_t * txData)
 {
-    u8 i;
-    u8 idx = 0;
+    uint8_t i;
+    uint8_t idx = 0;
 
     //APPLOG("READ registers complete\n");
     powerUpReader();
@@ -1271,10 +1272,10 @@ u8 readRegisters(u16 * txSize, u8 * txData)
 
 static void initTagInfo()
 {
-    u32 i;
-    u8 *ptr;
+    uint32_t i;
+    uint8_t *ptr;
 
-    ptr = (u8*)tags_;
+    ptr = (uint8_t*)tags_;
 
     for (i = 0; i <  sizeof(tags_) ; i ++)
     {
@@ -1309,8 +1310,8 @@ void callInventory6B(void)
 
 
 #if ISO6B
-    static u8 element = 0;
-    s8 status;
+    static uint8_t element = 0;
+    int8_t status;
 
     APPLOG("6b Inventory\n"); /* This MAY not be set, otherwise the Program execution drops. TLU */
 
@@ -1364,7 +1365,7 @@ void callInventory6B(void)
 void readFromTag6B(void)
 {
 #if ISO6B
-    s8 result = 0xff;
+    int8_t result = 0xff;
 #endif
     //APPLOG("6b Read\n"); /* This MAY not be set, otherwise the Program execution drops. TLU */
 
@@ -1418,7 +1419,7 @@ void callReadFromTag6B(void)
 void writeToTag6B(void)
 {
 #if ISO6B
-    s8 result = ISO6B_ERR_NOTAG;
+    int8_t result = ISO6B_ERR_NOTAG;
 
     APPLOG("6b Write\n"); /* This MAY not be set, otherwise the Program execution drops. TLU */
 
@@ -1467,7 +1468,7 @@ void callWriteToTag6B(void)
  */
 void callInventoryGen2Internal()
 {
-    u8 foundTags;
+    uint8_t foundTags;
     if (tagDataAvailable)       // wait until all tag data has been sent before starting next inventory round
     {
         return;
@@ -1564,7 +1565,7 @@ void TerminaInvetorio(void){
     hopChannelRelease();    
 }
 
-u8 inventorioSimplificado(void){
+uint8_t inventorioSimplificado(void){
   
     num_of_tags = inventoryGen2();
   
@@ -1572,9 +1573,9 @@ u8 inventorioSimplificado(void){
 }
 
 
-u8 inventoryGen2(void)
+uint8_t inventoryGen2(void)
 {
-    s8 result;
+    int8_t result;
 
     result = hopFrequencies();
     if( !result )
@@ -1737,8 +1738,8 @@ void selectTag(void)
 {
 
 
-    s8 status=ERR_NONE;
-    u8 idx = 0;
+    int8_t status=ERR_NONE;
+    uint8_t idx = 0;
 
     if (cmdBuffer.rxData[0] == 0)
     { /* Clear list */
@@ -1843,11 +1844,11 @@ void callWriteToTag(void)
     writeToTag();
 }
 
-u8 writeTagMem(u32 memAdress,Tag const * tag, u8 const * data_buf, u8 data_length_words, u8 mem_type, s8* status, u8* tag_error)
+uint8_t writeTagMem(uint32_t memAdress,Tag const * tag, uint8_t const * data_buf, uint8_t data_length_words, uint8_t mem_type, int8_t* status, uint8_t* tag_error)
 {
-    s8 error = ERR_NONE;
-    u8 length = 0;
-    u8 count;
+    int8_t error = ERR_NONE;
+    uint8_t length = 0;
+    uint8_t count;
     //APPLOG("len=%hhx\n",data_length_words);
 
     while (length < data_length_words)
@@ -1875,11 +1876,11 @@ u8 writeTagMem(u32 memAdress,Tag const * tag, u8 const * data_buf, u8 data_lengt
 
 void writeToTag(void)
 {
-    u8 len = 0;
-    s8 status=0;
-    u8 membank = cmdBuffer.rxData[0];
-    u32 address = readU32FromLittleEndianBuffer(&cmdBuffer.rxData[1]);
-    u8 datalen = (cmdBuffer.rxSize - 9)/2;
+    uint8_t len = 0;
+    int8_t status=0;
+    uint8_t membank = cmdBuffer.rxData[0];
+    uint32_t address = readU32FromLittleEndianBuffer(&cmdBuffer.rxData[1]);
+    uint8_t datalen = (cmdBuffer.rxSize - 9)/2;
 
     //APPLOG("WRITE TO Tag\n");
     //APPLOGDUMP(cmdBuffer.rxData, cmdBuffer.rxSize);
@@ -1921,10 +1922,10 @@ exit:
 #define RNDI 7          //index of first random value in buffer
 static void pseudoRandomContinuousModulation()
 {
-    static u8 bufferIndex = 0;
-    static u16 rnd;
-    u8 buf[2];
-    u16 rxbits = 0;
+    static uint8_t bufferIndex = 0;
+    static uint16_t rnd;
+    uint8_t buf[2];
+    uint16_t rxbits = 0;
 
     //prepare a pseudo random value
     rnd ^= (cmdBuffer.rxData[RNDI+bufferIndex*2] | (cmdBuffer.rxData[RNDI+bufferIndex*2+1]<<8));      // get the random value from the GUI
@@ -1947,11 +1948,11 @@ static void pseudoRandomContinuousModulation()
   long. The first byte in the payload is the LSB. The frequency is extracted
   from the payload like this:
   \code
-    u32 freq;
+    uint32_t freq;
     freq = 0;
-    freq += (u32)cmdBuffer.rxData[2];
-    freq += ((u32)cmdBuffer.rxData[3]) << 8;
-    freq += ((u32)cmdBuffer.rxData[4]) << 16;
+    freq += (uint32_t)cmdBuffer.rxData[2];
+    freq += ((uint32_t)cmdBuffer.rxData[3]) << 8;
+    freq += ((uint32_t)cmdBuffer.rxData[4]) << 16;
   \endcode
 
   The format of the payload received from the host is one of the following:
@@ -2074,15 +2075,15 @@ static void pseudoRandomContinuousModulation()
 void callChangeFreq(void)
 {
 
-    u16 reflectedValues;
-    u16 noiseLevel;
-    u8 rssiValues;
-    s8 dBm, sensi;
-    u32 freq;
+    uint16_t reflectedValues;
+    uint16_t noiseLevel;
+    uint8_t rssiValues;
+    int8_t dBm, sensi;
+    uint32_t freq;
     freq = 0;
-    freq += (u32)cmdBuffer.rxData[1];
-    freq += ((u32)cmdBuffer.rxData[2]) << 8;
-    freq += ((u32)cmdBuffer.rxData[3]) << 16;
+    freq += (uint32_t)cmdBuffer.rxData[1];
+    freq += ((uint32_t)cmdBuffer.rxData[2]) << 8;
+    freq += ((uint32_t)cmdBuffer.rxData[3]) << 16;
 
     //APPLOG("CHANGE FREQ f=%x%x, subcmd=%hhx\n", freq, cmdBuffer.rxData[0]);
     //APPLOGDUMP(cmdBuffer.rxData, cmdBuffer.rxSize);
@@ -2103,7 +2104,7 @@ void callChangeFreq(void)
                 as3993SaveSensitivity();
                 do
                 {
-                    s8 off;
+                    int8_t off;
                     sensi += 27;
                     off = as3993SetSensitivity(sensi);
                     as3993GetRSSI(0,&rssiValues,&dBm);
@@ -2238,11 +2239,11 @@ void callChangeFreq(void)
                     cmdBuffer.txSize = 0;
                     break;
                 }
-                u16 time_ms = cmdBuffer.rxData[4] | (cmdBuffer.rxData[5]<<8);
-                u8 rxnorespwait, rxwait;
-                u16 rxbits = 0;
+                uint16_t time_ms = cmdBuffer.rxData[4] | (cmdBuffer.rxData[5]<<8);
+                uint8_t rxnorespwait, rxwait;
+                uint16_t rxbits = 0;
 #if RUN_ON_AS3980 || RUN_ON_AS3981
-                u8 txbuf[] = {0x9E, 0x9E};
+                uint8_t txbuf[] = {0x9E, 0x9E};
 #endif
                 //APPLOG("continuous modulation, duration: %hx\n", time_ms);
                 powerUpReader();
@@ -2328,11 +2329,11 @@ void callReadFromTag(void)
 void readFromTag(void)
 {
 
-    s8 status = ERR_NONE;
-    u8 membank = cmdBuffer.rxData[0];
-    u32 wrdPtr = readU32FromLittleEndianBuffer(&cmdBuffer.rxData[1]);
-    u8 datalen = cmdBuffer.txSize;
-    u8 rxed = 0;
+    int8_t status = ERR_NONE;
+    uint8_t membank = cmdBuffer.rxData[0];
+    uint32_t wrdPtr = readU32FromLittleEndianBuffer(&cmdBuffer.rxData[1]);
+    uint8_t datalen = cmdBuffer.txSize;
+    uint8_t rxed = 0;
 
     //APPLOG("READ FROM Tag\n");
     //APPLOG("membank = %hhx\n", membank);
@@ -2367,7 +2368,7 @@ void readFromTag(void)
 
     if (datalen & 1)
     { /* Special mode for odd size: read word by word until error */
-        u8 * b = cmdBuffer.txData;
+        uint8_t * b = cmdBuffer.txData;
         datalen /= 2;
         while(ERR_NONE == status && datalen && continueCheckTimeout()) 
         {
@@ -2429,8 +2430,8 @@ void callLockUnlockTag(void)
 void lockUnlockTag(void)
 {
 
-    const u8 *mask = cmdBuffer.rxData;
-    s8 status;
+    const uint8_t *mask = cmdBuffer.rxData;
+    int8_t status;
     //APPLOG("Lock Tag\n");
     //APPLOG("Command  %hhx %hhx\n", cmdBuffer.rxData[0], cmdBuffer.rxData[1]);
     //APPLOGDUMP(cmdBuffer.rxData, cmdBuffer.rxSize);
@@ -2485,10 +2486,10 @@ exit:
 
 void callKillTag(void)
 {
-    s8 status;
-    const u8* password = cmdBuffer.rxData;
-    u8 rfu   = cmdBuffer.rxData[4];
-    u8 recom = cmdBuffer.rxData[5];
+    int8_t status;
+    const uint8_t* password = cmdBuffer.rxData;
+    uint8_t rfu   = cmdBuffer.rxData[4];
+    uint8_t recom = cmdBuffer.rxData[5];
 
     powerUpReader();
     checkAndSetSession(SESSION_GEN2);
@@ -2559,12 +2560,12 @@ void callGenericCMD(void)
 
 void executeGCMD()
 {
-    s8 status = ERR_NONE;
-    u16 toTagSize, fromTagSize;
-    u8 toTagBuffer[200];
-    u8 cmd, norestime;
-    u16 dataBytes, leftBits, startBytehandle;
-    u16 receivedBytes;
+    int8_t status = ERR_NONE;
+    uint16_t toTagSize, fromTagSize;
+    uint8_t toTagBuffer[200];
+    uint8_t cmd, norestime;
+    uint16_t dataBytes, leftBits, startBytehandle;
+    uint16_t receivedBytes;
 
     //LOG("Execute GCom: rxed: %hhx, txed: %hhx\n ", cmdBuffer.rxSize, cmdBuffer.txSize);
     //LOGDUMP(cmdBuffer.rxData, cmdBuffer.rxSize);
@@ -2611,8 +2612,8 @@ void executeGCMD()
 
 
     status = as3993TxRxGen2Bytes(cmd, toTagBuffer, toTagSize, (cmdBuffer.txData + 2), &fromTagSize, norestime, 0, 1);
-    cmdBuffer.txData[0] = (u8) status;
-    cmdBuffer.txData[1] = (u8)fromTagSize;
+    cmdBuffer.txData[0] = (uint8_t) status;
+    cmdBuffer.txData[1] = (uint8_t)fromTagSize;
     
 exit:
     receivedBytes = (fromTagSize+7)/8;
@@ -2631,15 +2632,15 @@ void callRSSIMeasureCMD(void)
 
 void executeRSSICMD()
 {
-    s8 status = ERR_NONE;
-    u8 count = cmdBuffer.txSize / 4;
-    u8 *b = cmdBuffer.txData;
-    u32 freq;
+    int8_t status = ERR_NONE;
+    uint8_t count = cmdBuffer.txSize / 4;
+    uint8_t *b = cmdBuffer.txData;
+    uint32_t freq;
 
     freq = 0;
-    freq += (u32)cmdBuffer.rxData[0];
-    freq += ((u32)cmdBuffer.rxData[1]) << 8;
-    freq += ((u32)cmdBuffer.rxData[2]) << 16;
+    freq += (uint32_t)cmdBuffer.rxData[0];
+    freq += ((uint32_t)cmdBuffer.rxData[1]) << 8;
+    freq += ((uint32_t)cmdBuffer.rxData[2]) << 16;
 
     //APPLOG("RSSI CMD f=%x%x\n", freq);
 
@@ -2653,7 +2654,7 @@ void executeRSSICMD()
 
     while ( count-- )
     {
-        status = gen2QueryMeasureRSSI(b+0, b+1, (s8*) b+2, (s8*) b+3);
+        status = gen2QueryMeasureRSSI(b+0, b+1, (int8_t*) b+2, (int8_t*) b+3);
         if (status)
         {/* Pick lowest values and invalid agc_reg to denote fail */
             b[0] = 0;
@@ -2686,18 +2687,18 @@ void initCommands(void)
     powerDownReader();
 }
 
-static void applyTunerSettingForFreq(u32 freq)
+static void applyTunerSettingForFreq(uint32_t freq)
 {
     
 }
 
-static s8 hopFrequencies(void)
+static int8_t hopFrequencies(void)
 {
-    u8 i;
-    u8 min_idx;
-    s8 dBm = -128;
-    u8 rssi;
-    u16 idleDelay;
+    uint8_t i;
+    uint8_t min_idx;
+    int8_t dBm = -128;
+    uint8_t rssi;
+    uint16_t idleDelay;
 
     slowTimerStart();       //start timer for idle delay
     powerUpReader();
@@ -2739,7 +2740,7 @@ static s8 hopFrequencies(void)
             /*If tuning is enabled and this frequency has been selected for the 500th time,
               check if we have to do a re-tune (autotune) */
         {
-            u16 refl;
+            uint16_t refl;
             refl = 0;
             //APPLOG("countFreqHop has reached %hhx\n",Frequencies.countFreqHop[currentFreqIdx]);
             //APPLOG("old reflected power: %hx\n", tuningTable.tunedIQ[usedAntenna-1][tuningTable.currentEntry]);

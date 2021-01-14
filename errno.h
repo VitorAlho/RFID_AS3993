@@ -40,7 +40,7 @@
 
 /*!
  * Error codes to be used within the application.
- * They are represented by an s8
+ * They are represented by an int8_t
  */
 #define ERR_NONE     0 /*!< no error occured */
 #define ERR_NOMEM   -1 /*!< not enough memory to perform the requested operation */

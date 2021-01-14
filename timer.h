@@ -46,7 +46,7 @@ void slowTimerStart( );
  * Measure time passed since last call of slowTimerStart(). The resolution is
  * ~10ms. The return value is in ms.
  */
-u16 slowTimerValue( );
+uint16_t slowTimerValue( );
 
 /*!
  * Stops the slow timer. This disables the interrupt and therefore reduces the

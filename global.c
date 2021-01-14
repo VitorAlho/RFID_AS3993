@@ -29,6 +29,7 @@
 #include "global.h"
 //#include <p24Fxxxx.h>
 #include "p24FJ256DA210.h"
+#include <stdint.h>
 
 /*------------------------------------------------------------------------- */
 /** This function is used to convert a 8bit value to a Hexstring. \n
@@ -36,9 +37,9 @@
   * @param *destbuf Destination buffer. The Buffer should be at least 5 bytes long.
                  The first byte is always a 0 and the second a x.
   */
-void bin2Hex(char value, u8 *destbuf)
+void bin2Hex(int8_t value, uint8_t *destbuf)
 {
-    u8 temp_v;
+    uint8_t temp_v;
     destbuf[0] = '0';
     destbuf[1] = 'x';
 
@@ -72,13 +73,13 @@ void bin2Hex(char value, u8 *destbuf)
   * @param value Databyte which should be converted
   * @param *destbuf Destination buffer. The Buffer should be at least 6 bytes long.
   */
-void bin2Chars(int value, u8 *destbuf)
+void bin2Chars(int16_t value, uint8_t *destbuf)
 {
-    u8 tenthousand=0;
-    u8 thousand=0;
-    u8 hundred=0;
-    u8 ten=0;
-    u8 one=0;
+    uint8_t tenthousand=0;
+    uint8_t thousand=0;
+    uint8_t hundred=0;
+    uint8_t ten=0;
+    uint8_t one=0;
 
     while (value-10000 >= 0)
     {
@@ -155,17 +156,17 @@ void bin2Chars(int value, u8 *destbuf)
  * @param ebv array to store the EBV
  * @param len number of data in ebv
  */
-void u32ToEbv(u32 value, u8 *ebv, u8 *len)
+void u32ToEbv(uint32_t value, uint8_t *ebv, uint8_t *len)
 {
-    u8 lsbytefirst[6];  //additional byte for setting extension bit in loop
-    u8 *buf = &lsbytefirst[0];
+    uint8_t lsbytefirst[6];  //additional byte for setting extension bit in loop
+    uint8_t *buf = &lsbytefirst[0];
     int i;
     
     *len = 0;
     *buf = 0;
     do
     {
-        (*buf) |= (u8)(value & 0x7F);
+        (*buf) |= (uint8_t)(value & 0x7F);
         value = value >> 7;
         buf++;
         (*len)++;
@@ -181,17 +182,17 @@ void u32ToEbv(u32 value, u8 *ebv, u8 *len)
 }
 
 /**
- * Inserts an array of u8 values into an u8 buffer at a specific bitpos
+ * Inserts an array of uint8_t values into an uint8_t buffer at a specific bitpos
  * @param dest Destination buffer
  * @param source Source buffer
  * @param len Number of bytes in source buffer
  * @param bitpos bitposition (1-8) on destination buffer where source values should be put.
  */
-void insertBitStream(u8 *dest, u8 const *source, u8 len, u8 bitpos)
+void insertBitStream(uint8_t *dest, uint8_t const *source, uint8_t len, uint8_t bitpos)
 {
-    int i;
-    u8 mask0 = (1<<bitpos)-1;
-    u8 mask1 = (1<<(8-bitpos))-1;
+    int16_t i;
+    uint8_t mask0 = (1<<bitpos)-1;
+    uint8_t mask1 = (1<<(8-bitpos))-1;
 
     for (i=0; i<len; i++)
     {
@@ -202,8 +203,8 @@ void insertBitStream(u8 *dest, u8 const *source, u8 len, u8 bitpos)
     }
 }
 
-u32 readU32FromLittleEndianBuffer(u8 const *buffer)
+uint32_t readU32FromLittleEndianBuffer(uint8_t const *buffer)
 {
-    return (u32)(buffer[0] | ((u32)buffer[1] << 8) |
-            ((u32)buffer[2] << 16) | ((u32)buffer[3] << 24));
+    return (uint32_t)(buffer[0] | ((uint32_t)buffer[1] << 8) |
+            ((uint32_t)buffer[2] << 16) | ((uint32_t)buffer[3] << 24));
 }

@@ -17,15 +17,15 @@
 /*--------------------------------------------------------------------*/
 
 #include "timer.h"
-//#include "uart.h"
-#include "string.h"
-#include "stdio.h"
-#include "math.h"
+#include <string.h>
+#include <stdio.h>
+#include <math.h>
 
 #include "as3993_public.h"
 #include "global.h"
 
 #include "tags.h"
+#include <stdint.h>
 
 /*--------------------------------------------------------------------*/
 /*                 ---+++>>> Variaveis <<<+++---                      */
@@ -56,7 +56,7 @@ extern __eds__ unsigned char __attribute__((far)) portais[10][300];
 /*               ---+++>>> FUNCOES() <<<+++---                        */
 /*--------------------------------------------------------------------*/
 
-extern u8 inventoryGen2(void);
+extern uint8_t inventoryGen2(void);
 
 /********************************************************/
 /*   ---+++>>> void limpa_buffer_tags(void) <<<+++---   */
@@ -66,9 +66,9 @@ extern u8 inventoryGen2(void);
  * : Funcao para limpar o buffer das TAGs.
  * @param: numDeteccoes - eh a quantidade de TAGs detectadas.
  */
-void limpa_buffer_tags(unsigned int numDeteccoes)
+void limpa_buffer_tags(uint16_t numDeteccoes)
 {
-    int x;
+    uint16_t x;
     for(x = 0; x < numDeteccoes; x++)
     {
         tags_[x].epc[0] = 0;
@@ -98,24 +98,24 @@ void limpa_buffer_tags(unsigned int numDeteccoes)
  * Descricao: Funcao para verificar se a TAG de maior RSSI pertence aa zona de exclusao.
  * @param: numDeteccoes - eh a quantidade de TAGs detectadas.
  */
-void troca_bytes(unsigned int numDeteccoes)
+void troca_bytes(uint16_t numDeteccoes)
 {
 //    static unsigned int conta_ausencia_ze = 0;          // contador de ausencia da area de exclusao
-    unsigned int indiceMaiorRSSI = 0;
-    char buffer[4] = {0};
-    char epcBuffer[25] = {0};
-    unsigned int i = 0;
-    const unsigned char EPC_LENGTH = 12;
+    uint16_t indiceMaiorRSSI = 0;
+    uint8_t buffer[4] = {0};
+    uint8_t epcBuffer[25] = {0};
+    uint16_t i = 0;
+    const uint8_t EPC_LENGTH = 12;
     
     if(numDeteccoes)                                    // se houve deteccoes...
     {
         indiceMaiorRSSI = verifMaxRSSI(numDeteccoes);   // buscamos a TAG com maior RSSI
 
-        memset(epcBuffer,0,strlen(epcBuffer));          // limpamos o buffer
+        memset(epcBuffer,0,strlen((const char *)epcBuffer));          // limpamos o buffer
         for(i=0; i < EPC_LENGTH; i++)
         {
 //            itoa(buffer,(unsigned long)tags_[indiceMaiorRSSI].epc[i],16); // converte o conteudo do EPC para ascii na base 16
-            strcat(epcBuffer,buffer);                   // e armazena no buffer
+            strcat((char *)epcBuffer,(const char *)buffer);                   // e armazena no buffer
         }
         
     }
@@ -195,7 +195,7 @@ void troca_bytes(unsigned int numDeteccoes)
  * Descricao: Funcao para fazer tratamento da TAGs.
  * @param: numDeteccoes - eh a quantidade de TAGs detectadas.
  */
-void pega_dados_tags(unsigned int numDeteccoes)
+void pega_dados_tags(uint16_t numDeteccoes)
 {
 
 }
@@ -219,11 +219,11 @@ void trata_tags_excessao(void)
  * @param: tags_detectadas - eh a quantidade de TAGs que foram detectadas
  * @return: indiceMaxRSSI - eh o indice cuja a TAG teve o maior RSSI
  */
-unsigned int verifMaxRSSI(unsigned int tags_detectadas)
+uint16_t verifMaxRSSI(uint16_t tags_detectadas)
 {
-    signed int rssi;
-    unsigned int maxRSSI = 0;
-    unsigned int i = 0, indiceMaxRSSI = 0;
+    int16_t rssi;
+    uint16_t maxRSSI = 0;
+    uint16_t i = 0, indiceMaxRSSI = 0;
         
 //    poe_texto_XY(3,6,"    ");                   // limpamos o campo de exibicao do RSSI
     
@@ -275,7 +275,7 @@ unsigned int verifSeEhZonaExclusao(unsigned int indice)
  * @param: indice - eh o indice da TAG a ser analisada
  * @return: 1 - se a TAG pertence a zona de exclusao, ou 0 se a TAG nao pertence a zzona de exclusao
  */
-unsigned int verifSeEhOperarioComum(unsigned int indice)
+uint16_t verifSeEhOperarioComum(uint16_t indice)
 {
     if(tags_[indice].epc[0] == 0x30)    // eh uma TAG de operario comum
     {
@@ -292,7 +292,7 @@ unsigned int verifSeEhOperarioComum(unsigned int indice)
  * @param: indice - eh o indice da TAG a ser analisada
  * @return: 1 - se a TAG pertence a zona de exclusao, ou 0 se a TAG nao pertence a zzona de exclusao
  */
-unsigned int verifSeEhCondutor(unsigned int indice)
+uint16_t verifSeEhCondutor(uint16_t indice)
 {
     if(tags_[indice].epc[0] == 0x50)    // eh uma TAG de condutor
     {
@@ -333,14 +333,14 @@ signed int calculaRSSI(unsigned int indice)
  */
 void testeRSSI(void)
 {
-    unsigned int i = 0, j = 0;
-    unsigned int  tags_detectadas = 0;
-    unsigned int indiceMaiorRSSI = 0;
-    signed int rssi;
-    signed int rssiI, rssiQ;
-    const unsigned char EPC_LENGTH = 12;
-    char buffer[4] = {0};
-    char epcBuffer[25] = {0};
+    uint16_t i = 0, j = 0;
+    uint16_t  tags_detectadas = 0;
+    uint16_t indiceMaiorRSSI = 0;
+    int16_t rssi;
+    int16_t rssiI, rssiQ;
+    const uint8_t EPC_LENGTH = 12;
+    int8_t buffer[4] = {0};
+    int8_t epcBuffer[25] = {0};
     
 //    limpa_display();
     
@@ -354,14 +354,14 @@ void testeRSSI(void)
             delay_ms(1000);                         // intervalo de 1 segundo para notarmos que ocorreu um novo ciclo de leitura
             for(j=0; j < tags_detectadas; j++)      // faz a varredura das TAGs detectadas
             {                
-                memset(epcBuffer,0,strlen(epcBuffer));  // limpamos o buffer
+                memset(epcBuffer,0,strlen((const char *)epcBuffer));  // limpamos o buffer
                 rssiI = tags_[j].rssi & 0x0F;           // pegamos a parte real do RSSI
                 rssiQ = (tags_[j].rssi >> 4) & 0x0F;    // pegamos a parte imaginaria do RSSI
                 rssi = 0;//calculaRSSI(j);                  // calculo do modulo do RSSI sem extrair a raiz quadrada
                 for(i=0; i < EPC_LENGTH; i++)
                 {
 //                    itoa(buffer,(unsigned long)tags_[j].epc[i],16); // converte o conteudo do EPC para ascii na base 16
-                    strcat(epcBuffer,buffer);                       // e armazena no buffer
+                    strcat((char *)epcBuffer,(const char *)buffer);                       // e armazena no buffer
                 }
                 delay_ms(4000);                     // delay de 4 segundos para podermos visualizar todos os valores
             }

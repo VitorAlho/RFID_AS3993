@@ -67,11 +67,11 @@
   * So a typical use case may look like this:
   * \code
   * Tag tags[16];
-  * u8 tag_error;
+  * uint8_t tag_error;
   * struct gen2Config config = = {TARI_125, GEN2_LF_256, GEN2_COD_MILLER4, TREXT_OFF, 0, GEN2_SESSION_S0, 0};
   * // setup gen2SelectParams
   * unsigned n;
-  * u8 buf[4];
+  * uint8_t buf[4];
   * ...
   * as3993Initialize(912000);
   *
@@ -106,8 +106,9 @@
 #define __GEN2_H__
 
 #include "as3993_public.h"
-#include "ams_types.h"
+//#include "ams_types.h"
 #include "errno_as3993.h"
+#include <stdint.h>
 
 /* Protocol configuration settings */
 #define GEN2_LF_40  0   /*!<link frequency 40 kHz*/
@@ -183,23 +184,23 @@
 #define GEN2_ERR_CHANNEL_TIMEOUT ERR_GEN2_CHANNEL_TIMEOUT /**< Error RF channel timed out*/
 
 struct gen2Config{
-    u8 tari;        /*< Tari setting */
-    u8 linkFreq;    /*< GEN2_LF_40, ... */
-    u8 miller;      /*< GEN2_COD_FM0, ... */
-    u8 trext;       /*< 1 if the preamble is long, i.e. with pilot tone */
-    u8 sel;         /*< For QUERY Sel field */
-    u8 session;     /*< GEN2_SESSION_S0, ... */
-    u8 target;      /*< For QUERY Target field */
+    uint8_t tari;        /*< Tari setting */
+    uint8_t linkFreq;    /*< GEN2_LF_40, ... */
+    uint8_t miller;      /*< GEN2_COD_FM0, ... */
+    uint8_t trext;       /*< 1 if the preamble is long, i.e. with pilot tone */
+    uint8_t sel;         /*< For QUERY Sel field */
+    uint8_t session;     /*< GEN2_SESSION_S0, ... */
+    uint8_t target;      /*< For QUERY Target field */
 };
 
 struct gen2SelectParams{
-    u8 target;
-    u8 action;
-    u8 mem_bank;
-    u8 mask[32];
-    u32 mask_address;
-    u8 mask_len;
-    u8 truncation;
+    uint8_t target;
+    uint8_t action;
+    uint8_t mem_bank;
+    uint8_t mask[32];
+    uint32_t mask_address;
+    uint8_t mask_len;
+    uint8_t truncation;
 };
 
 /*------------------------------------------------------------------------- */
@@ -222,11 +223,11 @@ struct gen2SelectParams{
   * @return the number of tags found
   */
 unsigned gen2SearchForTags(Tag *tags
-                          , u8 maxtags
-                          , u8 q
-                          , BOOL (*cbContinueScanning)(void)
-                          , BOOL singulate
-                          , BOOL toggleSession
+                          , uint8_t maxtags
+                          , uint8_t q
+                          , uint8_t (*cbContinueScanning)(void)
+                          , uint8_t singulate
+                          , uint8_t toggleSession
                           );
 
 
@@ -234,11 +235,11 @@ unsigned gen2SearchForTags(Tag *tags
   * uses the autoACK mode of the reader.
   */
 unsigned gen2SearchForTagsAutoAck(Tag *tags_
-                      , u8 maxtags
-                      , u8 q
-                      , BOOL (*cbContinueScanning)(void)
-                      , BOOL singulate
-                      , BOOL toggleSession
+                      , uint8_t maxtags
+                      , uint8_t q
+                      , uint8_t (*cbContinueScanning)(void)
+                      , uint8_t singulate
+                      , uint8_t toggleSession
                       );
 /*------------------------------------------------------------------------- */
 /** EPC ACCESS command send to the Tag.
@@ -254,7 +255,7 @@ unsigned gen2SearchForTagsAutoAck(Tag *tags_
                   0x00 means no Error occoured.
                   Any other value is the backscattered error code from the tag.
   */
-s8 gen2AccessTag(Tag const * tag, u8 const * password);
+int8_t gen2AccessTag(Tag const * tag, uint8_t const * password);
 
 /*------------------------------------------------------------------------- */
 /** EPC LOCK command send to the Tag.
@@ -272,7 +273,7 @@ s8 gen2AccessTag(Tag const * tag, u8 const * password);
                   0x00 means no Error occoured.
                   Any other value is the backscattered error code from the tag.
   */
-s8 gen2LockTag(Tag *tag, const u8 *mask_action, u8 *tag_reply);
+int8_t gen2LockTag(Tag *tag, const uint8_t *mask_action, uint8_t *tag_reply);
 
 /*------------------------------------------------------------------------- */
 /** EPC KILL command send to the Tag.
@@ -292,7 +293,7 @@ s8 gen2LockTag(Tag *tag, const u8 *mask_action, u8 *tag_reply);
                   0x00 means no Error occoured.
                   Any other value is the backscattered error code from the tag.
   */
-s8 gen2KillTag(Tag const * tag, u8 const * password, u8 rfu, u8 recom, u8 *tag_error);
+int8_t gen2KillTag(Tag const * tag, uint8_t const * password, uint8_t rfu, uint8_t recom, uint8_t *tag_error);
 
 /*------------------------------------------------------------------------- */
 /** EPC WRITE command send to the Tag.
@@ -314,7 +315,7 @@ s8 gen2KillTag(Tag const * tag, u8 const * password, u8 rfu, u8 recom, u8 *tag_e
                   0xFF unknown error occoured.
                   Any other value is the backscattered error code from the tag.
   */
-s8 gen2WriteWordToTag(Tag const * tag, u8 memBank, u32 wordPtr, u8 const * databuf, u8 * tag_error);
+int8_t gen2WriteWordToTag(Tag const * tag, uint8_t memBank, uint32_t wordPtr, uint8_t const * databuf, uint8_t * tag_error);
 
 /*------------------------------------------------------------------------- */
 /** EPC READ command send to the Tag.
@@ -332,8 +333,8 @@ s8 gen2WriteWordToTag(Tag const * tag, u8 memBank, u32 wordPtr, u8 const * datab
                   0xFF unknown error occoured.
                   Any other value is the backscattered error code from the tag.
   */
-s8 gen2ReadFromTag(Tag *tag, u8 memBank, u32 wordPtr,
-                          u8 wordCount, u8 *destbuf);
+int8_t gen2ReadFromTag(Tag *tag, uint8_t memBank, uint32_t wordPtr,
+                          uint8_t wordCount, uint8_t *destbuf);
 
 /*------------------------------------------------------------------------- */
 /** EPC SELECT command. send to the tag.
@@ -352,7 +353,7 @@ void gen2PrintEPC(Tag *tag);
   * @param epclen Length of the EPC.
   * @param tagNr Number of the tag.
   */
-void gen2PrintTagInfo(Tag *tag, u8 epclen, u8 tagNr);
+void gen2PrintTagInfo(Tag *tag, uint8_t epclen, uint8_t tagNr);
 
 /*!
  *****************************************************************************
@@ -390,5 +391,5 @@ void gen2Close(void);
  *
  *****************************************************************************
  */
-s8 gen2QueryMeasureRSSI(u8 *agc, u8 *log_rssis, s8 *irssi, s8 *qrssi);
+int8_t gen2QueryMeasureRSSI(uint8_t *agc, uint8_t *log_rssis, int8_t *irssi, int8_t *qrssi);
 #endif

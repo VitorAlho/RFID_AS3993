@@ -18,7 +18,6 @@
         <itemPath>mcc_generated_files/tmr3.h</itemPath>
       </logicalFolder>
       <itemPath>Compiler.h</itemPath>
-      <itemPath>GenericTypeDefs.h</itemPath>
       <itemPath>ams_types.h</itemPath>
       <itemPath>appl_commands.h</itemPath>
       <itemPath>as3993.h</itemPath>

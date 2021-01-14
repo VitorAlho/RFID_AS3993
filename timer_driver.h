@@ -44,7 +44,8 @@
 * INCLUDES
 ******************************************************************************
 */
-#include "ams_types.h"
+//#include "ams_types.h"
+#include <stdint.h>
 
 /*
 ******************************************************************************
@@ -106,7 +107,7 @@ typedef void (*pCbFunc)();
  *                                  e.g. 16000000 for 16 MHz.
  *****************************************************************************
  */
-void timerInitialize(u8 timerModule, u32 clockCyclesPerSecond );
+void timerInitialize(uint8_t timerModule, uint32_t clockCyclesPerSecond );
 
 /*!
  *****************************************************************************
@@ -121,7 +122,7 @@ void timerInitialize(u8 timerModule, u32 clockCyclesPerSecond );
  *                  timer expired (use NULL if no callback function is required)
  *****************************************************************************
  */
-void timerStart(u8 timerModule, u32 uSec, void(*cbFunc)() );
+void timerStart(uint8_t timerModule, uint32_t uSec, void(*cbFunc)() );
 
 /*!
  *****************************************************************************
@@ -132,7 +133,7 @@ void timerStart(u8 timerModule, u32 uSec, void(*cbFunc)() );
  * \param timerModule : timer module number (use defines for timer 1-5)
  *****************************************************************************
  */
-void timerStop(u8 timerModule);
+void timerStop(uint8_t timerModule);
 
 /*!
  *****************************************************************************
@@ -143,7 +144,7 @@ void timerStop(u8 timerModule);
  * \param timerModule : timer module number (use defines for timer 1-5)
  *****************************************************************************
  */
-void timerStopWithCb( u8 timerModule );
+void timerStopWithCb( uint8_t timerModule );
 
 /*!
  *****************************************************************************
@@ -157,7 +158,7 @@ void timerStopWithCb( u8 timerModule );
  * \return FALSE : given timer is not running
  *****************************************************************************
  */
-BOOL timerIsRunning( u8 timerModule );
+uint8_t timerIsRunning( uint8_t timerModule );
 
 /*!
  *****************************************************************************
@@ -173,7 +174,7 @@ BOOL timerIsRunning( u8 timerModule );
  *                  timer expired (use NULL if no callback function is required)
  *****************************************************************************
  */
-void timerSetTimeBasisAndStart(u32 fcy, u8 timerModule, u32 uSec, void(*cbFunc)() );
+void timerSetTimeBasisAndStart(uint32_t fcy, uint8_t timerModule, uint32_t uSec, void(*cbFunc)() );
 
 
 #endif /* TIMER_DRIVER_H */

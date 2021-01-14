@@ -49,7 +49,8 @@
 #define FCY    theSystemClock 
 
 #include <libpic30.h>
-#include "ams_types.h"
+//#include "ams_types.h"
+#include <stdint.h>
 
 /* NOTE: the Config Word2 must have either FCKSM_CSECME or FCKSM_CSECMD
    This means that clock-switching is enabled. 
@@ -86,7 +87,7 @@
 * DECLARATIONS
 ******************************************************************************
 */
-extern u32 theSystemClock; 
+extern uint32_t theSystemClock; 
 
 /*
 ******************************************************************************
@@ -102,14 +103,14 @@ extern u32 theSystemClock;
  *  \returns the FCY (the instruction cycle frequency) in hertz
  *****************************************************************************
  */
-u32 systemClockInitialise( );
+uint32_t systemClockInitialise( );
 
 /*!
  *****************************************************************************
  *  \brief configure if posc and sosc are enabled
  *****************************************************************************
  */
-void systemClockConfigure( s8 poscEnableDuringSleep, s8 soscEnable );
+void systemClockConfigure( int8_t poscEnableDuringSleep, int8_t soscEnable );
 
 /*!
  *****************************************************************************
@@ -118,14 +119,14 @@ void systemClockConfigure( s8 poscEnableDuringSleep, s8 soscEnable );
  *  \returns the FCY (the instruction cycle frequency) in hertz
  *****************************************************************************
  */
-u32 systemClockGetFcy( );
+uint32_t systemClockGetFcy( );
 
 /*!
  *****************************************************************************
  *  \brief returns the currently selected clock source
  *****************************************************************************
  */
-u8 systemClockGetClockSource( );
+uint8_t systemClockGetClockSource( );
 
 /*!
  *****************************************************************************
@@ -137,7 +138,7 @@ u8 systemClockGetClockSource( );
  *  \returns the new FCY (the instruction cycle frequency) in hertz
  *****************************************************************************
  */
-u32 systemClockChangeClockSource( u16 source, u32 newFcy );
+uint32_t systemClockChangeClockSource( uint16_t source, uint32_t newFcy );
 
 
 #endif /* SYSTEM_CLOCK_H */

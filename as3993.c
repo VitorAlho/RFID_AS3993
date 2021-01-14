@@ -16,23 +16,23 @@
 /** This variable is used as flag to signal an data reception.
   *  It is a bit mask of the RESP_TXIRQ, RESP_RXIRQ, RESP_* values
   */
-volatile u16 as3993Response = 0;
+volatile uint16_t as3993Response = 0;
 
 /** temporary buffer for as3993SaveSensitivity() and as3993RestoreSensitivity() */
-static u8 as3993SavedSensRegs[1];
+static uint8_t as3993SavedSensRegs[1];
 
 /** Restore registers 0x00 to 0x1D + 5 registers (0x22, 0x29, 0x35, 0x36 and 0x3A)
  *  after power up */
-static u8 as3993PowerDownRegs[AS3993_REG_ICD+6];
+static uint8_t as3993PowerDownRegs[AS3993_REG_ICD+6];
 
 /** Will be set to 0 if version register is > 0x60. Silicon revision 0x60 needs
  specific handling in some functions. */
-static u8 gChipRevisionZero = 1;
+static uint8_t gChipRevisionZero = 1;
 
 /*------------------------------------------------------------------------- */
-u16 as3993Initialize(u32 baseFreq)
+uint16_t as3993Initialize(uint32_t baseFreq)
 {
-    u8 myBuf[4];
+    uint8_t myBuf[4];
 
     as3993ResetDoNotPreserveRegisters();
 
@@ -204,8 +204,8 @@ u16 as3993Initialize(u32 baseFreq)
 #if RUN_ON_AS3993 || RUN_ON_AS3980 || RUN_ON_AS3994 || RUN_ON_AS3981
 void as3993Isr(void)
 {
-    u8 regs[2];
-    static u8 addr = READ | AS3993_REG_IRQSTATUS1;
+    uint8_t regs[2];
+    static uint8_t addr = READ | AS3993_REG_IRQSTATUS1;
     if (gChipRevisionZero)
         delay_us(30);
 
@@ -218,9 +218,9 @@ void as3993Isr(void)
 #endif
 
 /*------------------------------------------------------------------------- */
-u8 as3993ReadChipVersion(void)
+uint8_t as3993ReadChipVersion(void)
 {
-    u8 version;
+    uint8_t version;
     version = as3993SingleRead(AS3993_REG_DEVICEVERSION);
     if (version > 0x60)
         gChipRevisionZero = 0;
@@ -228,23 +228,23 @@ u8 as3993ReadChipVersion(void)
 }
 
 /*------------------------------------------------------------------------- */
-void as3993SingleCommand(u8 command)
+void as3993SingleCommand(uint8_t command)
 {
     DISEXTIRQ();
     writeReadAS3993( &command, 1, 0 , 0 , STOP_SGL, 1);
     ENEXTIRQ();
 }
 /*------------------------------------------------------------------------- */
-void as3993SingleWriteNoStop(u8 address, u8 value)
+void as3993SingleWriteNoStop(uint8_t address, uint8_t value)
 {
-    u8 buf[2];
+    uint8_t buf[2];
     buf[0] = address;
     buf[1] = value;
     writeReadAS3993( buf, 2, 0 , 0 , STOP_NONE, 1);
 }
 
 /*------------------------------------------------------------------------- */
-void as3993ContinuousRead(u8 address, s8 len, u8 *readbuf)
+void as3993ContinuousRead(uint8_t address, int8_t len, uint8_t *readbuf)
 {
     DISEXTIRQ();
     address |= READ;
@@ -253,9 +253,9 @@ void as3993ContinuousRead(u8 address, s8 len, u8 *readbuf)
 }
 
 /*------------------------------------------------------------------------- */
-void as3993FifoRead(s8 len, u8 *readbuf)
+void as3993FifoRead(int8_t len, uint8_t *readbuf)
 {
-    static u8 address = AS3993_REG_FIFO | READ ;
+    static uint8_t address = AS3993_REG_FIFO | READ ;
     DISEXTIRQ();
     writeReadAS3993( &address, 1, readbuf , len , STOP_CONT, 1);
     ENEXTIRQ();
@@ -263,9 +263,9 @@ void as3993FifoRead(s8 len, u8 *readbuf)
 
 /* Function is called from interrupt and normal level, therefore this 
    function must be forced to be reentrant on Keil compiler. */
-u8 as3993SingleRead(u8 address)
+uint8_t as3993SingleRead(uint8_t address)
 {
-    u8 readdata;
+    uint8_t readdata;
 
     DISEXTIRQ();
     address |= READ;
@@ -275,7 +275,7 @@ u8 as3993SingleRead(u8 address)
     return(readdata);
 }
 
-void as3993ContinuousWrite(u8 address, u8 *buf, s8 len)
+void as3993ContinuousWrite(uint8_t address, uint8_t *buf, int8_t len)
 {
     DISEXTIRQ();
     writeReadAS3993( &address, 1, 0 , 0 , STOP_NONE, 1);
@@ -283,9 +283,9 @@ void as3993ContinuousWrite(u8 address, u8 *buf, s8 len)
     ENEXTIRQ();
 }
 
-void as3993SingleWrite(u8 address, u8 value)
+void as3993SingleWrite(uint8_t address, uint8_t value)
 {
-    u8 buf[2];
+    uint8_t buf[2];
     buf[0] = address;
     buf[1] = value;
     DISEXTIRQ();
@@ -294,8 +294,8 @@ void as3993SingleWrite(u8 address, u8 value)
 }
 
 /*------------------------------------------------------------------------- */
-void as3993CommandContinuousAddress(u8 *command, u8 com_len,
-                             u8 address, u8 *buf, u8 buf_len)
+void as3993CommandContinuousAddress(uint8_t *command, uint8_t com_len,
+                             uint8_t address, uint8_t *buf, uint8_t buf_len)
 {
     DISEXTIRQ();
     writeReadAS3993( command, com_len, 0 , 0 , STOP_NONE, 1);
@@ -304,7 +304,7 @@ void as3993CommandContinuousAddress(u8 *command, u8 com_len,
     ENEXTIRQ();
 }
 
-void as3993WaitForResponseTimed(u16 waitMask, u16 counter)
+void as3993WaitForResponseTimed(uint16_t waitMask, uint16_t counter)
 {
     while (((as3993Response & waitMask) == 0) && (counter))
     {
@@ -322,9 +322,9 @@ void as3993WaitForResponseTimed(u16 waitMask, u16 counter)
 
 }
 
-void as3993WaitForResponse(u16 waitMask)
+void as3993WaitForResponse(uint16_t waitMask)
 {
-    u16 counter;
+    uint16_t counter;
     counter=0;
     while (((as3993Response & waitMask) == 0) && (counter < WAITFORRESPONSECOUNT))
     {
@@ -343,9 +343,9 @@ void as3993WaitForResponse(u16 waitMask)
 //    	LOG("TI ok response: %x, mask: %x\n", as3993Response, waitMask);
 }
 
-void as3993SelectLinkFrequency(u8 a)
+void as3993SelectLinkFrequency(uint8_t a)
 {
-    u8 reg;
+    uint8_t reg;
 
     reg = as3993SingleRead(AS3993_REG_RXOPTIONS);
 
@@ -356,11 +356,11 @@ void as3993SelectLinkFrequency(u8 a)
 
 static void as3993LockPLL(void)
 {
-    u8 buf;
-    u8 var;
-    u16 i;
+    uint8_t buf;
+    uint8_t var;
+    uint16_t i;
 
-    u8 vco_voltage;
+    uint8_t vco_voltage;
     buf = as3993SingleRead(AS3993_REG_STATUSPAGE);
     buf &= ~0x30;
     buf |= 0x10; /* have vco_ri in aglstatus */
@@ -390,13 +390,13 @@ static void as3993LockPLL(void)
 }
 
 /*------------------------------------------------------------------------- */
-void as3993SetBaseFrequency(u8 regs, u32 frequency)
+void as3993SetBaseFrequency(uint8_t regs, uint32_t frequency)
 {
     //TODO: use autohop command instead?
-    u8 buf[3];
-    u8 statusreg;
-    u16 ref=0, i, j, x, reg_A,reg_B;
-    u32 divisor;
+    uint8_t buf[3];
+    uint8_t statusreg;
+    uint16_t ref=0, i, j, x, reg_A,reg_B;
+    uint32_t divisor;
 
     statusreg = as3993SingleRead(AS3993_REG_STATUSCTRL);
     as3993SingleWrite(AS3993_REG_STATUSCTRL, statusreg & 0xfe);
@@ -464,9 +464,9 @@ void as3993SetBaseFrequency(u8 regs, u32 frequency)
     reg_B = j + x;
     if (regs==AS3993_REG_PLLMAIN1)
     {
-        buf[0] = (buf[0] & 0xF0) | ((u8)((reg_B >> 6) & 0x0F));
-        buf[1] = (u8)((reg_B << 2) & 0xFC) |  (u8)((reg_A >> 8) & 0x03);
-        buf[2] = (u8)reg_A;
+        buf[0] = (buf[0] & 0xF0) | ((uint8_t)((reg_B >> 6) & 0x0F));
+        buf[1] = (uint8_t)((reg_B << 2) & 0xFC) |  (uint8_t)((reg_A >> 8) & 0x03);
+        buf[2] = (uint8_t)reg_A;
 
         as3993ContinuousWrite(AS3993_REG_PLLMAIN1, buf, 3);
     }
@@ -476,7 +476,7 @@ void as3993SetBaseFrequency(u8 regs, u32 frequency)
 
 void as3993EnterPowerDownMode()
 {
-    u8 i;
+    uint8_t i;
     int count;
     
     if (!ENABLE) return;
@@ -508,8 +508,8 @@ void as3993EnterPowerDownMode()
 
 void as3993ExitPowerDownMode()
 {
-    u8 i;
-    u8 buf[2];
+    uint8_t i;
+    uint8_t buf[2];
     
     if (ENABLE) return;
 
@@ -565,7 +565,7 @@ void as3993ResetDoNotPreserveRegisters(void)
 
 void as3993EnterPowerNormalMode()
 {
-    u8 stat;
+    uint8_t stat;
 
     as3993ExitPowerDownMode();      //ensure that EN is high
     stat = as3993SingleRead(AS3993_REG_STATUSCTRL);
@@ -580,7 +580,7 @@ void as3993ExitPowerNormalMode()
 
 void as3993EnterPowerNormalRfMode()
 {
-    u8 stat;
+    uint8_t stat;
 
     as3993ExitPowerDownMode();      //ensure that EN is high
     stat = as3993SingleRead(AS3993_REG_STATUSCTRL);
@@ -595,7 +595,7 @@ void as3993ExitPowerNormalRfMode()
 
 void as3993EnterPowerStandbyMode()
 {
-    u8 stat;
+    uint8_t stat;
 
     as3993ExitPowerDownMode();      //ensure that EN is high
     as3993AntennaPower(0);
@@ -606,7 +606,7 @@ void as3993EnterPowerStandbyMode()
 
 void as3993ExitPowerStandbyMode()
 {
-    u8 stat;
+    uint8_t stat;
 
     as3993ExitPowerDownMode();      //ensure that EN is high
     stat = as3993SingleRead(AS3993_REG_STATUSCTRL);
@@ -616,9 +616,9 @@ void as3993ExitPowerStandbyMode()
 
 void as3993WaitForStartup(void)
 {
-    u8 osc_ok, version;
-    u8 myBuf[2];
-    u16 count = 0;
+    uint8_t osc_ok, version;
+    uint8_t myBuf[2];
+    uint16_t count = 0;
 
     do
     {
@@ -633,9 +633,9 @@ void as3993WaitForStartup(void)
     delay_ms(2);            // give AS3993 some time to fully initialize
 }
 
-void as3993AntennaPower( u8 on)
+void as3993AntennaPower( uint8_t on)
 {
-    u8 val;
+    uint8_t val;
     unsigned count;
     val = as3993SingleRead(AS3993_REG_STATUSCTRL);
 
@@ -675,9 +675,9 @@ void as3993AntennaPower( u8 on)
     if(on) delay_ms(6); /* according to standard we have to wait 1.5ms before issuing commands  */
 }
 
-static u8 as3993GetRawRSSI( void )
+static uint8_t as3993GetRawRSSI( void )
 {
-    u8 value;
+    uint8_t value;
 
     as3993SingleCommand(AS3993_CMD_BLOCKRX);
     as3993SingleCommand(AS3993_CMD_ENABLERX);
@@ -698,10 +698,10 @@ void as3993RestoreSensitivity( )
     as3993SingleWrite(AS3993_REG_RXMIXERGAIN, as3993SavedSensRegs[0]);
 }
 
-s8 as3993GetSensitivity( )
+int8_t as3993GetSensitivity( )
 {
-    s8 sensitivity = 0;
-    u8 reg0a, reg0d, gain;
+    int8_t sensitivity = 0;
+    uint8_t reg0a, reg0d, gain;
 
     reg0d = as3993SingleRead(AS3993_REG_MISC1);
     reg0a = as3993SingleRead(AS3993_REG_RXMIXERGAIN);
@@ -742,9 +742,9 @@ s8 as3993GetSensitivity( )
     return sensitivity;
 }
 
-s8 as3993SetSensitivity( s8 minimumSignal )
+int8_t as3993SetSensitivity( int8_t minimumSignal )
 {
-    u8 reg0d, reg0a, gain;
+    uint8_t reg0d, reg0a, gain;
       
     reg0a = as3993SingleRead(AS3993_REG_RXMIXERGAIN);
     reg0d = as3993SingleRead(AS3993_REG_MISC1);
@@ -801,14 +801,14 @@ s8 as3993SetSensitivity( s8 minimumSignal )
     return minimumSignal;
 }
 
-void as3993GetRSSI( u16 num_of_ms_to_scan, u8 *rawIQ, s8* dBm )
+void as3993GetRSSI( uint16_t num_of_ms_to_scan, uint8_t *rawIQ, int8_t* dBm )
 {
-    u8 val;
-    u8 rawVal, singleInput;
-    u8 regStatus, regFilter;
-    u16 num_of_reads = num_of_ms_to_scan/2; /* as3993GetRawRSSI() delays 500us*/
-    u8 gainSettings;
-    s8 sum;
+    uint8_t val;
+    uint8_t rawVal, singleInput;
+    uint8_t regStatus, regFilter;
+    uint16_t num_of_reads = num_of_ms_to_scan/2; /* as3993GetRawRSSI() delays 500us*/
+    uint8_t gainSettings;
+    int8_t sum;
 
     if (num_of_reads == 0) num_of_reads = 1;
     regStatus = as3993SingleRead(AS3993_REG_STATUSCTRL);
@@ -823,7 +823,7 @@ void as3993GetRSSI( u16 num_of_ms_to_scan, u8 *rawIQ, s8* dBm )
     sum = 0;
     while (num_of_reads--)
     {
-        u8 temp;
+        uint8_t temp;
         rawVal = as3993GetRawRSSI();
         temp = (rawVal&0x0f) + (rawVal>>4);
         if (temp > sum)
@@ -874,9 +874,9 @@ end:
 
 /* ADC Values are in sign magnitude representation -> convert */
 #define CONVERT_ADC_TO_NAT(A) (((A)&0x80)?((A)&0x7f):(0 - ((A)&0x7f)))
-s8 as3993GetADC( void )
+int8_t as3993GetADC( void )
 {
-    s8 val;
+    int8_t val;
     as3993SingleCommand(AS3993_CMD_TRIGGERADCCON);
     delay_us(20); /* according to spec */
     val = as3993SingleRead(AS3993_REG_ADC);
@@ -884,11 +884,11 @@ s8 as3993GetADC( void )
     return val;
 }
 
-u16 as3993GetReflectedPower( void )
+uint16_t as3993GetReflectedPower( void )
 {
-    u16 value;
-    s8 adcVal;
-    u8 regMeas, regStatus;
+    uint16_t value;
+    int8_t adcVal;
+    uint8_t regMeas, regStatus;
     regStatus = as3993SingleRead(AS3993_REG_STATUSCTRL);
     regMeas = as3993SingleRead(AS3993_REG_MEASUREMENTCONTROL);
     as3993SingleWrite(AS3993_REG_MEASUREMENTCONTROL, regMeas & ~0xC0);  /* disable the OAD pin outputs */
@@ -911,11 +911,11 @@ u16 as3993GetReflectedPower( void )
     return value;
 }
 
-u16 as3993GetReflectedPowerNoiseLevel( void )
+uint16_t as3993GetReflectedPowerNoiseLevel( void )
 {
-    u16 value;
-    s8 i_0, q_0;
-    u8 regMeas, regStatus;
+    uint16_t value;
+    int8_t i_0, q_0;
+    uint8_t regMeas, regStatus;
     regStatus = as3993SingleRead(AS3993_REG_STATUSCTRL);
     regMeas = as3993SingleRead(AS3993_REG_MEASUREMENTCONTROL);
     as3993SingleWrite(AS3993_REG_MEASUREMENTCONTROL, regMeas & ~0xC0);  /* disable the OAD pin outputs */
@@ -938,17 +938,17 @@ u16 as3993GetReflectedPowerNoiseLevel( void )
 
 }
 
-s8 as3993TxRxGen2Bytes(u8 cmd, u8 *txbuf, u16 txbits, 
-                               u8 *rxbuf, u16 *rxbits,
-                               u8 norestime, u8 followCmd,
-                               u8 waitTxIrq)
+int8_t as3993TxRxGen2Bytes(uint8_t cmd, uint8_t *txbuf, uint16_t txbits, 
+                               uint8_t *rxbuf, uint16_t *rxbits,
+                               uint8_t norestime, uint8_t followCmd,
+                               uint8_t waitTxIrq)
 {
-    static u8 currCmd;
-    u8 buf[2];
-    u8 rxbytes = (*rxbits + 7) / 8;
-    u8 checkRxLength = 0;
-    u16 rxs = 0;
-    u8 rxed = 0;
+    static uint8_t currCmd;
+    uint8_t buf[2];
+    uint8_t rxbytes = (*rxbits + 7) / 8;
+    uint8_t checkRxLength = 0;
+    uint16_t rxs = 0;
+    uint8_t rxed = 0;
     if (rxbits)
     {
         rxs = *rxbits;
@@ -967,8 +967,8 @@ s8 as3993TxRxGen2Bytes(u8 cmd, u8 *txbuf, u16 txbits,
     }
     if (txbits)
     {
-        u8 txbytes = (txbits + 7)/8;
-        u8 totx = txbytes;
+        uint8_t txbytes = (txbits + 7)/8;
+        uint8_t totx = txbytes;
         if (totx > 24) totx = 24;
 
         /* set up two bytes tx length register */
@@ -1012,8 +1012,8 @@ s8 as3993TxRxGen2Bytes(u8 cmd, u8 *txbuf, u16 txbits,
     }
     if (rxbuf)
     {
-        u8 count;
-        u16 resp;
+        uint8_t count;
+        uint16_t resp;
         if (0xff == norestime)
         {
             as3993WaitForResponseTimed(RESP_RXDONE_OR_ERROR | RESP_FIFO, 30);

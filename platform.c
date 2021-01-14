@@ -51,7 +51,7 @@
   */
 static void initExtInterrupt(void )
 {
-    u8 a;
+    uint8_t a;
     // initialize IRQ interrupt
     // source for interrupt is set up in board-corresponding initXXX function
 
@@ -284,7 +284,7 @@ void platformInit(void)
 }
 
 /*------------------------------------------------------------------------- */
-void writeReadAS3993( const u8* wbuf, u8 wlen, u8* rbuf, u8 rlen, u8 stopMode, u8 doStart )
+void writeReadAS3993( const uint8_t* wbuf, uint8_t wlen, uint8_t* rbuf, uint8_t rlen, uint8_t stopMode, uint8_t doStart )
 {
     if (doStart) NCS_SELECT();
 
@@ -297,7 +297,7 @@ void writeReadAS3993( const u8* wbuf, u8 wlen, u8* rbuf, u8 rlen, u8 stopMode, u
 }
 
 /*------------------------------------------------------------------------- */
-void writeReadAS3993Isr( const u8* wbuf, u8 wlen, u8* rbuf, u8 rlen )
+void writeReadAS3993Isr( const uint8_t* wbuf, uint8_t wlen, uint8_t* rbuf, uint8_t rlen )
 {
     NCS_SELECT();
 

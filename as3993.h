@@ -36,7 +36,8 @@
 #define _AS3993_H_
 
 #include "global.h"
-#include "ams_types.h"
+//#include "ams_types.h"
+#include <stdint.h>
 
 #define AS3993_REG_STATUSCTRL           0X00
 #define AS3993_REG_PROTOCOLCTRL         0X01
@@ -202,14 +203,14 @@
 #define WAITFORRESPONSECOUNT    WAITFORRESPONSETIMEOUT/WAITFORRESPONSEDELAY
 
 
-extern volatile u16 as3993Response;
-extern u32 as3993CurrentBaseFreq;
+extern volatile uint16_t as3993Response;
+extern uint32_t as3993CurrentBaseFreq;
 
 /*------------------------------------------------------------------------- */
 /** Sends only one command to the AS3993. \n
   * @param command The command which is send to the AS3993.
   */
-void as3993SingleCommand(u8 command);
+void as3993SingleCommand(uint8_t command);
 
 /*------------------------------------------------------------------------- */
 /** Reads data from a address and some following addresses from the
@@ -218,20 +219,20 @@ void as3993SingleCommand(u8 command);
   * @param len Length of the buffer.
   * @param *readbuf Pointer to the first byte of the array where the data has to be stored in.
   */
-void as3993ContinuousRead(u8 address, s8 len, u8 *readbuf);
+void as3993ContinuousRead(uint8_t address, int8_t len, uint8_t *readbuf);
 
 /** Reads data from the fifo and some following addresses from the
   * AS3993. The len parameter defines the number of address read.
   * @param len Length of the buffer.
   * @param *readbuf Pointer to the first byte of the array where the data has to be stored in.
   */
-void as3993FifoRead(s8 len, u8 *readbuf);
+void as3993FifoRead(int8_t len, uint8_t *readbuf);
 
 /** Single Read -> reads one byte from one address of the AS3993.  \n
   * @param address The addressbyte
   * @return The databyte read from the AS3993
   */
-u8 as3993SingleRead(u8 address);
+uint8_t as3993SingleRead(uint8_t address);
 
 /*------------------------------------------------------------------------- */
 /** Continuous Write -> writes several bytes to subsequent addresses of the AS3993.  \n
@@ -239,13 +240,13 @@ u8 as3993SingleRead(u8 address);
   * @param *buf Pointer to the first byte of the array.
   * @param len Length of the buffer.
   */
-void as3993ContinuousWrite(u8 address, u8 *buf, s8 len);
+void as3993ContinuousWrite(uint8_t address, uint8_t *buf, int8_t len);
 
 /** Single Write -> writes one byte to one address of the AS3993.  \n
   * @param address The addressbyte
   * @param value The databyte
   */
-void as3993SingleWrite(u8 address, u8 value);
+void as3993SingleWrite(uint8_t address, uint8_t value);
 
 /*------------------------------------------------------------------------- */
 /** Sends first some commands to the AS3993. The number of
@@ -259,34 +260,34 @@ void as3993SingleWrite(u8 address, u8 value);
   * @param buf_len Length of the buffer.
 
   */
-void as3993CommandContinuousAddress(u8 *command, u8 com_len,
-                             u8 address, u8 *buf, u8 buf_len);
+void as3993CommandContinuousAddress(uint8_t *command, uint8_t com_len,
+                             uint8_t address, uint8_t *buf, uint8_t buf_len);
 
 /*------------------------------------------------------------------------- */
 /** This function waits for the specified response(IRQ).
   */
-void as3993WaitForResponse(u16 waitMask);
+void as3993WaitForResponse(uint16_t waitMask);
 
 /*------------------------------------------------------------------------- */
 /** This function waits for the specified response(IRQ).
   */
-void as3993WaitForResponseTimed(u16 waitMask, u16 ms);
+void as3993WaitForResponseTimed(uint16_t waitMask, uint16_t ms);
 
 #if 0
 /*------------------------------------------------------------------------- */
 /** This function gets the current response
   */
-u16 as3993GetResponse(void);
+uint16_t as3993GetResponse(void);
 
 /*------------------------------------------------------------------------- */
 /** This function clears the response bits according to mask
   */
-u16 as3993ClrResponseMask(u16 mask);
+uint16_t as3993ClrResponseMask(uint16_t mask);
 
 /*------------------------------------------------------------------------- */
 /** This function clears all responses
   */
-u16 as3993ClrResponse(void);
+uint16_t as3993ClrResponse(void);
 #else
 #define as3993GetResponse() as3993Response
 #define as3993ClrResponseMask(mask) as3993Response&=~(mask)
@@ -383,7 +384,7 @@ void as3993EnterPowerStandbyMode();
  */
 void as3993ExitPowerStandbyMode();
 
-extern u8 as3993ChipVersion;
+extern uint8_t as3993ChipVersion;
 
 /*!
  *****************************************************************************

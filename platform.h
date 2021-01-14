@@ -12,6 +12,7 @@
 #include "Compiler.h"
 #include "global.h"
 #include "as3993_config.h"
+#include <stdint.h>
 
 
 /*
@@ -96,11 +97,11 @@ void spiInit(void);
 /*------------------------------------------------------------------------- */
 /** This function talks with the AS3993 chip.
   */
-void writeReadAS3993( const u8* wbuf, u8 wlen, u8* rbuf, u8 rlen, u8 stopMode, u8 doStart );
+void writeReadAS3993( const uint8_t* wbuf, uint8_t wlen, uint8_t* rbuf, uint8_t rlen, uint8_t stopMode, uint8_t doStart );
 
 /** This function talks with the AS3993 chip from ISR.
   */
-void writeReadAS3993Isr( const u8 *wbuf, u8 wlen, u8* rbuf, u8 rlen );
+void writeReadAS3993Isr( const uint8_t *wbuf, uint8_t wlen, uint8_t* rbuf, uint8_t rlen );
 
 /*------------------------------------------------------------------------- */
 /** \attention Do not use, not implemented.
@@ -117,14 +118,14 @@ void setPortDirect();
 void setPortNormal();
 
 //marte
-void sel_antena (int);
-void sel_cap_cin(int);
-void sel_cap_cout(int);
-void sel_cap_clen(int);
+void sel_antena (int16_t);
+void sel_cap_cin(int16_t);
+void sel_cap_cout(int16_t);
+void sel_cap_clen(int16_t);
 void desliga_saida_pa (void);
 void liga_saida_pa (void);
-void ld_pa (int);
-void antena_ok (unsigned char);
+void ld_pa (int16_t);
+void antena_ok (uint8_t);
 void auto_sintonia (void);
 
 /*

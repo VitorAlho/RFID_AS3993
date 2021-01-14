@@ -46,6 +46,10 @@
 #define _XTAL_FREQ  32000000UL
 #endif
 
+#ifndef FCY
+#define FCY _XTAL_FREQ/2
+#endif
+
 #include "xc.h"
 #include "stdint.h"
 

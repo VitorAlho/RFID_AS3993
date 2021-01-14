@@ -110,7 +110,8 @@
 #define FCY    (SYSCLK)
 
 #include "as3993_config.h"
-#include "ams_types.h"
+//#include "ams_types.h"
+#include <stdint.h>
 
 /** Definition high */
 #define HIGH                      1
@@ -127,12 +128,12 @@
 #define BIT6	0x40
 #define BIT7	0x80
 
-void bin2Chars(int value, unsigned char *destbuf);
-void bin2Hex(char value, unsigned char *destbuf);
-void u32ToEbv(u32 value, u8 *ebv, u8 *len);
-void insertBitStream(u8 *dest, u8 const *source, u8 len, u8 bitpos);
-u32 readU32FromLittleEndianBuffer(u8 const *buffer);
-void recebeOperador (u8 dado);
+void bin2Chars(int16_t value, uint8_t *destbuf);
+void bin2Hex(int8_t value, uint8_t *destbuf);
+void u32ToEbv(uint32_t value, uint8_t *ebv, uint8_t *len);
+void insertBitStream(uint8_t *dest, uint8_t const *source, uint8_t len, uint8_t bitpos);
+uint32_t readU32FromLittleEndianBuffer(uint8_t const *buffer);
+void recebeOperador (uint8_t dado);
 //void zeraPonteiroDoBufferNaMaquinaDeEstados_EventosDeParadaes (void);
 void bloqueia_frente(void);
 void bloqueia_reh(void);

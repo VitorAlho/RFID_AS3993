@@ -35,7 +35,7 @@
 #include "timer.h"
 
 void tick(void);
-static volatile u16 slowTimerMsValue;
+static volatile uint16_t slowTimerMsValue;
 
 void slowTimerStart( )
 {
@@ -47,7 +47,7 @@ void slowTimerStart( )
     T3CONbits.TON = 1;
 }
 
-u16 slowTimerValue( )
+uint16_t slowTimerValue( )
 {
     return slowTimerMsValue;
 }
