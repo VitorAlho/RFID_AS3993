@@ -9,6 +9,7 @@
 #include "stdlib.h"
 #include "string.h"
 #include "Compiler.h"
+#include "mcc_generated_files/spi1.h"
 
 /** Definition protocol read bit */
 #define READ                    0x40
@@ -28,6 +29,32 @@ static uint8_t as3993PowerDownRegs[AS3993_REG_ICD+6];
 /** Will be set to 0 if version register is > 0x60. Silicon revision 0x60 needs
  specific handling in some functions. */
 static uint8_t gChipRevisionZero = 1;
+
+/*------------------------------------------------------------------------- */
+void writeReadAS3993( const uint8_t* wbuf, uint8_t wlen, uint8_t* rbuf, uint8_t rlen, uint8_t stopMode, uint8_t doStart )
+{
+    if (doStart) NCS_SELECT();
+
+    //WriteReadSPI1(wbuf, 0, wlen);
+    SPI1_Exchange8bitBuffer((uint8_t *)wbuf,(uint16_t)wlen,0);
+    //WriteReadSPI1(wbuf,0,wlen);
+    if (rlen)
+        //WriteReadSPI1(0, rbuf, rlen);
+        SPI1_Exchange8bitBuffer(0,(uint16_t)rlen,rbuf);
+        //WriteReadSPI1(0,rbuf,rlen);
+    if (stopMode != STOP_NONE) NCS_DESELECT();
+}
+
+/*------------------------------------------------------------------------- */
+void writeReadAS3993Isr( const uint8_t* wbuf, uint8_t wlen, uint8_t* rbuf, uint8_t rlen )
+{
+    NCS_SELECT();
+
+    SPI1_Exchange8bitBuffer((uint8_t *)wbuf,(uint16_t)wlen,0);
+    SPI1_Exchange8bitBuffer(0,(uint16_t)rlen,rbuf);
+
+    NCS_DESELECT();
+}
 
 /*------------------------------------------------------------------------- */
 uint16_t as3993Initialize(uint32_t baseFreq)

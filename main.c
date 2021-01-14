@@ -55,9 +55,9 @@
 #include "platform.h"
 #include "as3993_public.h"
 #include "appl_commands.h"
-#include "spi1.h"
 #include "mcc_generated_files/system.h"
 #include "mcc_generated_files/pin_manager.h"
+#include "mcc_generated_files/spi1.h"
 #include <stdint.h>
 
 #ifndef FCY

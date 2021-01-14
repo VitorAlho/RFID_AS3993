@@ -9,4 +9,5 @@ as3993_public.h  \
 errno_as3993.h  \
 errno.h  \
  timer.h  \
-gen2.h 
+gen2.h  \
+mcc_generated_files/spi1.h 

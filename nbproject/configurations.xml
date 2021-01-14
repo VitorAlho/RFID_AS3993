@@ -18,7 +18,6 @@
         <itemPath>mcc_generated_files/tmr3.h</itemPath>
       </logicalFolder>
       <itemPath>Compiler.h</itemPath>
-      <itemPath>ams_types.h</itemPath>
       <itemPath>appl_commands.h</itemPath>
       <itemPath>as3993.h</itemPath>
       <itemPath>as3993_config.h</itemPath>
@@ -33,7 +32,6 @@
       <itemPath>timer.h</itemPath>
       <itemPath>timer_driver.h</itemPath>
       <itemPath>bsp.h</itemPath>
-      <itemPath>spi1.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
@@ -64,7 +62,6 @@
       <itemPath>timer.c</itemPath>
       <itemPath>bsp.c</itemPath>
       <itemPath>platform.c</itemPath>
-      <itemPath>spi1.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"

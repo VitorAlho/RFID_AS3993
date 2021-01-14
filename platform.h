@@ -95,15 +95,6 @@ void platformInit(void);
 void spiInit(void);
 
 /*------------------------------------------------------------------------- */
-/** This function talks with the AS3993 chip.
-  */
-void writeReadAS3993( const uint8_t* wbuf, uint8_t wlen, uint8_t* rbuf, uint8_t rlen, uint8_t stopMode, uint8_t doStart );
-
-/** This function talks with the AS3993 chip from ISR.
-  */
-void writeReadAS3993Isr( const uint8_t *wbuf, uint8_t wlen, uint8_t* rbuf, uint8_t rlen );
-
-/*------------------------------------------------------------------------- */
 /** \attention Do not use, not implemented.
   *  This function sets the interface to the AS3993 for accessing it via
   * direct mode. 

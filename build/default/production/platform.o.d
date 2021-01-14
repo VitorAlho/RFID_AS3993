@@ -5,4 +5,4 @@ global.h  \
  platform.h  \
 Compiler.h  \
 timer.h  \
-spi1.h 
+mcc_generated_files/spi1.h 

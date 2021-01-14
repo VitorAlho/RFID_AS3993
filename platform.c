@@ -40,9 +40,8 @@
 #include "platform.h"
 #include "global.h"
 #include "timer.h"
-#include "spi1.h"
 //#include "PPS.h"
-#include "spi1.h"
+#include "mcc_generated_files/spi1.h"
 
 /*------------------------------------------------------------------------- */
 /** This function initialising the external interrupt for comunication with the
@@ -283,29 +282,8 @@ void platformInit(void)
     delay_us(100);
 }
 
-/*------------------------------------------------------------------------- */
-void writeReadAS3993( const uint8_t* wbuf, uint8_t wlen, uint8_t* rbuf, uint8_t rlen, uint8_t stopMode, uint8_t doStart )
-{
-    if (doStart) NCS_SELECT();
 
-    //WriteReadSPI1(wbuf, 0, wlen);
-    WriteReadSPI1(wbuf,0,wlen);
-    if (rlen)
-        //WriteReadSPI1(0, rbuf, rlen);
-        WriteReadSPI1(0,rbuf,rlen);
-    if (stopMode != STOP_NONE) NCS_DESELECT();
-}
 
-/*------------------------------------------------------------------------- */
-void writeReadAS3993Isr( const uint8_t* wbuf, uint8_t wlen, uint8_t* rbuf, uint8_t rlen )
-{
-    NCS_SELECT();
-
-    WriteReadSPI1(wbuf, 0, wlen);
-    WriteReadSPI1(0, rbuf, rlen);
-
-    NCS_DESELECT();
-}
 
 
 void setPortDirect()
