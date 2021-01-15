@@ -35,10 +35,8 @@
 #ifndef _AS3993_PUBLIC_H_
 #define _AS3993_PUBLIC_H_
 
-#include "global.h"
-#include "errno_as3993.h"
-#include "GenericTypeDefs.h"
-#include "platform.h"
+#include <stdint.h>
+#include "appl_commands.h"
 
 /** @struct TagInfo_
   * This struct stores the whole Tag information
@@ -57,25 +55,25 @@
   * This struct stores the whole information of one tag.
   *
   */
-//typedef u8x unsigned char __attribute__((far));
+//typedef uint8_tx unsigned char __attribute__((far));
 
  //struct __attribute__((far)) TagInfo_
 struct TagInfo_
 {
     /** RN16 number */
-    u8 rn16[2];
+    uint8_t rn16[2];
     /** PC value */
-    u8 pc[2];
+    uint8_t pc[2];
     /** EPC array */
-    u8 epc[EPCLENGTH]; /* epc must immediately follow pc */
+    uint8_t epc[EPCLENGTH]; /* epc must immediately follow pc */
     /** EPC length */
-    u8 epclen;  /*length in bytes */
+    uint8_t epclen;  /*length in bytes */
     /** Handle for write and read communication with the Tag */
-    u8 handle[2];
+    uint8_t handle[2];
     /** rssi which has been measured when reading this Tag. */
-    u8 rssi;
+    uint8_t rssi;
     /** content of AGC and Internal Status Display Register 0x2A after reading a tag. */
-    u8 agc;
+    uint8_t agc;
 };
 
 /** Type definition struct: TagInfo_ is named Tag */
@@ -90,37 +88,37 @@ typedef struct TagInfo_ Tag;
 typedef struct
 {
     /** Number of frequencies in freq. */
-    u8 numFreqs;
+    uint8_t numFreqs;
 
     /** List of frequencies which are used for hopping. */
-    u32 freq[MAXFREQ];
-#ifdef TUNER
+    uint32_t freq[MAXFREQ];
+
     /** Counts how often this freq has been used in hopping. Only available on tuner enabled boards. */
-    u16 countFreqHop[MAXFREQ];
-#endif
+    uint16_t countFreqHop[MAXFREQ];
+
 } Freq;
 
-#ifdef TUNER
+
 typedef struct
 {
     /** number of entries in the table */
-    u8 tableSize;
+    uint8_t tableSize;
     /** currently active entry in the table. */
-    u8 currentEntry;
+    uint8_t currentEntry;
     /** frequency which is assigned to this tune parameters. */
     unsigned long freq[MAXTUNE];
     /** tune enable for antenna. Valid values: 1 = antenna 1, 2 = antenna 2, 3 = antenna 1+2 */
-    u8      tuneEnable[MAXTUNE];
+    uint8_t      tuneEnable[MAXTUNE];
     /** Cin tuning parameter for antenna 1 + 2. */
-    u8           cin[2][MAXTUNE];
+    uint8_t           cin[2][MAXTUNE];
     /** Clen tuning parameter for antenna 1 + 2. */
-    u8          clen[2][MAXTUNE];
+    uint8_t          clen[2][MAXTUNE];
     /** Cout tuning parameter for antenna 1 + 2. */
-    u8          cout[2][MAXTUNE];
+    uint8_t          cout[2][MAXTUNE];
     /** Reflected power which was measured after last tuning. */
-    u16      tunedIQ[2][MAXTUNE];
+    uint16_t      tunedIQ[2][MAXTUNE];
 } TuningTable;
-#endif
+
 
 /** This function initialises the AS3993. A return value greater 0 indicates an error.\n
  *
@@ -134,26 +132,26 @@ typedef struct
  * @return 4     : Crystal not stable (Bit0 in AGC and Internal Status register 0x2A)
  * @return 5     : PLL not locked (Bits1 in AGC and Internal Status register 0x2A)
  */
-u16 as3993Initialize(u32 baseFreq);
+uint16_t as3993Initialize(uint32_t baseFreq);
 
 /** This function reads the version register of the AS3993 and
   * returns the value. \n
   * @return Returns the value of the AS3993 version register.
   */
-u8 as3993ReadChipVersion(void);
+uint8_t as3993ReadChipVersion(void);
 
 /*------------------------------------------------------------------------- */
 /** This function sets the frequency in the approbiate register
   * @param regs Which register is being used either AS3993_REG_PLLMAIN or AS3993_REG_PLLAUX
   * @param frequency frequency in kHz
   */
-void as3993SetBaseFrequency(u8 regs, u32 frequency);
+void as3993SetBaseFrequency(uint8_t regs, uint32_t frequency);
 
 /*------------------------------------------------------------------------- */
 /** This function turns the antenna power on or off. 
   * @param on boolean to value to turn it on (1) or off (0).
   */
-void as3993AntennaPower( u8 on);
+void as3993AntennaPower( uint8_t on);
 
 /*------------------------------------------------------------------------- */
 /**  This function gets the RSSI (ReceivedSignalStrengthIndicator) of the
@@ -179,7 +177,7 @@ void as3993AntennaPower( u8 on);
   *  }
   *  \endcode
   */
-void as3993GetRSSI( u16 num_of_ms_to_scan, u8 *rawIQ, s8 *dBm );
+void as3993GetRSSI( uint16_t num_of_ms_to_scan, uint8_t *rawIQ, int8_t *dBm );
 
 /*------------------------------------------------------------------------- */
 /**  This function stores the current sensitivity registers. After that 
@@ -200,12 +198,12 @@ void as3993RestoreSensitivity( );
   *  \return the level offset. Sensitivity was set to minimumSignal - (returned_val).
   *  negative values mean the sensitivity could not be reached.
   */
-s8 as3993SetSensitivity( s8 minimumSignal );
+int8_t as3993SetSensitivity( int8_t minimumSignal );
 
 /*------------------------------------------------------------------------- */
 /**  This function gets the current rx sensitivity level.
   */
-s8 as3993GetSensitivity( void );
+int8_t as3993GetSensitivity( void );
 
 /*------------------------------------------------------------------------- */
 /** This function gets the values for the reflected power. For measuring the 
@@ -218,17 +216,17 @@ s8 as3993GetSensitivity( void );
   * as3993GetReflectedPowerNoiseLevel() should be subtracted from the result of
   * as3993GetReflectedPower()
   */
-u16 as3993GetReflectedPower( void );
+uint16_t as3993GetReflectedPower( void );
 
 /*------------------------------------------------------------------------- */
 /**
   * This function measures and returns the noise level of the reflected power
-  * measurement of the active antenna. The returned value is of type u16 and
+  * measurement of the active antenna. The returned value is of type uint16_t and
   * contains the 8 bit I and Q values of the reflected power. The I value is
   * located in the lower 8 bits, the Q value in the upper 8 bits. \n
   * See as3993GetReflectedPower() fore more info.
   */
-u16 as3993GetReflectedPowerNoiseLevel( void );
+uint16_t as3993GetReflectedPowerNoiseLevel( void );
 
 /*------------------------------------------------------------------------- */
 /** This function reads in the current register settings (configuration only), 
@@ -276,10 +274,10 @@ void as3993ResetDoNotPreserveRegisters(void);
       waits for tx-done, waits for rx-done, sends REQRN, reads EPC from FIFO
 
   */
-s8 as3993TxRxGen2Bytes(u8 cmd, u8 *txbuf, u16 txbits, 
-                               u8 *rxbuf, u16 *rxbits,
-                               u8 norestime, u8 followCmd,
-                               u8 waitTxIrq);
+int8_t as3993TxRxGen2Bytes(uint8_t cmd, uint8_t *txbuf, uint16_t txbits, 
+                               uint8_t *rxbuf, uint16_t *rxbits,
+                               uint8_t norestime, uint8_t followCmd,
+                               uint8_t waitTxIrq);
 
 /**
  * This function handles the rx-ed data for an command expecting a header bit.
@@ -297,9 +295,9 @@ s8 as3993TxRxGen2Bytes(u8 cmd, u8 *txbuf, u16 txbits,
  * @param handle Handle which should be inside the received data.
  * @return Returns the corrected error code.
  */
-s8 as3980HandleResponseWithHeaderBit(s8 ret, u8 *destbuf, u16 rxbits, u8 const * handle);
+int8_t as3980HandleResponseWithHeaderBit(int8_t ret, uint8_t *destbuf, uint16_t rxbits, uint8_t const * handle);
 
 /**
   * This functions performs an ADC conversion and returns the signed result in machine coding */
-s8 as3993GetADC( void );
+int8_t as3993GetADC( void );
 #endif /* _AS3993_PUBLIC_H_ */

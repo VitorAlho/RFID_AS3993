@@ -35,8 +35,54 @@
 #ifndef _AS3993_H_
 #define _AS3993_H_
 
-#include "global.h"
-#include "ams_types.h"
+
+//#include "ams_types.h"
+#include <stdint.h>
+
+///////////////////////////////////////////////////////
+//                      ERRORS
+///////////////////////////////////////////////////////
+
+/*!
+ * Error codes to be used within the application.
+ * They are represented by an int8_t
+ */
+#define ERR_NONE     0 /*!< no error occured */
+#define ERR_NOMEM   -1 /*!< not enough memory to perform the requested operation */
+#define ERR_BUSY    -2 /*!< device or resource busy */
+#define ERR_IO      -3 /*!< generic IO error */
+#define ERR_TIMEOUT -4 /*!< error due to timeout */
+#define ERR_REQUEST -5 /*!< invalid request or requested function can't be executed at the moment */
+#define ERR_NOMSG   -6 /*!< No message of desired type */
+#define ERR_PARAM   -7 /*!< Parameter error */
+
+#define ERR_LAST_ERROR -32
+
+#define ERR_FIRST_AS3993_ERROR (ERR_LAST_ERROR-1)
+
+/* Errors primarily raised by AS3993 itself, however codes like ERR_CHIP_CRCERROR can be reused by ISO6B */
+#define ERR_CHIP_NORESP               (ERR_FIRST_AS3993_ERROR - 0)
+#define ERR_CHIP_HEADER               (ERR_FIRST_AS3993_ERROR - 1)
+#define ERR_CHIP_PREAMBLE             (ERR_FIRST_AS3993_ERROR - 2)
+#define ERR_CHIP_RXCOUNT              (ERR_FIRST_AS3993_ERROR - 3)
+#define ERR_CHIP_CRCERROR             (ERR_FIRST_AS3993_ERROR - 4)
+#define ERR_CHIP_FIFO                 (ERR_FIRST_AS3993_ERROR - 5)
+
+#define ERR_REFLECTED_POWER           (ERR_FIRST_AS3993_ERROR - 16)
+
+/* Upper level protocol errors, e.g. a Write can fail when access command has failed... */
+#define ERR_GEN2_SELECT               (ERR_FIRST_AS3993_ERROR - 32)
+#define ERR_GEN2_ACCESS               (ERR_FIRST_AS3993_ERROR - 33)
+#define ERR_GEN2_REQRN                (ERR_FIRST_AS3993_ERROR - 34)
+#define ERR_GEN2_CHANNEL_TIMEOUT      (ERR_FIRST_AS3993_ERROR - 35)
+
+
+/* ISO6b errors */
+#define ERR_ISO6B_NACK                (ERR_FIRST_AS3993_ERROR - 64)
+
+///////////////////////////////////////////////////////
+//                     END ERRORS
+///////////////////////////////////////////////////////
 
 #define AS3993_REG_STATUSCTRL           0X00
 #define AS3993_REG_PROTOCOLCTRL         0X01
@@ -202,14 +248,14 @@
 #define WAITFORRESPONSECOUNT    WAITFORRESPONSETIMEOUT/WAITFORRESPONSEDELAY
 
 
-extern volatile u16 as3993Response;
-extern u32 as3993CurrentBaseFreq;
+extern volatile uint16_t as3993Response;
+extern uint32_t as3993CurrentBaseFreq;
 
 /*------------------------------------------------------------------------- */
 /** Sends only one command to the AS3993. \n
   * @param command The command which is send to the AS3993.
   */
-void as3993SingleCommand(u8 command);
+void as3993SingleCommand(uint8_t command);
 
 /*------------------------------------------------------------------------- */
 /** Reads data from a address and some following addresses from the
@@ -218,20 +264,20 @@ void as3993SingleCommand(u8 command);
   * @param len Length of the buffer.
   * @param *readbuf Pointer to the first byte of the array where the data has to be stored in.
   */
-void as3993ContinuousRead(u8 address, s8 len, u8 *readbuf);
+void as3993ContinuousRead(uint8_t address, int8_t len, uint8_t *readbuf);
 
 /** Reads data from the fifo and some following addresses from the
   * AS3993. The len parameter defines the number of address read.
   * @param len Length of the buffer.
   * @param *readbuf Pointer to the first byte of the array where the data has to be stored in.
   */
-void as3993FifoRead(s8 len, u8 *readbuf);
+void as3993FifoRead(int8_t len, uint8_t *readbuf);
 
 /** Single Read -> reads one byte from one address of the AS3993.  \n
   * @param address The addressbyte
   * @return The databyte read from the AS3993
   */
-u8 as3993SingleRead(u8 address);
+uint8_t as3993SingleRead(uint8_t address);
 
 /*------------------------------------------------------------------------- */
 /** Continuous Write -> writes several bytes to subsequent addresses of the AS3993.  \n
@@ -239,13 +285,13 @@ u8 as3993SingleRead(u8 address);
   * @param *buf Pointer to the first byte of the array.
   * @param len Length of the buffer.
   */
-void as3993ContinuousWrite(u8 address, u8 *buf, s8 len);
+void as3993ContinuousWrite(uint8_t address, uint8_t *buf, int8_t len);
 
 /** Single Write -> writes one byte to one address of the AS3993.  \n
   * @param address The addressbyte
   * @param value The databyte
   */
-void as3993SingleWrite(u8 address, u8 value);
+void as3993SingleWrite(uint8_t address, uint8_t value);
 
 /*------------------------------------------------------------------------- */
 /** Sends first some commands to the AS3993. The number of
@@ -259,34 +305,34 @@ void as3993SingleWrite(u8 address, u8 value);
   * @param buf_len Length of the buffer.
 
   */
-void as3993CommandContinuousAddress(u8 *command, u8 com_len,
-                             u8 address, u8 *buf, u8 buf_len);
+void as3993CommandContinuousAddress(uint8_t *command, uint8_t com_len,
+                             uint8_t address, uint8_t *buf, uint8_t buf_len);
 
 /*------------------------------------------------------------------------- */
 /** This function waits for the specified response(IRQ).
   */
-void as3993WaitForResponse(u16 waitMask);
+void as3993WaitForResponse(uint16_t waitMask);
 
 /*------------------------------------------------------------------------- */
 /** This function waits for the specified response(IRQ).
   */
-void as3993WaitForResponseTimed(u16 waitMask, u16 ms);
+void as3993WaitForResponseTimed(uint16_t waitMask, uint16_t ms);
 
 #if 0
 /*------------------------------------------------------------------------- */
 /** This function gets the current response
   */
-u16 as3993GetResponse(void);
+uint16_t as3993GetResponse(void);
 
 /*------------------------------------------------------------------------- */
 /** This function clears the response bits according to mask
   */
-u16 as3993ClrResponseMask(u16 mask);
+uint16_t as3993ClrResponseMask(uint16_t mask);
 
 /*------------------------------------------------------------------------- */
 /** This function clears all responses
   */
-u16 as3993ClrResponse(void);
+uint16_t as3993ClrResponse(void);
 #else
 #define as3993GetResponse() as3993Response
 #define as3993ClrResponseMask(mask) as3993Response&=~(mask)
@@ -383,7 +429,7 @@ void as3993EnterPowerStandbyMode();
  */
 void as3993ExitPowerStandbyMode();
 
-extern u8 as3993ChipVersion;
+extern uint8_t as3993ChipVersion;
 
 /*!
  *****************************************************************************
@@ -392,4 +438,117 @@ extern u8 as3993ChipVersion;
  *****************************************************************************
  */
 void as3993WaitForStartup(void);
+
+/*
+******************************************************************************
+* DEFINES
+******************************************************************************
+*/
+/** define for stopMode parameter of writeReadAS3993() */
+#define STOP_NONE               0
+/** define for stopMode parameter of writeReadAS3993() */
+#define STOP_SGL                1
+/** define for stopMode parameter of writeReadAS3993() */
+#define STOP_CONT               2
+
+/** map as3993Isr to _INT1Interrupt */
+#define as3993Isr EX_INT1_CallBack
+
+/*! map timer2Isr to _T3Interrupt */
+#define timer3Isr //TMR3_CallBack
+
+/** Macro for enable external IRQ */
+#define ENEXTIRQ()                _INT1IE = 1;
+
+/** Macro for disable external IRQ */
+#define DISEXTIRQ()               _INT1IE = 0
+
+/** Macro for clearing external IRQ flag*/
+#define CLREXTIRQ()               _INT1IF = 0
+
+/** Macro for setting enable pin */
+#define EN(x)                     ENABLE=(x)
+
+/** Macro for setting DCDC on/off */
+#define DCDC(x)                   DCDCPIN=(x)
+
+/** Macro for setting NCS pin, serial enable line */
+#define NCS(x)                    NCSPIN=(x)
+/** Macro for activating AS3993 for SPI communication */
+#define NCS_SELECT()              NCS(0)
+/** Macro for deactivating AS3993 for SPI communication */
+#define NCS_DESELECT()            NCS(1)
+
+/** Definition for the serial enable pin */
+#define NCSPIN                    _LATF8 //_LATB15
+/** Definition for the Direct data mode Pin*/
+
+/** Definition for the enable pin */
+#define ENABLE                    _LATB2 //_LATB13
+
+#define SAIDA_RS(x)                 _LATD11=(x)     //SAIDA RS
+#define SAIDA_ELCD(x)               _LATD0=(x)      //SAIDA ELCD
+#define SAIDA_BD4(x)                _LATD6=(x)      //SAIDA BD4
+#define SAIDA_BD5(x)                _LATD7=(x)      //SAIDA BD5
+#define SAIDA_BD6(x)                _LATD13=(x)     //SAIDA BD6
+#define SAIDA_BD7(x)                _LATD12=(x)     //SAIDA BD7
+#define SAIDA_DIR(x)                _LATG13=(x)     //SAIDA DIR
+
+#define LED_A1(x)                   _LATE0=(x)      //SAIDA LED_A1
+#define LED_A2(x)                   _LATE1=(x)      //SAIDA LED A2
+#define LED_A3(x)                   _LATE2=(x)      //SAIDA LED A3
+#define LED_A4(x)                   _LATE3=(x)      //SAIDA LED_A4
+#define LED_A5(x)                   _LATE4=(x)      //SAIDA LED A5
+#define LED_A6(x)                   _LATE5=(x)      //SAIDA LED A6
+
+#define LED_A7(x)                   _LATA1=(x)      //SAIDA LED A7
+#define LED_A8(x)                   _LATA6=(x)      //SAIDA LED A8
+
+#define LED_TAG(x)                  _LATE8=(x)      //SAIDA LED TAG
+#define LIGA_PA(x)                  _LATE9=(x)      //SAIDA LIGA PA
+
+#define SEL_BBA(x)                  _LATB10=(x)     //SAIDA SEL_BBA
+#define SEL_A1_4(x)                 _LATB11=(x)     //SAIDA SEL_A1-4
+#define SEL_B5_8(x)                 _LATB12=(x)     //SAIDA SEL_B5-8
+#define SEL_A1_2(x)                 _LATB13=(x)     //SAIDA SEL_A1-2
+#define SEL_A3_4(x)                 _LATB15=(x)     //SAIDA SEL_A3-4
+#define SEL_B5_6(x)                 _LATF13=(x)     //SAIDA SEL_B5-6
+#define SEL_B7_8(x)                 _LATF12=(x)     //SAIDA SEL_B7-8
+#define TUNE_CAP3(x)                _LATF4=(x)      //SAIDA TUNE_CAP3
+
+#define SAI_1(x)                    _LATG15=(x)     //SAIDA SAI_1
+#define SAI_2(x)                    _LATB3=(x)      //SAIDA SAI_2
+#define SAI_3(x)                    _LATC4=(x)      //SAIDA SAI_3
+#define SAI_4(x)                    _LATC3=(x)      //SAIDA SAI_4
+#define SAI_5(x)                    _LATC2=(x)      //SAIDA SAI_5
+#define SAI_6(x)                    _LATC1=(x)      //SAIDA SAI_6
+#define SAI_7(x)                    _LATB6=(x)      //SAIDA SAI_6
+#define TUNE_CAP1(x)                _LATD15=(x)     //SAIDA TUNE_CAP1
+#define TUNE_CAP2(x)                _LATD14=(x)     //SAIDA TUNE_CAP2
+
+#define GP_0(x)                     _LATB4=(x)      //SAIDA GP_0
+#define GP_1(x)                     _LATC13=(x)      //SAIDA GP_1
+#define GP_2(x)                     _LATF2=(x)      //SAIDA GP_2
+#define GP_3(x)                     _LATA4=(x)      //SAIDA GP_3
+#define GP_4(x)                     _LATA5=(x)      //SAIDA GP_4
+#define GP_5(x)                     _LATA2=(x)      //SAIDA GP_5
+#define GP_6(x)                     _LATG12=(x)      //SAIDA GP_6
+#define GP_7(x)                     _LATA9=(x)      //SAIDA GP_7
+#define GP_8(x)                     _LATA0=(x)      //SAIDA GP_8
+#define GP_9(x)                     _LATC14=(x)      //SAIDA GP_9
+#define GP_10(x)                     _LATF0=(x)      //SAIDA GP_10
+#define GP_11(x)                     _LATF1=(x)      //SAIDA GP_11
+#define GP_12(x)                     _LATA1=(x)      //SAIDA GP_12
+#define GP_13(x)                     _LATD10=(x)      //SAIDA GP_13
+#define GP_14(x)                     _LATA6=(x)      //SAIDA GP_14
+#define GP_15(x)                     _LATA7=(x)      //SAIDA GP_15
+#define GP_16(x)                     _LATB5=(x)      //SAIDA GP_16
+
+#define LED_ZIG(x)                   _LATA10=(x)     //SAIDA LED_ZIG
+#define LED_WIFI                     _LATA10
+#define LED_WF(x)                    _LATG1=(x)//_LATG14=(x)     //SAIDA RIO4
+#define LED_3G(x)                    _LATG14=(x)//_LATG0=(x)      //SAIDA LED0
+#define LED_GPS(x)                   _LATG0=(x)//_LATG1=(x)      //SAIDA LED1
+
+//----------------------------------------------------------------------
 #endif /* _AS3993_H_ */

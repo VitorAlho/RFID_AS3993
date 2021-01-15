@@ -42,15 +42,23 @@
     TERMS.
 */
 
+#ifndef SYSTEM_H
+#define	SYSTEM_H
+
 #ifndef _XTAL_FREQ
 #define _XTAL_FREQ  32000000UL
 #endif
 
-#include "xc.h"
-#include "stdint.h"
+#ifndef FCY
+#define FCY _XTAL_FREQ/2
+#endif
 
-#ifndef SYSTEM_H
-#define	SYSTEM_H
+#include <libpic30.h>
+#include <xc.h>
+#include <stdint.h>
+
+#define delay_ms(ms)    { __delay_ms(ms); }
+#define delay_us(us)    { __delay_us(us); }
 
 /**
  * @Param

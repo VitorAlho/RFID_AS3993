@@ -1,45 +1,9 @@
-/*
- *****************************************************************************
- * Copyright by ams AG                                                       *
- * All rights are reserved.                                                  *
- *                                                                           *
- * IMPORTANT - PLEASE READ CAREFULLY BEFORE COPYING, INSTALLING OR USING     *
- * THE SOFTWARE.                                                             *
- *                                                                           *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS       *
- * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT         *
- * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS         *
- * FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT  *
- * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,     *
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT          *
- * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,     *
- * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY     *
- * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT       *
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE     *
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.      *
- *****************************************************************************
- */
-/** @file
-  * @brief This file includes functions providing an implementation of the ISO6c aka GEN2 RFID EPC protocol.
-  *
-  * Detailed documentation of the provided functionality can be found in gen2.h.
-  *
-  * @author Ulrich Herrmann
-  * @author Bernhard Breinbauer
-  */
-#include "as3993_config.h"
-#include "platform.h"
+
 #include "as3993.h"
-//#include "logger.h"
-#include "timer.h"
 #include "gen2.h"
 #include "string.h"
-
-/** Definition for debug output: epc.c */
-#define EPCDEBUG          0
-
-#define EPCLOG(...) /*!< macro used for printing debug messages if USE_LOGGER is set */
-#define EPCLOGDUMP(...) /*!< macro used for dumping buffers if USE_LOGGER is set */
+#include "appl_commands.h"
+#include "as3993_public.h"
 
 /*EPC Commands */
 /** Definition for queryrep EPC command */
@@ -75,29 +39,26 @@
 
 #define GEN2_RESET_TIMEOUT 10
 
-
-
-
 /*------------------------------------------------------------------------- */
 /* local types */
 /*------------------------------------------------------------------------- */
 
 struct gen2InternalConfig{
     struct gen2Config config;
-    u8 DR; /* Division ratio */
-    u8 no_resp_time; /* value for AS3993_REG_RXNORESPONSEWAITTIME */
+    uint8_t DR; /* Division ratio */
+    uint8_t no_resp_time; /* value for AS3993_REG_RXNORESPONSEWAITTIME */
 };
 
 /*------------------------------------------------------------------------- */
 /*global variables */
 /*------------------------------------------------------------------------- */
-static u16 gen2ResetTimeout = GEN2_RESET_TIMEOUT;
+static uint16_t gen2ResetTimeout = GEN2_RESET_TIMEOUT;
 
 /** Global buffer for generating data, sending to the Tag.\n
   * Caution: In case of a global variable pay attention to the sequence of generating
   * and executing epc commands.
   */
-static u8 buf_[8+EPCLENGTH+PCLENGTH+CRCLENGTH]; /*8->tx_length+EPCcommand+wordptr+wordcount+handle+broken byte */
+static uint8_t buf_[8+EPCLENGTH+PCLENGTH+CRCLENGTH]; /*8->tx_length+EPCcommand+wordptr+wordcount+handle+broken byte */
 
 static struct gen2InternalConfig gen2IntConfig;
 
@@ -116,20 +77,20 @@ static struct gen2InternalConfig gen2IntConfig;
                   0x00 means no Error occoured.
                   0xff means Error occoured.
   */
-static s8 gen2ReqRNHandleChar(u8 const * handle, u8 *dest_handle);
+static int8_t gen2ReqRNHandleChar(uint8_t const * handle, uint8_t *dest_handle);
 
-static u8 gen2InsertEBV(u32 value, u8 *p, u8 bitpos)
+static uint8_t gen2InsertEBV(uint32_t value, uint8_t *p, uint8_t bitpos)
 {
-    u8 ebv[5];
-    u8 ebvlen;
+    uint8_t ebv[5];
+    uint8_t ebvlen;
     u32ToEbv(value, ebv, &ebvlen);
     insertBitStream(p, ebv, ebvlen, bitpos);
     return ebvlen;
 }
 
-static void gen2GetAgcRssi(u8 *agc, u8 *rssi)
+static void gen2GetAgcRssi(uint8_t *agc, uint8_t *rssi)
 {
-    u8 buf[2];
+    uint8_t buf[2];
     as3993ContinuousRead(AS3993_REG_AGCANDSTATUS, 2, buf);
     *agc = buf[0];
     *rssi = buf[1];
@@ -140,13 +101,12 @@ static void gen2GetAgcRssi(u8 *agc, u8 *rssi)
 
 void gen2Select(struct gen2SelectParams *p)
 {
-#if !RUN_ON_AS3980 && !RUN_ON_AS3981      // no select on AS3980/81 available
-    u16 len = p->mask_len;
-    u8 ebvLen;
-    u16 rxbits = 1;
-    u8 *mask = p->mask;
-    u8 j,i;
-    u8 resp_null;
+    uint16_t len = p->mask_len;
+    uint8_t ebvLen;
+    uint16_t rxbits = 1;
+    uint8_t *mask = p->mask;
+    uint8_t j,i;
+    uint8_t resp_null;
 
     as3993ClrResponse();
     memset(buf_,0,sizeof(buf_));
@@ -171,10 +131,10 @@ void gen2Select(struct gen2SelectParams *p)
     /* Pseudo 1-bit receival with small timeout to have AS3993 state machine 
        finished and avoiding spurious interrupts (no response) */
     as3993TxRxGen2Bytes(AS3993_CMD_TRANSMCRC, buf_, len, &resp_null, &rxbits, 1, 0, 1);
-#endif
+
 }
 
-static void gen2PrepareQueryCmd(u8 *buf, u8 q)
+static void gen2PrepareQueryCmd(uint8_t *buf, uint8_t q)
 {
     buf[0] = ((gen2IntConfig.DR<<5)&0x20)/*DR*/ |
               ((gen2IntConfig.config.miller<<3)&0x18)/*M*/ |
@@ -186,13 +146,13 @@ static void gen2PrepareQueryCmd(u8 *buf, u8 q)
 
 }
 
-s8 gen2QueryMeasureRSSI(u8 *agc, u8 *log_rssis, s8 *irssi, s8 *qrssi)
+int8_t gen2QueryMeasureRSSI(uint8_t *agc, uint8_t *log_rssis, int8_t *irssi, int8_t *qrssi)
 {
-    u16 rxlen;
-    u8 rn16[2];
-    s8 ret = 0;
-    u8 reg;
-    uint i = 100;
+    uint16_t rxlen;
+    uint8_t rn16[2];
+    int8_t ret = 0;
+    uint8_t reg;
+    uint8_t i = 100;
 
     reg = as3993SingleRead(AS3993_REG_MEASUREMENTCONTROL);
 
@@ -242,10 +202,10 @@ s8 gen2QueryMeasureRSSI(u8 *agc, u8 *log_rssis, s8 *irssi, s8 *qrssi)
  * session flag.
  * \return 1 if one tag has been succesfully read, 0 if no response in slot, -1 if error occured (collision)
  */
-static s8 gen2Slot(Tag *tag, u8 qCommand, u8 q, BOOL fast, u8 followCommand)
+static int8_t gen2Slot(Tag *tag, uint8_t qCommand, uint8_t q, uint8_t fast, uint8_t followCommand)
 {
-    u16 rxlen;
-    s8 ret = 0;
+    uint16_t rxlen;
+    int8_t ret = 0;
 
     /*********************************************************************************/
     /* 1. Send proper query command */
@@ -286,11 +246,7 @@ static s8 gen2Slot(Tag *tag, u8 qCommand, u8 q, BOOL fast, u8 followCommand)
         //EPCLOG("  ack rx rest(pc=%hhx) -> err %hhx\n", tag->pc[0], ret);
         return -1;
     }
-#if RUN_ON_AS3980 || RUN_ON_AS3981
-    tag->epclen = (rxlen+7)/8-4;    //on AS3980 crc is in the fifo, omit it.
-#else
     tag->epclen = (rxlen+7)/8-2;
-#endif
     if(tag->epclen > EPCLENGTH)
         tag->epclen = EPCLENGTH;
     memcpy(tag->epc, buf_+2, tag->epclen);
@@ -325,10 +281,10 @@ static s8 gen2Slot(Tag *tag, u8 qCommand, u8 q, BOOL fast, u8 followCommand)
 
 /** Same as gen2Slot() but uses autoACK feature of reader.
  */
-static s8 gen2SlotAutoAck(Tag *tag, u8 qCommand, u8 q, BOOL fast, u8 followCommand)
+static int8_t gen2SlotAutoAck(Tag *tag, uint8_t qCommand, uint8_t q, uint8_t fast, uint8_t followCommand)
 {
-    u16 rxlen;
-    s8 ret = 0;
+    uint16_t rxlen;
+    int8_t ret = 0;
 
     /*********************************************************************************/
     /* 1. Send proper query command */
@@ -362,11 +318,7 @@ static s8 gen2SlotAutoAck(Tag *tag, u8 qCommand, u8 q, BOOL fast, u8 followComma
         //EPCLOG("  auto ack rx (pc=%hhx) -> err %hhx\n", tag->pc[0], ret);
         return -1;
     }
-#if RUN_ON_AS3980 || RUN_ON_AS3981
-    tag->epclen = (rxlen+7)/8-4;    //on AS3980 crc is in the fifo, omit it.
-#else
     tag->epclen = (rxlen+7)/8-2;
-#endif
     if(tag->epclen > EPCLENGTH)
         tag->epclen = EPCLENGTH;
     memcpy(tag->epc, buf_+2, tag->epclen);
@@ -401,10 +353,10 @@ static s8 gen2SlotAutoAck(Tag *tag, u8 qCommand, u8 q, BOOL fast, u8 followComma
 }
 
 /*------------------------------------------------------------------------- */
-static s8 gen2ReqRNHandleChar(u8 const * handle, u8 *dest_handle)
+static int8_t gen2ReqRNHandleChar(uint8_t const * handle, uint8_t *dest_handle)
 {
-    s8 ret;
-    u16 rxbits = 32;
+    int8_t ret;
+    uint16_t rxbits = 32;
 
     buf_[0] = EPC_REQRN;                 /*Command REQRN */
     buf_[1] = handle[0];
@@ -418,14 +370,14 @@ static s8 gen2ReqRNHandleChar(u8 const * handle, u8 *dest_handle)
 }
 
 /*------------------------------------------------------------------------- */
-s8 gen2AccessTag(Tag const * tag, u8 const * password)
+int8_t gen2AccessTag(Tag const * tag, uint8_t const * password)
 {
-    s8 ret;
-    s8 error;
-    u8 count;
-    u16 rxcount;
-    u8 tagResponse[5];
-    u8 temp_rn16[2];
+    int8_t ret;
+    int8_t error;
+    uint8_t count;
+    uint16_t rxcount;
+    uint8_t tagResponse[5];
+    uint8_t temp_rn16[2];
 
     for (count = 0; count < 2; count++)
     {
@@ -456,22 +408,17 @@ s8 gen2AccessTag(Tag const * tag, u8 const * password)
             //EPCLOG("handle not correct\n");
             return GEN2_ERR_ACCESS;
         }
-#if EPCDEBUG
-        if (count ==0) EPCLOG("first  part of access ok\n");
-        if (count ==1) EPCLOG("second part of access ok\n");
-#endif
+
     }
     return ret;
 }
 
 /*------------------------------------------------------------------------- */
-s8 gen2LockTag(Tag *tag, const u8 *mask_action, u8 *tag_reply)
+int8_t gen2LockTag(Tag *tag, const uint8_t *mask_action, uint8_t *tag_reply)
 {
-    s8 ret;
-#if EPCDEBUG
-    u8 count;
-#endif
-    u16 rxbits = 32+1;
+    int8_t ret;
+
+    uint16_t rxbits = 32+1;
 
     *tag_reply = 0xa5;
 
@@ -483,15 +430,6 @@ s8 gen2LockTag(Tag *tag, const u8 *mask_action, u8 *tag_reply)
     buf_[3] = ((mask_action[2] ) & 0xF0);
     insertBitStream(&buf_[3], tag->handle, 2, 4);
 
-#if EPCDEBUG
-    EPCLOG("lock code\n");
-    for (count=0; count<6; count++)
-    {
-        EPCLOG("%hhx ",buf_[count]);
-    }
-    EPCLOG("\n");
-#endif
-
     ret = as3993TxRxGen2Bytes(AS3993_CMD_TRANSMCRCEHEAD, buf_, 44, buf_, &rxbits, 0xff, 0, 1);
 
     if (ERR_CHIP_HEADER == ret && rxbits) *tag_reply = buf_[0];
@@ -499,14 +437,14 @@ s8 gen2LockTag(Tag *tag, const u8 *mask_action, u8 *tag_reply)
 }
 
 /*------------------------------------------------------------------------- */
-s8 gen2KillTag(Tag const * tag, u8 const * password, u8 rfu, u8 recom, u8* tag_error)
+int8_t gen2KillTag(Tag const * tag, uint8_t const * password, uint8_t rfu, uint8_t recom, uint8_t* tag_error)
 {
-    s8 error;
-    u8 count;
-    u8 temp_rn16[2];
-    u16 rxbits = 32;
-    u8 cmd = AS3993_CMD_TRANSMCRC;/* first command has no header Bit */
-    u8 no_resp_time = gen2IntConfig.no_resp_time;
+    int8_t error;
+    uint8_t count;
+    uint8_t temp_rn16[2];
+    uint16_t rxbits = 32;
+    uint8_t cmd = AS3993_CMD_TRANSMCRC;/* first command has no header Bit */
+    uint8_t no_resp_time = gen2IntConfig.no_resp_time;
 
     *tag_error = 0xa5;
     for (count = 0; count < 2; count++)
@@ -546,15 +484,15 @@ s8 gen2KillTag(Tag const * tag, u8 const * password, u8 rfu, u8 recom, u8* tag_e
 }
 
 /*------------------------------------------------------------------------- */
-s8 gen2WriteWordToTag(Tag const * tag, u8 memBank, u32 wordPtr,
-                                  u8 const * databuf, u8 * tag_error)
+int8_t gen2WriteWordToTag(Tag const * tag, uint8_t memBank, uint32_t wordPtr,
+                                  uint8_t const * databuf, uint8_t * tag_error)
 {
-    s8 error;
-    u8 datab;
-    s8 ret;
-    u8 ebvlen;
-    u8 temp_rn16[2];
-    u16 rxbits = 32+1;
+    int8_t error;
+    uint8_t datab;
+    int8_t ret;
+    uint8_t ebvlen;
+    uint8_t temp_rn16[2];
+    uint16_t rxbits = 32+1;
     *tag_error = 0xa5;
 
     error = gen2ReqRNHandleChar(tag->handle, temp_rn16);
@@ -591,12 +529,12 @@ s8 gen2WriteWordToTag(Tag const * tag, u8 memBank, u32 wordPtr,
 }
 
 /*------------------------------------------------------------------------- */
-s8 gen2ReadFromTag(Tag *tag, u8 memBank, u32 wordPtr,
-                          u8 wordCount, u8 *destbuf)
+int8_t gen2ReadFromTag(Tag *tag, uint8_t memBank, uint32_t wordPtr,
+                          uint8_t wordCount, uint8_t *destbuf)
 {
-    u16 bit_count = (wordCount * 2 + 4) * 8 + 1; /* + 2 bytes rn16 + 2bytes crc + 1 header bit */
-    s8 ret;
-    u8 ebvlen;
+    uint16_t bit_count = (wordCount * 2 + 4) * 8 + 1; /* + 2 bytes rn16 + 2bytes crc + 1 header bit */
+    int8_t ret;
+    uint8_t ebvlen;
 
     buf_[0]  = EPC_READ;                 /*Command EPC_READ */
     buf_[1]  = (memBank << 6) & 0xC0;
@@ -614,79 +552,32 @@ s8 gen2ReadFromTag(Tag *tag, u8 memBank, u32 wordPtr,
 
 void gen2PrintGen2Settings()
 {
-    u8 buf[9];
+    uint8_t buf[9];
     as3993ContinuousRead(AS3993_REG_PROTOCOLCTRL, 9, buf);
     //LOG("Gen2 registers:\n");
     //LOGDUMP(buf, 9);
 
 }
 
-/*------------------------------------------------------------------------------ */
-void gen2PrintEPC(Tag *tag)
-{
-    u16 count;
-    //EPCLOG("Print PC %hhx %hhx\n",tag->pc[0], tag->pc[1]);
-    //EPCLOG("Print EPC, len= %hhx \n", tag->epclen);
-    for (count=0; count<(tag->epclen); count++)
-    {
-        //EPCLOG("%hhx ",tag->epc[count]);
-    }
-    //EPCLOG("\n");
-}
-
-/*------------------------------------------------------------------------- */
-void gen2PrintTagInfo(Tag *tag, u8 epclen, u8 tagNr)
-{
-    u8 count = 0;
-
-    //EPCLOG("TAG %hhx:\n",tagNr);
-    //EPCLOG("RN16: %hhx %hhx\n",tag->rn16[1]
-    //                             ,tag->rn16[0]);
-    //EPCLOG("Number of read bytes: %d\n",epclen+2);
-    //EPCLOG("PC: %hhx %hhx", tag->pc[1]
-    //                         , tag->pc[0]);
-    //EPCLOG("EPC: ");
-    while (count < epclen)
-    {
-        //EPCLOG("%hhx ",tag->epc[count]);
-        count++;
-    }
-    //EPCLOG("\n");
-
-    // EPCLOG("EPCLEN (bytes): %hhd\n",tag->epclen);
-
-    //EPCLOG("HANDLE: %hhx %hhx\n", tag->handle[0]
-    //                               , tag->handle[1]);
-}
-
 unsigned gen2SearchForTags(Tag *tags_
-                      , u8 maxtags
-                      , u8 q
-                      , BOOL (*cbContinueScanning)(void)
-                      , BOOL singulate
-                      , BOOL toggleSession
+                      , uint8_t maxtags
+                      , uint8_t q
+                      , uint8_t (*cbContinueScanning)(void)
+                      , uint8_t singulate
+                      , uint8_t toggleSession
                       )
 {
-    u16 num_of_tags = 0;
-    u16 collisions = 0;
-    u16 slot_count;
-    u8 i = 0;
-    u8 addRounds = 1; /* the maximal number of rounds performed */
-    u8 cmd = AS3993_CMD_QUERY;
-    u8 followCmd = 0;
+    uint16_t num_of_tags = 0;
+    uint16_t collisions = 0;
+    uint16_t slot_count;
+    uint8_t i = 0;
+    uint8_t addRounds = 1; /* the maximal number of rounds performed */
+    uint8_t cmd = AS3993_CMD_QUERY;
+    uint8_t followCmd = 0;
     
-
-#if !RUN_ON_AS3980 && !RUN_ON_AS3981
-    if (toggleSession)
-        followCmd = AS3993_CMD_QUERYREP;
-#endif
-
     as3993AntennaPower(1);
     as3993ContinuousRead(AS3993_REG_IRQSTATUS1, 2, &buf_[0]);    // ensure that IRQ bits are reset
     as3993ClrResponse();
-
-    //EPCLOG("Searching for Tags, maxtags=%hhd, q=%hhd\n",maxtags,q);
-    //EPCLOG("-------------------------------\n");
 
     for (i=0; i < maxtags; i++)   /*Reseting the TAGLIST */
     {
@@ -696,7 +587,7 @@ unsigned gen2SearchForTags(Tag *tags_
     }
     do
     {
-        BOOL goOn;
+        uint8_t goOn;
         collisions = 0;
         slot_count = 1UL<<q;   /*get the maximum slot_count */
         do
@@ -729,7 +620,7 @@ unsigned gen2SearchForTags(Tag *tags_
                 default:
                     break;
             }
-            goOn = cbContinueScanning();
+            goOn = cbContinueScanning(); // timeout check routine
         } while (slot_count && goOn );
         addRounds--;
         //EPCLOG("q=%hhx, collisions=%x, num_of_tags=%x",q,collisions,num_of_tags);
@@ -758,11 +649,6 @@ unsigned gen2SearchForTags(Tag *tags_
         }
     }while(num_of_tags < maxtags && addRounds && cbContinueScanning() );
 
-#if EPCDEBUG
-    EPCLOG("-------------------------------\n");
-    EPCLOG("%hx  Tags found", num_of_tags);
-    EPCLOG("\n");
-#endif
     if (num_of_tags == 0)
     {
         gen2ResetTimeout--;
@@ -781,31 +667,22 @@ unsigned gen2SearchForTags(Tag *tags_
 }
 
 unsigned gen2SearchForTagsAutoAck(Tag *tags_
-                      , u8 maxtags
-                      , u8 q
-                      , BOOL (*cbContinueScanning)(void)
-                      , BOOL singulate
-                      , BOOL toggleSession
+                      , uint8_t maxtags
+                      , uint8_t q
+                      , uint8_t (*cbContinueScanning)(void)
+                      , uint8_t singulate
+                      , uint8_t toggleSession
                       )
 {
-    u16 num_of_tags = 0;
-    u16 collisions = 0;
-    u16 slot_count;
-    u8 i = 0;
-    u8 cmd = AS3993_CMD_QUERY;
-    u8 followCmd = 0;
-    u8 autoAck;
-    BOOL goOn = 1;
-    
-
-    //EPCLOG("Searching for Tags with autoACK, maxtags=%hhd, q=%hhd\n",maxtags, q);
-    //EPCLOG("-------------------------------\n");
-
-#if !RUN_ON_AS3980 && !RUN_ON_AS3981
-    if (toggleSession)
-        followCmd = AS3993_CMD_QUERYREP;
-#endif
-    
+    uint16_t num_of_tags = 0;
+    uint16_t collisions = 0;
+    uint16_t slot_count;
+    uint8_t i = 0;
+    uint8_t cmd = AS3993_CMD_QUERY;
+    uint8_t followCmd = 0;
+    uint8_t autoAck;
+    uint8_t goOn = 1;
+        
     as3993AntennaPower(1);
     as3993ContinuousRead(AS3993_REG_IRQSTATUS1, 2, &buf_[0]);    // ensure that IRQ bits are reset
     as3993ClrResponse();
@@ -864,11 +741,6 @@ unsigned gen2SearchForTagsAutoAck(Tag *tags_
     autoAck &= ~0x30;
     as3993SingleWrite(AS3993_REG_PROTOCOLCTRL, autoAck);
 
-#if EPCDEBUG
-    EPCLOG("-------------------------------\n");
-    EPCLOG("%hx  Tags found", num_of_tags);
-    EPCLOG("\n");
-#endif
     if (num_of_tags == 0)
     {
         gen2ResetTimeout--;
@@ -890,8 +762,8 @@ void gen2Configure(const struct gen2Config *config)
 {
     /* depending on link frequency setting adjust */
     /* registers 01, 02, 03, 04, 05, 06, 07, 08 and 09 */
-    u8 reg[9];
-    u8 session = config->session;
+    uint8_t reg[9];
+    uint8_t session = config->session;
     gen2IntConfig.DR = 1;
     gen2IntConfig.config = *config;
     if (session > GEN2_IINV_S3)
@@ -1038,4 +910,36 @@ void gen2Open(const struct gen2Config * config)
 
 void gen2Close(void)
 {
+}
+
+/**
+ * Converts u32 number into EBV format. The EBV is stored in parameter ebv.
+ * Parameter len will be set to the length of data in ebv.
+ * @param value u32 value to convert into EBV
+ * @param ebv array to store the EBV
+ * @param len number of data in ebv
+ */
+void u32ToEbv(uint32_t value, uint8_t *ebv, uint8_t *len)
+{
+    uint8_t lsbytefirst[6];  //additional byte for setting extension bit in loop
+    uint8_t *buf = &lsbytefirst[0];
+    int i;
+    
+    *len = 0;
+    *buf = 0;
+    do
+    {
+        (*buf) |= (uint8_t)(value & 0x7F);
+        value = value >> 7;
+        buf++;
+        (*len)++;
+        *buf = 0x80;   //set extension bit in next block
+    }
+    while (value > 0);
+    //the EBV in buf starts with LSByte -> reorder the content into ebv array
+    for (i=0; i<(*len); i++)
+    {
+        buf--;
+        ebv[i] = *buf;
+    }
 }

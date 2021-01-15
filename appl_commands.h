@@ -37,13 +37,29 @@
  * INCLUDES
  ******************************************************************************
  */
-#include "global.h"
+
+/** Definition for the maximal EPC length */
+#define EPCLENGTH              12 //32  // number of bytes for EPC, standard allows up to 62 bytes
+/** Definition for the PC length */
+#define PCLENGTH                2
+/** Definition for the CRC length */
+#define CRCLENGTH               2
+/** Definition of the maximum frequencies for the hopping */
+#define MAXFREQ                 53
+/** Definition of the maximum tune entries in tuning table */
+#define MAXTUNE                 52
+/** Definition of the maximum number of tags, which can be read in 1 round */
+//#define MAXTAG 255
+#define MAXTAG 12//20//120
+
+
+#include <stdint.h>
 
 #define CALL_FKT_SIZE           32
 
 struct callFunction {
-    u16 min_tx_size;
-    u16 min_rx_size;
+    uint16_t min_tx_size;
+    uint16_t min_rx_size;
     void (*const func)(void);
 };
 
@@ -55,21 +71,23 @@ struct callFunction {
  * GLOBAL FUNCTIONS
  ******************************************************************************
  */
-extern u8 commands( u8 protocol, u16 rxSize, const u8 * rxData, u16 * txSize, u8 * txData );
+extern uint8_t commands( uint8_t protocol, uint16_t rxSize, const uint8_t * rxData, uint16_t * txSize, uint8_t * txData );
 extern void initCommands(void);
-extern u8 uartCommands(void);
-extern u8 sendTagData( u8 * protocol, u16 * txSize, u8 * txData, u16 remainingSize );
+extern uint8_t uartCommands(void);
+extern uint8_t sendTagData( uint8_t * protocol, uint16_t * txSize, uint8_t * txData, uint16_t remainingSize );
 extern void doCyclicInventory(void);
 
-extern u8 readRegister(u8 addr, u16 * txSize, u8 * txData);
-extern u8 readRegisters(u16 * txSize, u8 * txData);
-extern u8 writeRegister(u8 addr, u8 value, u16 * txSize, u8 * txData);
+void insertBitStream(uint8_t *dest, uint8_t const *source, uint8_t len, uint8_t bitpos);
+
+extern uint8_t readRegister(uint8_t addr, uint16_t * txSize, uint8_t * txData);
+extern uint8_t readRegisters(uint16_t * txSize, uint8_t * txData);
+extern uint8_t writeRegister(uint8_t addr, uint8_t value, uint16_t * txSize, uint8_t * txData);
 
 void comecaInvetorio(void);
 void TerminaInvetorio(void);
-u8 inventoryGen2(void);
+uint8_t inventoryGen2(void);
 
-u8 inventorioSimplificado(void);
+uint8_t inventorioSimplificado(void);
 
 /* command functions table */
 extern struct callFunction call_fkt_[CALL_FKT_SIZE];
