@@ -20,12 +20,10 @@
       <itemPath>Compiler.h</itemPath>
       <itemPath>appl_commands.h</itemPath>
       <itemPath>as3993.h</itemPath>
-      <itemPath>as3993_config.h</itemPath>
       <itemPath>as3993_public.h</itemPath>
       <itemPath>errno.h</itemPath>
       <itemPath>errno_as3993.h</itemPath>
       <itemPath>gen2.h</itemPath>
-      <itemPath>global.h</itemPath>
       <itemPath>system_clock.h</itemPath>
       <itemPath>tags.h</itemPath>
     </logicalFolder>
@@ -53,7 +51,6 @@
       <itemPath>appl_commands.c</itemPath>
       <itemPath>as3993.c</itemPath>
       <itemPath>gen2.c</itemPath>
-      <itemPath>global.c</itemPath>
       <itemPath>tags.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"

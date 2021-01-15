@@ -37,7 +37,22 @@
  * INCLUDES
  ******************************************************************************
  */
-#include "global.h"
+
+/** Definition for the maximal EPC length */
+#define EPCLENGTH              12 //32  // number of bytes for EPC, standard allows up to 62 bytes
+/** Definition for the PC length */
+#define PCLENGTH                2
+/** Definition for the CRC length */
+#define CRCLENGTH               2
+/** Definition of the maximum frequencies for the hopping */
+#define MAXFREQ                 53
+/** Definition of the maximum tune entries in tuning table */
+#define MAXTUNE                 52
+/** Definition of the maximum number of tags, which can be read in 1 round */
+//#define MAXTAG 255
+#define MAXTAG 12//20//120
+
+
 #include <stdint.h>
 
 #define CALL_FKT_SIZE           32
@@ -61,6 +76,8 @@ extern void initCommands(void);
 extern uint8_t uartCommands(void);
 extern uint8_t sendTagData( uint8_t * protocol, uint16_t * txSize, uint8_t * txData, uint16_t remainingSize );
 extern void doCyclicInventory(void);
+
+void insertBitStream(uint8_t *dest, uint8_t const *source, uint8_t len, uint8_t bitpos);
 
 extern uint8_t readRegister(uint8_t addr, uint16_t * txSize, uint8_t * txData);
 extern uint8_t readRegisters(uint16_t * txSize, uint8_t * txData);

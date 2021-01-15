@@ -109,6 +109,7 @@
 //#include "ams_types.h"
 #include "errno_as3993.h"
 #include <stdint.h>
+#include "appl_commands.h"
 
 /* Protocol configuration settings */
 #define GEN2_LF_40  0   /*!<link frequency 40 kHz*/
@@ -384,6 +385,8 @@ void gen2Open(const struct gen2Config * config);
  *****************************************************************************
  */
 void gen2Close(void);
+
+void u32ToEbv(uint32_t value, uint8_t *ebv, uint8_t *len);
 
 /*!
  *****************************************************************************

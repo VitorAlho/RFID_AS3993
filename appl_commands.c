@@ -47,7 +47,7 @@
  ******************************************************************************
  */
 
-#include "global.h"
+
 #include "gen2.h"
 #include "as3993_public.h"
 #include "appl_commands.h"
@@ -57,7 +57,10 @@
 #include <limits.h>
 #include "as3993.h"
 #include <stdint.h>
-
+#include "mcc_generated_files/system.h"
+#ifndef FCY
+#define FCY SYSCLK/2
+#endif
 #include <libpic30.h>
 
 /* Porting note: replace delay functions which with functions provided with your controller or use timer */
@@ -249,6 +252,20 @@ static void powerDownReader(void);
 static void powerUpReader(void);
 void pega_pot_refl(void);
 
+void insertBitStream(uint8_t *dest, uint8_t const *source, uint8_t len, uint8_t bitpos)
+{
+    int16_t i;
+    uint8_t mask0 = (1<<bitpos)-1;
+    uint8_t mask1 = (1<<(8-bitpos))-1;
+
+    for (i=0; i<len; i++)
+    {
+        dest[i+0] &= (~mask0);
+        dest[i+0] |= ((source[i]>>(8-bitpos)) & mask0);
+        dest[i+1] &= ((~mask1) << bitpos);
+        dest[i+1] |= ((source[i] & mask1) << bitpos);
+    }
+}
 
 void pega_pot_refl (void)
 {
@@ -1722,7 +1739,7 @@ void writeToTag(void)
     uint8_t len = 0;
     int8_t status=0;
     uint8_t membank = cmdBuffer.rxData[0];
-    uint32_t address = readU32FromLittleEndianBuffer(&cmdBuffer.rxData[1]);
+    uint32_t address = 0;//readU32FromLittleEndianBuffer(&cmdBuffer.rxData[1]);
     uint8_t datalen = (cmdBuffer.rxSize - 9)/2;
 
     //APPLOG("WRITE TO Tag\n");
@@ -2170,7 +2187,7 @@ void readFromTag(void)
 
     int8_t status = ERR_NONE;
     uint8_t membank = cmdBuffer.rxData[0];
-    uint32_t wrdPtr = readU32FromLittleEndianBuffer(&cmdBuffer.rxData[1]);
+    uint32_t wrdPtr = 0;//readU32FromLittleEndianBuffer(&cmdBuffer.rxData[1]);
     uint8_t datalen = cmdBuffer.txSize;
     uint8_t rxed = 0;
 

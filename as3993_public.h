@@ -35,9 +35,10 @@
 #ifndef _AS3993_PUBLIC_H_
 #define _AS3993_PUBLIC_H_
 
-#include "global.h"
+
 #include "errno_as3993.h"
 #include <stdint.h>
+#include "appl_commands.h"
 
 /** @struct TagInfo_
   * This struct stores the whole Tag information

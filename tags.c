@@ -22,14 +22,16 @@
 #include <math.h>
 
 #include "as3993_public.h"
-#include "global.h"
+
 
 #include "tags.h"
 #include <stdint.h>
 
+#include "mcc_generated_files/system.h"
+#ifndef FCY
+#define FCY SYSCLK/2
+#endif
 #include <libpic30.h>
-
-/* Porting note: replace delay functions which with functions provided with your controller or use timer */
 #ifndef delay_ms
 #define delay_ms(ms)    { __delay_ms(ms); }
 #define delay_us(us)    { __delay_us(us); }

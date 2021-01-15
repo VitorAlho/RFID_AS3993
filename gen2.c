@@ -29,10 +29,9 @@
   */
 
 #include "as3993.h"
-//#include "logger.h"
-//#include "timer.h"
 #include "gen2.h"
 #include "string.h"
+#include "appl_commands.h"
 
 /** Definition for debug output: epc.c */
 #define EPCDEBUG          0
@@ -73,9 +72,6 @@
 #define EPC_BLOCKPERMALOCK 0xC9
 
 #define GEN2_RESET_TIMEOUT 10
-
-
-
 
 /*------------------------------------------------------------------------- */
 /* local types */
@@ -993,4 +989,36 @@ void gen2Open(const struct gen2Config * config)
 
 void gen2Close(void)
 {
+}
+
+/**
+ * Converts u32 number into EBV format. The EBV is stored in parameter ebv.
+ * Parameter len will be set to the length of data in ebv.
+ * @param value u32 value to convert into EBV
+ * @param ebv array to store the EBV
+ * @param len number of data in ebv
+ */
+void u32ToEbv(uint32_t value, uint8_t *ebv, uint8_t *len)
+{
+    uint8_t lsbytefirst[6];  //additional byte for setting extension bit in loop
+    uint8_t *buf = &lsbytefirst[0];
+    int i;
+    
+    *len = 0;
+    *buf = 0;
+    do
+    {
+        (*buf) |= (uint8_t)(value & 0x7F);
+        value = value >> 7;
+        buf++;
+        (*len)++;
+        *buf = 0x80;   //set extension bit in next block
+    }
+    while (value > 0);
+    //the EBV in buf starts with LSByte -> reorder the content into ebv array
+    for (i=0; i<(*len); i++)
+    {
+        buf--;
+        ebv[i] = *buf;
+    }
 }

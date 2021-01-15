@@ -35,7 +35,7 @@
 #ifndef _AS3993_H_
 #define _AS3993_H_
 
-#include "global.h"
+
 //#include "ams_types.h"
 #include <stdint.h>
 
