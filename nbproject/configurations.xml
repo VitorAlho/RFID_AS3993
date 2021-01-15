@@ -28,7 +28,6 @@
       <itemPath>global.h</itemPath>
       <itemPath>system_clock.h</itemPath>
       <itemPath>tags.h</itemPath>
-      <itemPath>bsp.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
@@ -56,7 +55,6 @@
       <itemPath>gen2.c</itemPath>
       <itemPath>global.c</itemPath>
       <itemPath>tags.c</itemPath>
-      <itemPath>bsp.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
