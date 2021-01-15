@@ -37,8 +37,6 @@
 
 #include "global.h"
 #include "errno_as3993.h"
-//#include "GenericTypeDefs.h"
-#include "platform.h"
 #include <stdint.h>
 
 /** @struct TagInfo_

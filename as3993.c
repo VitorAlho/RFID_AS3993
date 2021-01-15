@@ -1,6 +1,5 @@
 
 #include "as3993_config.h"
-#include "platform.h"
 #include "as3993.h"
 #include "as3993_public.h"
 #include "global.h"

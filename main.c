@@ -52,7 +52,6 @@
 #include <stdio.h>
 #include <string.h>
 #include <xc.h>
-#include "platform.h"
 #include "as3993_public.h"
 #include "appl_commands.h"
 #include "mcc_generated_files/system.h"

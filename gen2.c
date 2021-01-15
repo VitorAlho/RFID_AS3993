@@ -28,7 +28,6 @@
   * @author Bernhard Breinbauer
   */
 #include "as3993_config.h"
-#include "platform.h"
 #include "as3993.h"
 //#include "logger.h"
 #include "timer.h"

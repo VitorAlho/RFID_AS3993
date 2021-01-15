@@ -1,10 +1,8 @@
 build/default/production/main.o:  \
 main.c  \
-platform.h  \
-Compiler.h  \
+as3993_public.h  \
 global.h  \
  as3993_config.h  \
-as3993_public.h  \
 errno_as3993.h  \
 errno.h  \
 appl_commands.h  \

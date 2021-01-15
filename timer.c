@@ -31,7 +31,6 @@
 #include "Compiler.h"
 #include "as3993_config.h"
 #include "global.h"
-#include "platform.h"
 #include "timer.h"
 
 void tick(void);

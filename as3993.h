@@ -393,4 +393,118 @@ extern uint8_t as3993ChipVersion;
  *****************************************************************************
  */
 void as3993WaitForStartup(void);
+
+/*
+******************************************************************************
+* DEFINES
+******************************************************************************
+*/
+/** define for stopMode parameter of writeReadAS3993() */
+#define STOP_NONE               0
+/** define for stopMode parameter of writeReadAS3993() */
+#define STOP_SGL                1
+/** define for stopMode parameter of writeReadAS3993() */
+#define STOP_CONT               2
+
+/** map as3993Isr to _INT1Interrupt */
+#define as3993Isr EX_INT1_CallBack
+
+/*! map timer2Isr to _T3Interrupt */
+#define timer3Isr TMR3_CallBack
+#define timer2Isr _T2Interrupt
+
+/** Macro for enable external IRQ */
+#define ENEXTIRQ()                _INT1IE = 1;
+
+/** Macro for disable external IRQ */
+#define DISEXTIRQ()               _INT1IE = 0
+
+/** Macro for clearing external IRQ flag*/
+#define CLREXTIRQ()               _INT1IF = 0
+
+/** Macro for setting enable pin */
+#define EN(x)                     ENABLE=(x)
+
+/** Macro for setting DCDC on/off */
+#define DCDC(x)                   DCDCPIN=(x)
+
+/** Macro for setting NCS pin, serial enable line */
+#define NCS(x)                    NCSPIN=(x)
+/** Macro for activating AS3993 for SPI communication */
+#define NCS_SELECT()              NCS(0)
+/** Macro for deactivating AS3993 for SPI communication */
+#define NCS_DESELECT()            NCS(1)
+
+/** Definition for the serial enable pin */
+#define NCSPIN                    _LATF8 //_LATB15
+/** Definition for the Direct data mode Pin*/
+
+/** Definition for the enable pin */
+#define ENABLE                    _LATB2 //_LATB13
+
+#define SAIDA_RS(x)                 _LATD11=(x)     //SAIDA RS
+#define SAIDA_ELCD(x)               _LATD0=(x)      //SAIDA ELCD
+#define SAIDA_BD4(x)                _LATD6=(x)      //SAIDA BD4
+#define SAIDA_BD5(x)                _LATD7=(x)      //SAIDA BD5
+#define SAIDA_BD6(x)                _LATD13=(x)     //SAIDA BD6
+#define SAIDA_BD7(x)                _LATD12=(x)     //SAIDA BD7
+#define SAIDA_DIR(x)                _LATG13=(x)     //SAIDA DIR
+
+#define LED_A1(x)                   _LATE0=(x)      //SAIDA LED_A1
+#define LED_A2(x)                   _LATE1=(x)      //SAIDA LED A2
+#define LED_A3(x)                   _LATE2=(x)      //SAIDA LED A3
+#define LED_A4(x)                   _LATE3=(x)      //SAIDA LED_A4
+#define LED_A5(x)                   _LATE4=(x)      //SAIDA LED A5
+#define LED_A6(x)                   _LATE5=(x)      //SAIDA LED A6
+
+#define LED_A7(x)                   _LATA1=(x)      //SAIDA LED A7
+#define LED_A8(x)                   _LATA6=(x)      //SAIDA LED A8
+
+#define LED_TAG(x)                  _LATE8=(x)      //SAIDA LED TAG
+#define LIGA_PA(x)                  _LATE9=(x)      //SAIDA LIGA PA
+
+#define SEL_BBA(x)                  _LATB10=(x)     //SAIDA SEL_BBA
+#define SEL_A1_4(x)                 _LATB11=(x)     //SAIDA SEL_A1-4
+#define SEL_B5_8(x)                 _LATB12=(x)     //SAIDA SEL_B5-8
+#define SEL_A1_2(x)                 _LATB13=(x)     //SAIDA SEL_A1-2
+#define SEL_A3_4(x)                 _LATB15=(x)     //SAIDA SEL_A3-4
+#define SEL_B5_6(x)                 _LATF13=(x)     //SAIDA SEL_B5-6
+#define SEL_B7_8(x)                 _LATF12=(x)     //SAIDA SEL_B7-8
+#define TUNE_CAP3(x)                _LATF4=(x)      //SAIDA TUNE_CAP3
+
+#define SAI_1(x)                    _LATG15=(x)     //SAIDA SAI_1
+#define SAI_2(x)                    _LATB3=(x)      //SAIDA SAI_2
+#define SAI_3(x)                    _LATC4=(x)      //SAIDA SAI_3
+#define SAI_4(x)                    _LATC3=(x)      //SAIDA SAI_4
+#define SAI_5(x)                    _LATC2=(x)      //SAIDA SAI_5
+#define SAI_6(x)                    _LATC1=(x)      //SAIDA SAI_6
+#define SAI_7(x)                    _LATB6=(x)      //SAIDA SAI_6
+#define TUNE_CAP1(x)                _LATD15=(x)     //SAIDA TUNE_CAP1
+#define TUNE_CAP2(x)                _LATD14=(x)     //SAIDA TUNE_CAP2
+
+#define GP_0(x)                     _LATB4=(x)      //SAIDA GP_0
+#define GP_1(x)                     _LATC13=(x)      //SAIDA GP_1
+#define GP_2(x)                     _LATF2=(x)      //SAIDA GP_2
+#define GP_3(x)                     _LATA4=(x)      //SAIDA GP_3
+#define GP_4(x)                     _LATA5=(x)      //SAIDA GP_4
+#define GP_5(x)                     _LATA2=(x)      //SAIDA GP_5
+#define GP_6(x)                     _LATG12=(x)      //SAIDA GP_6
+#define GP_7(x)                     _LATA9=(x)      //SAIDA GP_7
+#define GP_8(x)                     _LATA0=(x)      //SAIDA GP_8
+#define GP_9(x)                     _LATC14=(x)      //SAIDA GP_9
+#define GP_10(x)                     _LATF0=(x)      //SAIDA GP_10
+#define GP_11(x)                     _LATF1=(x)      //SAIDA GP_11
+#define GP_12(x)                     _LATA1=(x)      //SAIDA GP_12
+#define GP_13(x)                     _LATD10=(x)      //SAIDA GP_13
+#define GP_14(x)                     _LATA6=(x)      //SAIDA GP_14
+#define GP_15(x)                     _LATA7=(x)      //SAIDA GP_15
+#define GP_16(x)                     _LATB5=(x)      //SAIDA GP_16
+
+#define LED_ZIG(x)                   _LATA10=(x)     //SAIDA LED_ZIG
+#define LED_WIFI                     _LATA10
+#define LED_WF(x)                    _LATG1=(x)//_LATG14=(x)     //SAIDA RIO4
+#define LED_3G(x)                    _LATG14=(x)//_LATG0=(x)      //SAIDA LED0
+#define LED_GPS(x)                   _LATG0=(x)//_LATG1=(x)      //SAIDA LED1
+
+//----------------------------------------------------------------------
 #endif /* _AS3993_H_ */

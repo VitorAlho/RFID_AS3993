@@ -47,7 +47,6 @@
  ******************************************************************************
  */
 #include "as3993_config.h"
-#include "platform.h"
 #include "global.h"
 #include "gen2.h"
 #include "as3993_public.h"
