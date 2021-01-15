@@ -6,6 +6,5 @@ as3993_public.h  \
 errno.h  \
 appl_commands.h  \
 gen2.h  \
-Compiler.h  \
- mcc_generated_files/spi1.h  \
-mcc_generated_files/system.h 
+mcc_generated_files/spi1.h  \
+ mcc_generated_files/system.h 

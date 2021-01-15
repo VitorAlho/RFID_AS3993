@@ -667,7 +667,7 @@ __CONFIG1
 .comment
  *(.comment)
 
-.debug_info       0x000000       0x7c33
+.debug_info       0x000000       0x7c2b
  *(.debug_info)
  .debug_info      0x000000        0x43f build/default/production/mcc_generated_files/clock.o
  .debug_info      0x00043f        0x4a3 build/default/production/mcc_generated_files/interrupt_manager.o
@@ -679,9 +679,9 @@ __CONFIG1
  .debug_info      0x002aee        0x824 build/default/production/mcc_generated_files/tmr3.o
  .debug_info      0x003312        0x4f3 build/default/production/main.o
  .debug_info      0x003805       0x184b build/default/production/appl_commands.o
- .debug_info      0x005050       0x16c4 build/default/production/as3993.o
- .debug_info      0x006714        0xfe5 build/default/production/gen2.o
- .debug_info      0x0076f9        0x53a build/default/production/tags.o
+ .debug_info      0x005050       0x16bc build/default/production/as3993.o
+ .debug_info      0x00670c        0xfe5 build/default/production/gen2.o
+ .debug_info      0x0076f1        0x53a build/default/production/tags.o
  *(.gnu.linkonce.wi.*)
 
 .debug_abbrev     0x000000       0x1003

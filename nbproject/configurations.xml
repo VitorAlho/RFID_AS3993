@@ -17,7 +17,6 @@
         <itemPath>mcc_generated_files/ext_int.h</itemPath>
         <itemPath>mcc_generated_files/tmr3.h</itemPath>
       </logicalFolder>
-      <itemPath>Compiler.h</itemPath>
       <itemPath>appl_commands.h</itemPath>
       <itemPath>as3993.h</itemPath>
       <itemPath>as3993_public.h</itemPath>
