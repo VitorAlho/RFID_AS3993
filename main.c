@@ -51,18 +51,15 @@
 */
 #include <stdio.h>
 #include <string.h>
-#include <xc.h>
-#include "as3993_public.h"
-#include "appl_commands.h"
-#include "mcc_generated_files/system.h"
-#include "mcc_generated_files/pin_manager.h"
-#include "mcc_generated_files/spi1.h"
 #include <stdint.h>
 
-#ifndef FCY
-#define FCY SYSCLK/2
-#endif
-#include <libpic30.h>
+#include <xc.h>
+
+#include "mcc_generated_files/system.h"
+#include "mcc_generated_files/pin_manager.h"
+
+#include "as3993_public.h"
+#include "appl_commands.h"
         
 /*
   Section: Global variables 
@@ -101,7 +98,7 @@ int main(void)
             i=1;
         }
         LIGA_PA_SetLow();
-        __delay_ms(10);
+        delay_ms(10);
         LED_TAG_SetLow();
     } 
     

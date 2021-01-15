@@ -7,14 +7,6 @@
 #include "string.h"
 #include "mcc_generated_files/spi1.h"
 #include "mcc_generated_files/system.h"
-#ifndef FCY
-#define FCY SYSCLK/2
-#endif
-#include <libpic30.h>
-#ifndef delay_ms
-#define delay_ms(ms)    { __delay_ms(ms); }
-#define delay_us(us)    { __delay_us(us); }
-#endif
 
 /** Definition high */
 #define HIGH                      1

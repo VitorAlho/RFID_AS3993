@@ -1,44 +1,9 @@
-/*
- *****************************************************************************
- * Copyright by ams AG                                                       *
- * All rights are reserved.                                                  *
- *                                                                           *
- * IMPORTANT - PLEASE READ CAREFULLY BEFORE COPYING, INSTALLING OR USING     *
- * THE SOFTWARE.                                                             *
- *                                                                           *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS       *
- * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT         *
- * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS         *
- * FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT  *
- * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,     *
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT          *
- * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,     *
- * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY     *
- * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT       *
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE     *
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.      *
- *****************************************************************************
- */
-/** @file
-  * @brief This file includes functions providing an implementation of the ISO6c aka GEN2 RFID EPC protocol.
-  *
-  * Detailed documentation of the provided functionality can be found in gen2.h.
-  *
-  * @author Ulrich Herrmann
-  * @author Bernhard Breinbauer
-  */
 
 #include "as3993.h"
 #include "gen2.h"
 #include "string.h"
 #include "appl_commands.h"
 #include "as3993_public.h"
-
-/** Definition for debug output: epc.c */
-#define EPCDEBUG          0
-
-#define EPCLOG(...) /*!< macro used for printing debug messages if USE_LOGGER is set */
-#define EPCLOGDUMP(...) /*!< macro used for dumping buffers if USE_LOGGER is set */
 
 /*EPC Commands */
 /** Definition for queryrep EPC command */
@@ -594,44 +559,6 @@ void gen2PrintGen2Settings()
 
 }
 
-/*------------------------------------------------------------------------------ */
-void gen2PrintEPC(Tag *tag)
-{
-    uint16_t count;
-    //EPCLOG("Print PC %hhx %hhx\n",tag->pc[0], tag->pc[1]);
-    //EPCLOG("Print EPC, len= %hhx \n", tag->epclen);
-    for (count=0; count<(tag->epclen); count++)
-    {
-        //EPCLOG("%hhx ",tag->epc[count]);
-    }
-    //EPCLOG("\n");
-}
-
-/*------------------------------------------------------------------------- */
-void gen2PrintTagInfo(Tag *tag, uint8_t epclen, uint8_t tagNr)
-{
-    uint8_t count = 0;
-
-    //EPCLOG("TAG %hhx:\n",tagNr);
-    //EPCLOG("RN16: %hhx %hhx\n",tag->rn16[1]
-    //                             ,tag->rn16[0]);
-    //EPCLOG("Number of read bytes: %d\n",epclen+2);
-    //EPCLOG("PC: %hhx %hhx", tag->pc[1]
-    //                         , tag->pc[0]);
-    //EPCLOG("EPC: ");
-    while (count < epclen)
-    {
-        //EPCLOG("%hhx ",tag->epc[count]);
-        count++;
-    }
-    //EPCLOG("\n");
-
-    // EPCLOG("EPCLEN (bytes): %hhd\n",tag->epclen);
-
-    //EPCLOG("HANDLE: %hhx %hhx\n", tag->handle[0]
-    //                               , tag->handle[1]);
-}
-
 unsigned gen2SearchForTags(Tag *tags_
                       , uint8_t maxtags
                       , uint8_t q
@@ -651,9 +578,6 @@ unsigned gen2SearchForTags(Tag *tags_
     as3993AntennaPower(1);
     as3993ContinuousRead(AS3993_REG_IRQSTATUS1, 2, &buf_[0]);    // ensure that IRQ bits are reset
     as3993ClrResponse();
-
-    //EPCLOG("Searching for Tags, maxtags=%hhd, q=%hhd\n",maxtags,q);
-    //EPCLOG("-------------------------------\n");
 
     for (i=0; i < maxtags; i++)   /*Reseting the TAGLIST */
     {
@@ -696,7 +620,7 @@ unsigned gen2SearchForTags(Tag *tags_
                 default:
                     break;
             }
-            goOn = cbContinueScanning();
+            goOn = cbContinueScanning(); // timeout check routine
         } while (slot_count && goOn );
         addRounds--;
         //EPCLOG("q=%hhx, collisions=%x, num_of_tags=%x",q,collisions,num_of_tags);
@@ -758,11 +682,7 @@ unsigned gen2SearchForTagsAutoAck(Tag *tags_
     uint8_t followCmd = 0;
     uint8_t autoAck;
     uint8_t goOn = 1;
-    
-
-    //EPCLOG("Searching for Tags with autoACK, maxtags=%hhd, q=%hhd\n",maxtags, q);
-    //EPCLOG("-------------------------------\n");
-    
+        
     as3993AntennaPower(1);
     as3993ContinuousRead(AS3993_REG_IRQSTATUS1, 2, &buf_[0]);    // ensure that IRQ bits are reset
     as3993ClrResponse();
