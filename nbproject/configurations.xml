@@ -24,7 +24,6 @@
       <itemPath>errno.h</itemPath>
       <itemPath>errno_as3993.h</itemPath>
       <itemPath>gen2.h</itemPath>
-      <itemPath>system_clock.h</itemPath>
       <itemPath>tags.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
