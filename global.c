@@ -25,7 +25,7 @@
   * @author Ulrich Herrmann
   */
 
-#include "as3993_config.h"
+
 #include "global.h"
 //#include <p24Fxxxx.h>
 #include "p24FJ256DA210.h"

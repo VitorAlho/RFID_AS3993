@@ -93,13 +93,13 @@ typedef struct
 
     /** List of frequencies which are used for hopping. */
     uint32_t freq[MAXFREQ];
-#ifdef TUNER
+
     /** Counts how often this freq has been used in hopping. Only available on tuner enabled boards. */
     uint16_t countFreqHop[MAXFREQ];
-#endif
+
 } Freq;
 
-#ifdef TUNER
+
 typedef struct
 {
     /** number of entries in the table */
@@ -119,7 +119,7 @@ typedef struct
     /** Reflected power which was measured after last tuning. */
     uint16_t      tunedIQ[2][MAXTUNE];
 } TuningTable;
-#endif
+
 
 /** This function initialises the AS3993. A return value greater 0 indicates an error.\n
  *

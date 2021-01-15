@@ -27,7 +27,7 @@
   * @author Ulrich Herrmann
   * @author Bernhard Breinbauer
   */
-#include "as3993_config.h"
+
 #include "as3993.h"
 //#include "logger.h"
 //#include "timer.h"
@@ -139,7 +139,6 @@ static void gen2GetAgcRssi(uint8_t *agc, uint8_t *rssi)
 
 void gen2Select(struct gen2SelectParams *p)
 {
-#if !RUN_ON_AS3980 && !RUN_ON_AS3981      // no select on AS3980/81 available
     uint16_t len = p->mask_len;
     uint8_t ebvLen;
     uint16_t rxbits = 1;
@@ -170,7 +169,7 @@ void gen2Select(struct gen2SelectParams *p)
     /* Pseudo 1-bit receival with small timeout to have AS3993 state machine 
        finished and avoiding spurious interrupts (no response) */
     as3993TxRxGen2Bytes(AS3993_CMD_TRANSMCRC, buf_, len, &resp_null, &rxbits, 1, 0, 1);
-#endif
+
 }
 
 static void gen2PrepareQueryCmd(uint8_t *buf, uint8_t q)
@@ -285,11 +284,7 @@ static int8_t gen2Slot(Tag *tag, uint8_t qCommand, uint8_t q, uint8_t fast, uint
         //EPCLOG("  ack rx rest(pc=%hhx) -> err %hhx\n", tag->pc[0], ret);
         return -1;
     }
-#if RUN_ON_AS3980 || RUN_ON_AS3981
-    tag->epclen = (rxlen+7)/8-4;    //on AS3980 crc is in the fifo, omit it.
-#else
     tag->epclen = (rxlen+7)/8-2;
-#endif
     if(tag->epclen > EPCLENGTH)
         tag->epclen = EPCLENGTH;
     memcpy(tag->epc, buf_+2, tag->epclen);
@@ -361,11 +356,7 @@ static int8_t gen2SlotAutoAck(Tag *tag, uint8_t qCommand, uint8_t q, uint8_t fas
         //EPCLOG("  auto ack rx (pc=%hhx) -> err %hhx\n", tag->pc[0], ret);
         return -1;
     }
-#if RUN_ON_AS3980 || RUN_ON_AS3981
-    tag->epclen = (rxlen+7)/8-4;    //on AS3980 crc is in the fifo, omit it.
-#else
     tag->epclen = (rxlen+7)/8-2;
-#endif
     if(tag->epclen > EPCLENGTH)
         tag->epclen = EPCLENGTH;
     memcpy(tag->epc, buf_+2, tag->epclen);
@@ -455,10 +446,7 @@ int8_t gen2AccessTag(Tag const * tag, uint8_t const * password)
             //EPCLOG("handle not correct\n");
             return GEN2_ERR_ACCESS;
         }
-#if EPCDEBUG
-        if (count ==0) EPCLOG("first  part of access ok\n");
-        if (count ==1) EPCLOG("second part of access ok\n");
-#endif
+
     }
     return ret;
 }
@@ -467,9 +455,7 @@ int8_t gen2AccessTag(Tag const * tag, uint8_t const * password)
 int8_t gen2LockTag(Tag *tag, const uint8_t *mask_action, uint8_t *tag_reply)
 {
     int8_t ret;
-#if EPCDEBUG
-    uint8_t count;
-#endif
+
     uint16_t rxbits = 32+1;
 
     *tag_reply = 0xa5;
@@ -481,15 +467,6 @@ int8_t gen2LockTag(Tag *tag, const uint8_t *mask_action, uint8_t *tag_reply)
 
     buf_[3] = ((mask_action[2] ) & 0xF0);
     insertBitStream(&buf_[3], tag->handle, 2, 4);
-
-#if EPCDEBUG
-    EPCLOG("lock code\n");
-    for (count=0; count<6; count++)
-    {
-        EPCLOG("%hhx ",buf_[count]);
-    }
-    EPCLOG("\n");
-#endif
 
     ret = as3993TxRxGen2Bytes(AS3993_CMD_TRANSMCRCEHEAD, buf_, 44, buf_, &rxbits, 0xff, 0, 1);
 
@@ -674,12 +651,6 @@ unsigned gen2SearchForTags(Tag *tags_
     uint8_t cmd = AS3993_CMD_QUERY;
     uint8_t followCmd = 0;
     
-
-#if !RUN_ON_AS3980 && !RUN_ON_AS3981
-    if (toggleSession)
-        followCmd = AS3993_CMD_QUERYREP;
-#endif
-
     as3993AntennaPower(1);
     as3993ContinuousRead(AS3993_REG_IRQSTATUS1, 2, &buf_[0]);    // ensure that IRQ bits are reset
     as3993ClrResponse();
@@ -757,11 +728,6 @@ unsigned gen2SearchForTags(Tag *tags_
         }
     }while(num_of_tags < maxtags && addRounds && cbContinueScanning() );
 
-#if EPCDEBUG
-    EPCLOG("-------------------------------\n");
-    EPCLOG("%hx  Tags found", num_of_tags);
-    EPCLOG("\n");
-#endif
     if (num_of_tags == 0)
     {
         gen2ResetTimeout--;
@@ -799,11 +765,6 @@ unsigned gen2SearchForTagsAutoAck(Tag *tags_
 
     //EPCLOG("Searching for Tags with autoACK, maxtags=%hhd, q=%hhd\n",maxtags, q);
     //EPCLOG("-------------------------------\n");
-
-#if !RUN_ON_AS3980 && !RUN_ON_AS3981
-    if (toggleSession)
-        followCmd = AS3993_CMD_QUERYREP;
-#endif
     
     as3993AntennaPower(1);
     as3993ContinuousRead(AS3993_REG_IRQSTATUS1, 2, &buf_[0]);    // ensure that IRQ bits are reset
@@ -863,11 +824,6 @@ unsigned gen2SearchForTagsAutoAck(Tag *tags_
     autoAck &= ~0x30;
     as3993SingleWrite(AS3993_REG_PROTOCOLCTRL, autoAck);
 
-#if EPCDEBUG
-    EPCLOG("-------------------------------\n");
-    EPCLOG("%hx  Tags found", num_of_tags);
-    EPCLOG("\n");
-#endif
     if (num_of_tags == 0)
     {
         gen2ResetTimeout--;

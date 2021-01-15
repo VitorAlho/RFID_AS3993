@@ -109,7 +109,7 @@
 #endif
 #define FCY    (SYSCLK)
 
-#include "as3993_config.h"
+
 //#include "ams_types.h"
 #include <stdint.h>
 

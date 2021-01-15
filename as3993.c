@@ -1,5 +1,5 @@
 
-#include "as3993_config.h"
+
 #include "as3993.h"
 #include "as3993_public.h"
 #include "global.h"
@@ -41,7 +41,7 @@ static uint8_t gChipRevisionZero = 1;
 void writeReadAS3993( const uint8_t* wbuf, uint8_t wlen, uint8_t* rbuf, uint8_t rlen, uint8_t stopMode, uint8_t doStart )
 {
     if (doStart) NCS_SELECT();
-
+    
     //WriteReadSPI1(wbuf, 0, wlen);
     SPI1_Exchange8bitBuffer((uint8_t *)wbuf,(uint16_t)wlen,0);
     //WriteReadSPI1(wbuf,0,wlen);
@@ -235,7 +235,6 @@ uint16_t as3993Initialize(uint32_t baseFreq)
   * IRQ status registers.
   * The interrupt function sets the flags if an event occours.
   */
-#if RUN_ON_AS3993 || RUN_ON_AS3980 || RUN_ON_AS3994 || RUN_ON_AS3981
 void as3993Isr(void)
 {
     uint8_t regs[2];
@@ -249,7 +248,6 @@ void as3993Isr(void)
     CLREXTIRQ();
     //LOG("isr: %hx\n", as3993Response);
 }
-#endif
 
 /*------------------------------------------------------------------------- */
 uint8_t as3993ReadChipVersion(void)
@@ -347,9 +345,7 @@ void as3993WaitForResponseTimed(uint16_t waitMask, uint16_t counter)
     }
     if (counter==0)
     {
-#if !USE_UART_STREAM_DRIVER
-        //LOG("TI O T %x %x\n", as3993Response, waitMask);
-#endif
+
         as3993Reset();
         as3993Response = RESP_NORESINTERRUPT;
     }
@@ -367,9 +363,7 @@ void as3993WaitForResponse(uint16_t waitMask)
     }
     if (counter >= WAITFORRESPONSECOUNT)
     {
-#if !USE_UART_STREAM_DRIVER
-        //LOG("TI O response: %x, mask: %x\n", as3993Response, waitMask);
-#endif
+
         as3993Reset();
         as3993Response = RESP_NORESINTERRUPT;
     }
@@ -694,16 +688,7 @@ void as3993AntennaPower( uint8_t on)
         {
             delay_us(100);
         }
-        //MCULED(LEDOFF);
-        //MCULED(LEDON);
-        //desliga_saida_pa();
-        //delay_us(300);
-#ifdef EXTPA
-        //EN_PA(PA_OFF);
-#endif
-#if 0
-        DCDC(HIGH);  
-#endif
+
     }
 
     if(on) delay_ms(6); /* according to standard we have to wait 1.5ms before issuing commands  */
@@ -1062,9 +1047,7 @@ int8_t as3993TxRxGen2Bytes(uint8_t cmd, uint8_t *txbuf, uint16_t txbits,
             count = 18;
             if (checkRxLength && count > rxbytes)
             {
-#if AS3993DEBUG
-                //LOG("limiting1 %hhx %hhx resp %hx\n",count,rxbytes,as3993GetResponse());
-#endif
+
                 count = rxbytes;
             }
             as3993FifoRead(count, rxbuf);
@@ -1087,9 +1070,7 @@ int8_t as3993TxRxGen2Bytes(uint8_t cmd, uint8_t *txbuf, uint16_t txbits,
         count = as3993SingleRead(AS3993_REG_FIFOSTATUS) & 0x1F; /*get the number of bytes */
         if (checkRxLength && count > rxbytes)
         {
-#if AS3993DEBUG
-            //LOG("limiting %hhx %hhx\n",count,rxbytes);
-#endif
+
             count = rxbytes;
             resp |= RESP_RXCOUNTERROR;
         }
@@ -1100,20 +1081,8 @@ int8_t as3993TxRxGen2Bytes(uint8_t cmd, uint8_t *txbuf, uint16_t txbits,
         if (rxbits)
             *rxbits = 8 * rxed;
 
-#if RUN_ON_AS3980 || RUN_ON_AS3981   /* on AS3980/81 header IRQ is actually 2nd-byte IRQ -> ignore if no
-                                        command which expects header bit was sent */
-        if (currCmd != AS3993_CMD_TRANSMCRCEHEAD)
-            resp &= ~RESP_HEADERBIT;
-#endif
         if(resp & (RESP_NORESINTERRUPT | RESP_RXERR | RESP_HEADERBIT | RESP_RXCOUNTERROR))
         {
-#if AS3993DEBUG
-            if(resp & RESP_RXERR)
-            {   //log errors (except no response)
-                //LOG("rx error=%hx , rxed=%hhx , rxlen=%hx\n",resp, rxed);
-                //LOGDUMP(rxbuf, rxed);
-            }
-#endif
             if (resp & RESP_NORESINTERRUPT)
                 return AS3993_ERR_NORES;
             if (resp & RESP_HEADERBIT && currCmd == AS3993_CMD_TRANSMCRCEHEAD)

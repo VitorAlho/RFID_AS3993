@@ -1,9 +1,8 @@
 build/default/production/as3993.o:  \
 as3993.c  \
-as3993_config.h  \
+as3993.h  \
 global.h  \
- as3993.h  \
-as3993_public.h  \
+ as3993_public.h  \
 errno_as3993.h  \
 errno.h  \
 gen2.h  \

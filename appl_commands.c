@@ -46,7 +46,7 @@
  * INCLUDES
  ******************************************************************************
  */
-#include "as3993_config.h"
+
 #include "global.h"
 #include "gen2.h"
 #include "as3993_public.h"
@@ -215,25 +215,7 @@ static int8_t inventoryResult;
 static uint8_t usedAntenna = 1;  //marte
 uint32_t nivel_ruido,pot_refletida;
 
-#ifdef ANTENNA_SWITCH
-/** Stores which antenna port is used atm. valid values are 1 and 2. */
-#if RADON || FEMTO2 || FEMTO2_1
-static uint8_t usedAntenna = 2;
-#else
-static uint8_t usedAntenna = 1;
-#endif
-#endif
-#ifdef TUNER
-/** The #tuningTable contains a list of frequencies and values for the tuner for every frequency.
- * When frequency hopping is performed (hopFrequencies()) the closest frequency in the list is looked up
- * and the corresponding tuner values are applied to the DTCs of the tuner.
- * The #tuningTable can be modified via callTunerTable().  */
 static TuningTable tuningTable __attribute__((far));
-/** Default and current tuner settings. */
-#if RADON
-static TunerParameters tunerAnt1Params = {15, 15, 15};
-#endif
-#endif
 
 /** Structure which contains the command data which has been received and shall be sent.
  * Provides access to parameters of commands() to all appl command funtions (call*()). */
@@ -345,9 +327,7 @@ static void checkAndSetSession( uint8_t newSession)
             gen2Close();
             break;
         case SESSION_ISO6B:
-#if ISO6B
-            iso6bClose();
-#endif
+
             break;
     }
     switch (newSession)
@@ -356,9 +336,7 @@ static void checkAndSetSession( uint8_t newSession)
             gen2Open(&gen2Configuration);
             break;
         case SESSION_ISO6B:
-#if ISO6B
-            iso6bOpen();
-#endif
+
             break;
     }
     currentSession = newSession;
@@ -572,7 +550,7 @@ void autoTuner(void)
 {
 }
 
-#ifdef TUNER
+
 /**
  * adds data in current USB buffer to tuning table, should be only called from callAntennaTuner().
  */
@@ -629,7 +607,6 @@ static uint8_t addToTuningTable(void)
     else
         return tuningTable.tableSize;
 }
-#endif
 
 /** This function allows to update the tuner table. For in detail information
  * to antenna tuning see callAntennaTuner() and tuner.h.\n
@@ -779,7 +756,7 @@ void tunerTable(void)
     //APPLOGDUMP(cmdBuffer.rxData, cmdBuffer.rxSize);
     memset(cmdBuffer.txData, 0, CMD_TUNER_TABLE_REPLY_SIZE);
 
-#ifdef TUNER
+
     cmdBuffer.result = ERR_NONE;
     switch (cmdBuffer.rxData[0])
     {
@@ -814,12 +791,7 @@ void tunerTable(void)
     }
     cmdBuffer.txSize = CMD_TUNER_TABLE_REPLY_SIZE;
     //APPLOGDUMP(cmdBuffer.txData, cmdBuffer.txSize);
-#else
-    cmdBuffer.txSize = CMD_ANTENNA_TUNER_REPLY_SIZE;
-    cmdBuffer.result = ERR_REQUEST;
-    cmdBuffer.txData[0] = 0xFF; //subcmd
-    cmdBuffer.txData[1] = 0;
-#endif
+
 
 }
 
@@ -1041,38 +1013,12 @@ void configTxRx()
     //APPLOGDUMP(cmdBuffer.rxData, cmdBuffer.rxSize);
 
     if (cmdBuffer.rxData[0]) as3993SetSensitivity( cmdBuffer.rxData[1] );
-#ifdef ANTENNA_SWITCH
-    if (cmdBuffer.rxData[2])
-    {
-        usedAntenna = cmdBuffer.rxData[3];
-        if (usedAntenna > 2)        //prevent mis-configuration of antenna switch.
-            usedAntenna = 2;
-        else if (usedAntenna < 1)
-            usedAntenna = 1;
-        SWITCH_ANTENNA(usedAntenna);
-    }
-#endif
-#ifdef POWER_DETECTOR
-    if (cmdBuffer.rxData[4])
-    {
-        desTxPower                = cmdBuffer.rxData[5] | (cmdBuffer.rxData[6]<<8);
-        desTxPower = as3993SetTxPower(desTxPower); /* limit to reachable values */
-        actTxPower = desTxPower; /* not implemented */
-    }
-#endif
+
 
     cmdBuffer.txSize = CMD_CONFIG_TX_RX_REPLY_SIZE;
 
     cmdBuffer.txData[1] = (uint8_t) as3993GetSensitivity();
-#ifdef ANTENNA_SWITCH
-    cmdBuffer.txData[3] = usedAntenna;
-#endif
-#ifdef POWER_DETECTOR
-    cmdBuffer.txData[5] = desTxPower & 0xFF;
-    cmdBuffer.txData[6] = (desTxPower >> 8) & 0xFF;
-    cmdBuffer.txData[7] = actTxPower & 0xFF;
-    cmdBuffer.txData[8] = (actTxPower >> 8) & 0xFF;
-#endif
+
     cmdBuffer.result = ERR_NONE;
 
 }
@@ -1314,86 +1260,15 @@ where
 
 void callInventory6B(void)
 {
-
-
-#if ISO6B
-    static uint8_t element = 0;
-    int8_t status;
-
-    APPLOG("6b Inventory\n"); /* This MAY not be set, otherwise the Program execution drops. TLU */
-
-    if (cmdBuffer.rxData[1] == STARTINVENTORY)
-    {
-        checkAndSetSession(SESSION_ISO6B);
-        status = hopFrequencies();
-        element = 0;
-        initTagInfo();
-        if ( status )
-        {
-            num_of_tags = 0;
-        }
-        else
-        {
-            num_of_tags = iso6bInventoryRound (tags_, MAXTAG, cmdBuffer.rxData[2], &cmdBuffer.rxData[3], cmdBuffer.rxData[11]);
-        }
-        hopChannelRelease();
-        selectedTag = &tags_[0];
-    }
-
-    inventoryResult = status;
-    cmdBuffer.txData[1] = 0; /* RSSI field, currently not supported */
-    cmdBuffer.txData[2] = tags_[element].epclen;
-    cmdBuffer.txData[11] = Frequencies.freq[currentFreqIdx] & 0xff;
-    cmdBuffer.txData[12] = (Frequencies.freq[currentFreqIdx] >>  8) & 0xff;
-    cmdBuffer.txData[13] = (Frequencies.freq[currentFreqIdx] >> 16) & 0xff;
-
-    if (tags_[element].epclen)
-    {
-        memcpy(&cmdBuffer.txData[3], tags_[element].epc, tags_[element].epclen);
-    }
-    if (num_of_tags)
-    {
-        cmdBuffer.txData[0] = num_of_tags-element;
-    }
-    else
-    {
-        cmdBuffer.txData[0] = 0;
-    }
-    cmdBuffer.txSize = CMD_INVENTORY_6B_REPLY_SIZE;
-    element++;
-#else
-    cmdBuffer.txData[0] = 0; /* no tags */
-    cmdBuffer.txData[1] = 0; /* RSSI field, currently not supported */
-    cmdBuffer.result = ERR_REQUEST;
-    cmdBuffer.txSize = 2;
-#endif
+    
 }
 
 void readFromTag6B(void)
 {
-#if ISO6B
-    int8_t result = 0xff;
-#endif
-    //APPLOG("6b Read\n"); /* This MAY not be set, otherwise the Program execution drops. TLU */
 
-#if ISO6B
-    result = hopFrequencies();
-    
-    if (!result) result = iso6bRead(&cmdBuffer.rxData[1], cmdBuffer.rxData[9], &cmdBuffer.txData[2], cmdBuffer.rxData[10]);
-    hopChannelRelease();
-
-    /* prepare answer ... */
-    cmdBuffer.txSize = 0xFF & (CMD_READ_FROM_TAG_6B_REPLY_SIZE + cmdBuffer.rxData[10]);
-    /* just support two answer codes - 0x0 if everything went ok, otherwise 0xff which means
-        actually 'no response from tag' */
-    cmdBuffer.txData[0] = result * -1;
-    cmdBuffer.result = result;
-    cmdBuffer.txData[1] = cmdBuffer.rxData[10];
-#else
     cmdBuffer.txSize = CMD_READ_FROM_TAG_6B_REPLY_SIZE;
     cmdBuffer.result   = ERR_REQUEST;
     cmdBuffer.txData[1] = 0;
-#endif
 }
 
 /** \attention Do not use, ISO 6B not supported.
@@ -1425,24 +1300,10 @@ void callReadFromTag6B(void)
 
 void writeToTag6B(void)
 {
-#if ISO6B
-    int8_t result = ISO6B_ERR_NOTAG;
 
-    APPLOG("6b Write\n"); /* This MAY not be set, otherwise the Program execution drops. TLU */
-
-    result = hopFrequencies();
-    if ( !result ) result = iso6bWrite(&cmdBuffer.rxData[1], cmdBuffer.rxData[9], &cmdBuffer.rxData[11], cmdBuffer.rxData[10]);
-    hopChannelRelease();
-
-    /* prepare answer ... */
-    cmdBuffer.txSize = CMD_WRITE_TO_TAG_6B_REPLY_SIZE;
-    cmdBuffer.result = result;
-    cmdBuffer.txData[0] = result * -1;
-#else
     /* prepare answer ... */
     cmdBuffer.txSize = CMD_WRITE_TO_TAG_6B_REPLY_SIZE;
     cmdBuffer.result   = ERR_REQUEST;
-#endif
 }
 
 /** \attention Do not use, ISO 6B not supported.
@@ -1730,15 +1591,11 @@ uint8_t inventoryGen2(void)
  */
 void callSelectTag(void)
 {
-#if RUN_ON_AS3980 || RUN_ON_AS3981
-    cmdBuffer.txSize = CMD_SELECT_REPLY_SIZE;
-    cmdBuffer.result = ERR_REQUEST;
-#else
+
     //powerUpReader();
     //checkAndSetSession(SESSION_GEN2);
     selectTag();
-    //powerDownReader();
-#endif
+  
 }
 
 void selectTag(void)
@@ -1793,30 +1650,9 @@ void selectTag(void)
     //APPLOG("SELECT Tag target\n");
     //APPLOGDUMP(selParams[idx].mask, (selParams[idx].mask_len+7)/8);
     initTagInfo();
-  #if 0
-    status = hopFrequencies();
-    num_of_tags = 0;
-    if (!status )
-    {
-        performSelects();
-        num_of_tags = gen2SearchForTags(tags_, 1, 0, continueCheckTimeout, 1, 1);
-    }
-    hopChannelRelease();
-    //APPLOG("SELECTed %hx tags\n",num_of_tags);
-    if (num_of_tags)
-    {
-        selectedTag = &tags_[0];
-        status = ERR_NONE;    /* Tag found */
-    }
-    else
-    {
-        selectedTag = 0;
-        status = GEN2_ERR_SELECT; /*Tag not found */
-    }
-  #else
+  
     status = ERR_NONE;    /* Tag found */
-  #endif
-
+  
 exit:
     cmdBuffer.txSize = CMD_SELECT_REPLY_SIZE;
     cmdBuffer.result = status;
@@ -2249,9 +2085,7 @@ void callChangeFreq(void)
                 uint16_t time_ms = cmdBuffer.rxData[4] | (cmdBuffer.rxData[5]<<8);
                 uint8_t rxnorespwait, rxwait;
                 uint16_t rxbits = 0;
-#if RUN_ON_AS3980 || RUN_ON_AS3981
-                uint8_t txbuf[] = {0x9E, 0x9E};
-#endif
+
                 //APPLOG("continuous modulation, duration: %hx\n", time_ms);
                 powerUpReader();
                 rxnorespwait = as3993SingleRead( AS3993_REG_RXNORESPONSEWAITTIME );
@@ -2273,11 +2107,9 @@ void callChangeFreq(void)
                     }
                     else
                     {   /* static modulation */
-#if RUN_ON_AS3980 || RUN_ON_AS3981
-                        as3993TxRxGen2Bytes(AS3993_CMD_TRANSMCRC, txbuf, 16, 0, &rxbits, 0, 0, 1);
-#else
+
                         as3993TxRxGen2Bytes(AS3993_CMD_NAK, 0, 0, 0, &rxbits, 0, 0, 1);
-#endif
+
                     }
                     as3993ClrResponse();
                 }while(continueCheckTimeout());

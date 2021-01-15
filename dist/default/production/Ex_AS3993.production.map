@@ -112,13 +112,13 @@ Default Scalar Model: Small
 section                    address   length (PC units)   length (bytes) (dec)
 -------                    -------   -----------------   --------------------
 .text                        0x200               0x3f2           0x5eb  (1515)
-.text                        0x5f2              0x3db2          0x5c8b  (23691)
-.dinit                      0x43a4                0x70            0xa8  (168)
-.text                       0x4414                0x92            0xdb  (219)
-.init.delay32               0x44a6                0x1c            0x2a  (42)
-.text                       0x44c2                0x56            0x81  (129)
+.text                        0x5f2              0x3d86          0x5c49  (23625)
+.dinit                      0x4378                0x70            0xa8  (168)
+.text                       0x43e8                0x92            0xdb  (219)
+.init.delay32               0x447a                0x1c            0x2a  (42)
+.text                       0x4496                0x56            0x81  (129)
 
-                 Total "program" memory used (bytes):         0x64a4  (25764) 9%
+                 Total "program" memory used (bytes):         0x6462  (25698) 9%
 
 
 "data" Memory  [Origin = 0x800, Length = 0x18000]
@@ -232,153 +232,153 @@ External Symbols in Program Memory (by address):
                   0x000ba0                  _callConfigGen2
                   0x000ba8                  _readRegisters
                   0x000c5c                  _callInventory6B
-                  0x000c7a                  _readFromTag6B
-                  0x000c92                  _callReadFromTag6B
-                  0x000ca2                  _writeToTag6B
-                  0x000cb2                  _callWriteToTag6B
-                  0x000cc2                  _callInventoryGen2Internal
-                  0x000cda                  _callInventoryGen2
-                  0x000cfe                  _comecaInvetorio
-                  0x000d08                  _TerminaInvetorio
-                  0x000d10                  _inventorioSimplificado
-                  0x000d1c                  _inventoryGen2
-                  0x000da2                  _callSelectTag
-                  0x000daa                  _selectTag
-                  0x000f2c                  _callWriteToTag
-                  0x000f3a                  _writeTagMem
-                  0x000fce                  _writeToTag
-                  0x0010de                  _callChangeFreq
-                  0x00151a                  _callReadFromTag
-                  0x001528                  _readFromTag
-                  0x001668                  _callLockUnlockTag
-                  0x001676                  _lockUnlockTag
-                  0x0016f6                  _callKillTag
-                  0x001754                  _callStartStop
-                  0x00179a                  _callGenericCMD
-                  0x0017a8                  _executeGCMD
-                  0x0018e2                  _callRSSIMeasureCMD
-                  0x0018f0                  _executeRSSICMD
-                  0x0019c4                  _initCommands
-                  0x001b7e                  _doCyclicInventory
-                  0x001bf4                  _writeReadAS3993
-                  0x001c34                  _writeReadAS3993Isr
-                  0x001c5e                  _as3993Initialize
-                  0x001de0                  _EX_INT1_CallBack
-                  0x001e12                  _as3993ReadChipVersion
-                  0x001e2a                  _as3993SingleCommand
-                  0x001e44                  _as3993SingleWriteNoStop
-                  0x001e64                  _as3993ContinuousRead
-                  0x001e8a                  _as3993FifoRead
-                  0x001ea8                  _as3993SingleRead
-                  0x001eca                  _as3993ContinuousWrite
-                  0x001ef8                  _as3993SingleWrite
-                  0x001f1c                  _as3993CommandContinuousAddress
-                  0x001f5a                  _as3993WaitForResponseTimed
-                  0x001f8c                  _as3993WaitForResponse
-                  0x001fc2                  _as3993SelectLinkFrequency
-                  0x002066                  _as3993SetBaseFrequency
-                  0x0021c6                  _as3993EnterPowerDownMode
-                  0x002274                  _as3993ExitPowerDownMode
-                  0x00231a                  _as3993Reset
-                  0x00232a                  _as3993ResetDoNotPreserveRegisters
-                  0x002342                  _as3993EnterPowerNormalMode
-                  0x00235c                  _as3993ExitPowerNormalMode
-                  0x002362                  _as3993EnterPowerNormalRfMode
-                  0x00237c                  _as3993ExitPowerNormalRfMode
-                  0x002382                  _as3993EnterPowerStandbyMode
-                  0x00239c                  _as3993ExitPowerStandbyMode
-                  0x0023b2                  _as3993WaitForStartup
-                  0x0023fc                  _as3993AntennaPower
-                  0x0024a4                  _as3993SaveSensitivity
-                  0x0024b0                  _as3993RestoreSensitivity
-                  0x0024be                  _as3993GetSensitivity
-                  0x002562                  _as3993SetSensitivity
-                  0x002644                  _as3993GetRSSI
-                  0x0027b8                  _as3993GetADC
-                  0x0027e4                  _as3993GetReflectedPower
-                  0x002856                  _as3993GetReflectedPowerNoiseLevel
-                  0x0028c8                  _as3993TxRxGen2Bytes
-                  0x002bbe                  _gen2Select
-                  0x002d58                  _gen2QueryMeasureRSSI
-                  0x003164                  _gen2AccessTag
-                  0x00320e                  _gen2LockTag
-                  0x003286                  _gen2KillTag
-                  0x00335e                  _gen2WriteWordToTag
-                  0x003476                  _gen2ReadFromTag
-                  0x003516                  _gen2PrintGen2Settings
-                  0x003524                  _gen2PrintEPC
-                  0x00353e                  _gen2PrintTagInfo
-                  0x00355a                  _gen2SearchForTags
-                  0x003726                  _gen2SearchForTagsAutoAck
-                  0x003894                  _gen2Configure
-                  0x003ada                  _gen2Open
-                  0x003ae6                  _gen2Close
-                  0x003aec                  _bin2Hex
-                  0x003b58                  _bin2Chars
-                  0x003cd6                  _u32ToEbv
-                  0x003d58                  _insertBitStream
-                  0x003e2c                  _readU32FromLittleEndianBuffer
-                  0x003e72                  _limpa_buffer_tags
-                  0x003f4a                  _troca_bytes
-                  0x003f9a                  _pega_dados_tags
-                  0x003fa2                  _trata_tags_excessao
-                  0x003fa8                  _verifMaxRSSI
-                  0x003fe4                  _verifSeEhOperarioComum
-                  0x004004                  _verifSeEhCondutor
-                  0x004024                  _testeRSSI
-                  0x0040d2                  _SPI1_Initialize
-                  0x0040e4                  _SPI1_Exchange
-                  0x004114                  _SPI1_ExchangeBuffer
-                  0x0041de                  _SPI1_Exchange8bit
-                  0x0041ee                  _SPI1_Exchange8bitBuffer
-                  0x004202                  _SPI1_TransferModeGet
-                  0x004218                  _SPI1_StatusGet
-                  0x004220                  _PIN_MANAGER_Initialize
-                  0x0042ec                  _TMR3_Initialize
-                  0x004310                  _TMR3_Period16BitSet
-                  0x004322                  _TMR3_Period16BitGet
-                  0x00432a                  _TMR3_Counter16BitSet
-                  0x00433c                  _TMR3_Counter16BitGet
-                  0x00434a                  _TMR3_SetInterruptHandler
-                  0x00435a                  _TMR3_Start
-                  0x00436a                  _TMR3_Stop
-                  0x004374                  _TMR3_GetElapsedThenClear
-                  0x00438c                  _TMR3_SoftwareCounterGet
-                  0x004398                  _TMR3_SoftwareCounterClear
-                  0x004414                  _CLOCK_Initialize
-                  0x004460                  _main
-                  0x0044a6                  ___delay32
-                  0x0044c2                  _INTERRUPT_Initialize
-                  0x0044f4                  _SYSTEM_Initialize
-                  0x00450c                  _EXT_INT_Initialize
+                  0x000c62                  _readFromTag6B
+                  0x000c7a                  _callReadFromTag6B
+                  0x000c8a                  _writeToTag6B
+                  0x000c9a                  _callWriteToTag6B
+                  0x000caa                  _callInventoryGen2Internal
+                  0x000cc2                  _callInventoryGen2
+                  0x000ce6                  _comecaInvetorio
+                  0x000cf0                  _TerminaInvetorio
+                  0x000cf8                  _inventorioSimplificado
+                  0x000d04                  _inventoryGen2
+                  0x000d8a                  _callSelectTag
+                  0x000d92                  _selectTag
+                  0x000f14                  _callWriteToTag
+                  0x000f22                  _writeTagMem
+                  0x000fb6                  _writeToTag
+                  0x0010c6                  _callChangeFreq
+                  0x001502                  _callReadFromTag
+                  0x001510                  _readFromTag
+                  0x001650                  _callLockUnlockTag
+                  0x00165e                  _lockUnlockTag
+                  0x0016de                  _callKillTag
+                  0x00173c                  _callStartStop
+                  0x001782                  _callGenericCMD
+                  0x001790                  _executeGCMD
+                  0x0018ca                  _callRSSIMeasureCMD
+                  0x0018d8                  _executeRSSICMD
+                  0x0019ac                  _initCommands
+                  0x001b66                  _doCyclicInventory
+                  0x001bdc                  _writeReadAS3993
+                  0x001c1c                  _writeReadAS3993Isr
+                  0x001c46                  _as3993Initialize
+                  0x001dc8                  _EX_INT1_CallBack
+                  0x001dfa                  _as3993ReadChipVersion
+                  0x001e12                  _as3993SingleCommand
+                  0x001e2c                  _as3993SingleWriteNoStop
+                  0x001e4c                  _as3993ContinuousRead
+                  0x001e72                  _as3993FifoRead
+                  0x001e90                  _as3993SingleRead
+                  0x001eb2                  _as3993ContinuousWrite
+                  0x001ee0                  _as3993SingleWrite
+                  0x001f04                  _as3993CommandContinuousAddress
+                  0x001f42                  _as3993WaitForResponseTimed
+                  0x001f74                  _as3993WaitForResponse
+                  0x001faa                  _as3993SelectLinkFrequency
+                  0x00204e                  _as3993SetBaseFrequency
+                  0x0021ae                  _as3993EnterPowerDownMode
+                  0x00225c                  _as3993ExitPowerDownMode
+                  0x002302                  _as3993Reset
+                  0x002312                  _as3993ResetDoNotPreserveRegisters
+                  0x00232a                  _as3993EnterPowerNormalMode
+                  0x002344                  _as3993ExitPowerNormalMode
+                  0x00234a                  _as3993EnterPowerNormalRfMode
+                  0x002364                  _as3993ExitPowerNormalRfMode
+                  0x00236a                  _as3993EnterPowerStandbyMode
+                  0x002384                  _as3993ExitPowerStandbyMode
+                  0x00239a                  _as3993WaitForStartup
+                  0x0023e4                  _as3993AntennaPower
+                  0x00248c                  _as3993SaveSensitivity
+                  0x002498                  _as3993RestoreSensitivity
+                  0x0024a6                  _as3993GetSensitivity
+                  0x00254a                  _as3993SetSensitivity
+                  0x00262c                  _as3993GetRSSI
+                  0x0027a0                  _as3993GetADC
+                  0x0027cc                  _as3993GetReflectedPower
+                  0x00283e                  _as3993GetReflectedPowerNoiseLevel
+                  0x0028b0                  _as3993TxRxGen2Bytes
+                  0x002ba6                  _gen2Select
+                  0x002d40                  _gen2QueryMeasureRSSI
+                  0x00314c                  _gen2AccessTag
+                  0x0031f6                  _gen2LockTag
+                  0x00326e                  _gen2KillTag
+                  0x003346                  _gen2WriteWordToTag
+                  0x00345e                  _gen2ReadFromTag
+                  0x0034fe                  _gen2PrintGen2Settings
+                  0x00350c                  _gen2PrintEPC
+                  0x003526                  _gen2PrintTagInfo
+                  0x003542                  _gen2SearchForTags
+                  0x003704                  _gen2SearchForTagsAutoAck
+                  0x003868                  _gen2Configure
+                  0x003aae                  _gen2Open
+                  0x003aba                  _gen2Close
+                  0x003ac0                  _bin2Hex
+                  0x003b2c                  _bin2Chars
+                  0x003caa                  _u32ToEbv
+                  0x003d2c                  _insertBitStream
+                  0x003e00                  _readU32FromLittleEndianBuffer
+                  0x003e46                  _limpa_buffer_tags
+                  0x003f1e                  _troca_bytes
+                  0x003f6e                  _pega_dados_tags
+                  0x003f76                  _trata_tags_excessao
+                  0x003f7c                  _verifMaxRSSI
+                  0x003fb8                  _verifSeEhOperarioComum
+                  0x003fd8                  _verifSeEhCondutor
+                  0x003ff8                  _testeRSSI
+                  0x0040a6                  _SPI1_Initialize
+                  0x0040b8                  _SPI1_Exchange
+                  0x0040e8                  _SPI1_ExchangeBuffer
+                  0x0041b2                  _SPI1_Exchange8bit
+                  0x0041c2                  _SPI1_Exchange8bitBuffer
+                  0x0041d6                  _SPI1_TransferModeGet
+                  0x0041ec                  _SPI1_StatusGet
+                  0x0041f4                  _PIN_MANAGER_Initialize
+                  0x0042c0                  _TMR3_Initialize
+                  0x0042e4                  _TMR3_Period16BitSet
+                  0x0042f6                  _TMR3_Period16BitGet
+                  0x0042fe                  _TMR3_Counter16BitSet
+                  0x004310                  _TMR3_Counter16BitGet
+                  0x00431e                  _TMR3_SetInterruptHandler
+                  0x00432e                  _TMR3_Start
+                  0x00433e                  _TMR3_Stop
+                  0x004348                  _TMR3_GetElapsedThenClear
+                  0x004360                  _TMR3_SoftwareCounterGet
+                  0x00436c                  _TMR3_SoftwareCounterClear
+                  0x0043e8                  _CLOCK_Initialize
+                  0x004434                  _main
+                  0x00447a                  ___delay32
+                  0x004496                  _INTERRUPT_Initialize
+                  0x0044c8                  _SYSTEM_Initialize
+                  0x0044e0                  _EXT_INT_Initialize
 
 External Symbols in Program Memory (by name):
 
-                  0x004414                  _CLOCK_Initialize
-                  0x00450c                  _EXT_INT_Initialize
-                  0x001de0                  _EX_INT1_CallBack
-                  0x0044c2                  _INTERRUPT_Initialize
-                  0x004220                  _PIN_MANAGER_Initialize
-                  0x0040e4                  _SPI1_Exchange
-                  0x0041de                  _SPI1_Exchange8bit
-                  0x0041ee                  _SPI1_Exchange8bitBuffer
-                  0x004114                  _SPI1_ExchangeBuffer
-                  0x0040d2                  _SPI1_Initialize
-                  0x004218                  _SPI1_StatusGet
-                  0x004202                  _SPI1_TransferModeGet
-                  0x0044f4                  _SYSTEM_Initialize
-                  0x00433c                  _TMR3_Counter16BitGet
-                  0x00432a                  _TMR3_Counter16BitSet
-                  0x004374                  _TMR3_GetElapsedThenClear
-                  0x0042ec                  _TMR3_Initialize
-                  0x004322                  _TMR3_Period16BitGet
-                  0x004310                  _TMR3_Period16BitSet
-                  0x00434a                  _TMR3_SetInterruptHandler
-                  0x004398                  _TMR3_SoftwareCounterClear
-                  0x00438c                  _TMR3_SoftwareCounterGet
-                  0x00435a                  _TMR3_Start
-                  0x00436a                  _TMR3_Stop
-                  0x000d08                  _TerminaInvetorio
+                  0x0043e8                  _CLOCK_Initialize
+                  0x0044e0                  _EXT_INT_Initialize
+                  0x001dc8                  _EX_INT1_CallBack
+                  0x004496                  _INTERRUPT_Initialize
+                  0x0041f4                  _PIN_MANAGER_Initialize
+                  0x0040b8                  _SPI1_Exchange
+                  0x0041b2                  _SPI1_Exchange8bit
+                  0x0041c2                  _SPI1_Exchange8bitBuffer
+                  0x0040e8                  _SPI1_ExchangeBuffer
+                  0x0040a6                  _SPI1_Initialize
+                  0x0041ec                  _SPI1_StatusGet
+                  0x0041d6                  _SPI1_TransferModeGet
+                  0x0044c8                  _SYSTEM_Initialize
+                  0x004310                  _TMR3_Counter16BitGet
+                  0x0042fe                  _TMR3_Counter16BitSet
+                  0x004348                  _TMR3_GetElapsedThenClear
+                  0x0042c0                  _TMR3_Initialize
+                  0x0042f6                  _TMR3_Period16BitGet
+                  0x0042e4                  _TMR3_Period16BitSet
+                  0x00431e                  _TMR3_SetInterruptHandler
+                  0x00436c                  _TMR3_SoftwareCounterClear
+                  0x004360                  _TMR3_SoftwareCounterGet
+                  0x00432e                  _TMR3_Start
+                  0x00433e                  _TMR3_Stop
+                  0x000cf0                  _TerminaInvetorio
                   0x00034e                  __AddressError
                   0x0003e2                  __DefaultInterrupt
                   0x00038e                  __INT1Interrupt
@@ -386,7 +386,7 @@ External Symbols in Program Memory (by name):
                   0x00030c                  __OscillatorFail
                   0x00032c                  __StackError
                   0x0003ac                  __T3Interrupt
-                  0x0044a6                  ___delay32
+                  0x00447a                  ___delay32
                   0x0003e8                  ___eqsf2
                   0x0004b2                  ___floatundisf
                   0x0003f0                  ___floatunsisf
@@ -409,122 +409,122 @@ External Symbols in Program Memory (by name):
                   0x000200                  __resetPRI
                   0x000716                  _antennaPower
                   0x000766                  _antennaTuner
-                  0x0023fc                  _as3993AntennaPower
-                  0x001f1c                  _as3993CommandContinuousAddress
-                  0x001e64                  _as3993ContinuousRead
-                  0x001eca                  _as3993ContinuousWrite
-                  0x0021c6                  _as3993EnterPowerDownMode
-                  0x002342                  _as3993EnterPowerNormalMode
-                  0x002362                  _as3993EnterPowerNormalRfMode
-                  0x002382                  _as3993EnterPowerStandbyMode
-                  0x002274                  _as3993ExitPowerDownMode
-                  0x00235c                  _as3993ExitPowerNormalMode
-                  0x00237c                  _as3993ExitPowerNormalRfMode
-                  0x00239c                  _as3993ExitPowerStandbyMode
-                  0x001e8a                  _as3993FifoRead
-                  0x0027b8                  _as3993GetADC
-                  0x002644                  _as3993GetRSSI
-                  0x0027e4                  _as3993GetReflectedPower
-                  0x002856                  _as3993GetReflectedPowerNoiseLevel
-                  0x0024be                  _as3993GetSensitivity
-                  0x001c5e                  _as3993Initialize
-                  0x001e12                  _as3993ReadChipVersion
-                  0x00231a                  _as3993Reset
-                  0x00232a                  _as3993ResetDoNotPreserveRegisters
-                  0x0024b0                  _as3993RestoreSensitivity
-                  0x0024a4                  _as3993SaveSensitivity
-                  0x001fc2                  _as3993SelectLinkFrequency
-                  0x002066                  _as3993SetBaseFrequency
-                  0x002562                  _as3993SetSensitivity
-                  0x001e2a                  _as3993SingleCommand
-                  0x001ea8                  _as3993SingleRead
-                  0x001ef8                  _as3993SingleWrite
-                  0x001e44                  _as3993SingleWriteNoStop
-                  0x0028c8                  _as3993TxRxGen2Bytes
-                  0x001f8c                  _as3993WaitForResponse
-                  0x001f5a                  _as3993WaitForResponseTimed
-                  0x0023b2                  _as3993WaitForStartup
+                  0x0023e4                  _as3993AntennaPower
+                  0x001f04                  _as3993CommandContinuousAddress
+                  0x001e4c                  _as3993ContinuousRead
+                  0x001eb2                  _as3993ContinuousWrite
+                  0x0021ae                  _as3993EnterPowerDownMode
+                  0x00232a                  _as3993EnterPowerNormalMode
+                  0x00234a                  _as3993EnterPowerNormalRfMode
+                  0x00236a                  _as3993EnterPowerStandbyMode
+                  0x00225c                  _as3993ExitPowerDownMode
+                  0x002344                  _as3993ExitPowerNormalMode
+                  0x002364                  _as3993ExitPowerNormalRfMode
+                  0x002384                  _as3993ExitPowerStandbyMode
+                  0x001e72                  _as3993FifoRead
+                  0x0027a0                  _as3993GetADC
+                  0x00262c                  _as3993GetRSSI
+                  0x0027cc                  _as3993GetReflectedPower
+                  0x00283e                  _as3993GetReflectedPowerNoiseLevel
+                  0x0024a6                  _as3993GetSensitivity
+                  0x001c46                  _as3993Initialize
+                  0x001dfa                  _as3993ReadChipVersion
+                  0x002302                  _as3993Reset
+                  0x002312                  _as3993ResetDoNotPreserveRegisters
+                  0x002498                  _as3993RestoreSensitivity
+                  0x00248c                  _as3993SaveSensitivity
+                  0x001faa                  _as3993SelectLinkFrequency
+                  0x00204e                  _as3993SetBaseFrequency
+                  0x00254a                  _as3993SetSensitivity
+                  0x001e12                  _as3993SingleCommand
+                  0x001e90                  _as3993SingleRead
+                  0x001ee0                  _as3993SingleWrite
+                  0x001e2c                  _as3993SingleWriteNoStop
+                  0x0028b0                  _as3993TxRxGen2Bytes
+                  0x001f74                  _as3993WaitForResponse
+                  0x001f42                  _as3993WaitForResponseTimed
+                  0x00239a                  _as3993WaitForStartup
                   0x000778                  _autoTuner
-                  0x003b58                  _bin2Chars
-                  0x003aec                  _bin2Hex
+                  0x003b2c                  _bin2Chars
+                  0x003ac0                  _bin2Hex
                   0x00070e                  _callAntennaPower
                   0x00075e                  _callAntennaTuner
                   0x00076c                  _callAutoTuner
-                  0x0010de                  _callChangeFreq
+                  0x0010c6                  _callChangeFreq
                   0x000ba0                  _callConfigGen2
                   0x000a5c                  _callConfigTxRx
-                  0x00179a                  _callGenericCMD
+                  0x001782                  _callGenericCMD
                   0x000c5c                  _callInventory6B
-                  0x000cda                  _callInventoryGen2
-                  0x000cc2                  _callInventoryGen2Internal
-                  0x0016f6                  _callKillTag
-                  0x001668                  _callLockUnlockTag
-                  0x0018e2                  _callRSSIMeasureCMD
-                  0x00151a                  _callReadFromTag
-                  0x000c92                  _callReadFromTag6B
+                  0x000cc2                  _callInventoryGen2
+                  0x000caa                  _callInventoryGen2Internal
+                  0x0016de                  _callKillTag
+                  0x001650                  _callLockUnlockTag
+                  0x0018ca                  _callRSSIMeasureCMD
+                  0x001502                  _callReadFromTag
+                  0x000c7a                  _callReadFromTag6B
                   0x0009ce                  _callReaderConfig
-                  0x000da2                  _callSelectTag
-                  0x001754                  _callStartStop
+                  0x000d8a                  _callSelectTag
+                  0x00173c                  _callStartStop
                   0x00091e                  _callTunerTable
-                  0x000f2c                  _callWriteToTag
-                  0x000cb2                  _callWriteToTag6B
+                  0x000f14                  _callWriteToTag
+                  0x000c9a                  _callWriteToTag6B
                   0x0006ac                  _callWrongCommand
-                  0x000cfe                  _comecaInvetorio
+                  0x000ce6                  _comecaInvetorio
                   0x000a94                  _configGen2
                   0x000a68                  _configTxRx
-                  0x001b7e                  _doCyclicInventory
-                  0x0017a8                  _executeGCMD
-                  0x0018f0                  _executeRSSICMD
-                  0x003164                  _gen2AccessTag
-                  0x003ae6                  _gen2Close
-                  0x003894                  _gen2Configure
-                  0x003286                  _gen2KillTag
-                  0x00320e                  _gen2LockTag
-                  0x003ada                  _gen2Open
-                  0x003524                  _gen2PrintEPC
-                  0x003516                  _gen2PrintGen2Settings
-                  0x00353e                  _gen2PrintTagInfo
-                  0x002d58                  _gen2QueryMeasureRSSI
-                  0x003476                  _gen2ReadFromTag
-                  0x00355a                  _gen2SearchForTags
-                  0x003726                  _gen2SearchForTagsAutoAck
-                  0x002bbe                  _gen2Select
-                  0x00335e                  _gen2WriteWordToTag
-                  0x0019c4                  _initCommands
-                  0x003d58                  _insertBitStream
-                  0x000d10                  _inventorioSimplificado
-                  0x000d1c                  _inventoryGen2
-                  0x003e72                  _limpa_buffer_tags
-                  0x001676                  _lockUnlockTag
-                  0x004460                  _main
+                  0x001b66                  _doCyclicInventory
+                  0x001790                  _executeGCMD
+                  0x0018d8                  _executeRSSICMD
+                  0x00314c                  _gen2AccessTag
+                  0x003aba                  _gen2Close
+                  0x003868                  _gen2Configure
+                  0x00326e                  _gen2KillTag
+                  0x0031f6                  _gen2LockTag
+                  0x003aae                  _gen2Open
+                  0x00350c                  _gen2PrintEPC
+                  0x0034fe                  _gen2PrintGen2Settings
+                  0x003526                  _gen2PrintTagInfo
+                  0x002d40                  _gen2QueryMeasureRSSI
+                  0x00345e                  _gen2ReadFromTag
+                  0x003542                  _gen2SearchForTags
+                  0x003704                  _gen2SearchForTagsAutoAck
+                  0x002ba6                  _gen2Select
+                  0x003346                  _gen2WriteWordToTag
+                  0x0019ac                  _initCommands
+                  0x003d2c                  _insertBitStream
+                  0x000cf8                  _inventorioSimplificado
+                  0x000d04                  _inventoryGen2
+                  0x003e46                  _limpa_buffer_tags
+                  0x00165e                  _lockUnlockTag
+                  0x004434                  _main
                   0x0005b6                  _memcpy
                   0x0005c4                  _memset
-                  0x003f9a                  _pega_dados_tags
+                  0x003f6e                  _pega_dados_tags
                   0x0005f2                  _pega_pot_refl
                   0x0006c0                  _performSelects
-                  0x001528                  _readFromTag
-                  0x000c7a                  _readFromTag6B
+                  0x001510                  _readFromTag
+                  0x000c62                  _readFromTag6B
                   0x000a3c                  _readRegister
                   0x000ba8                  _readRegisters
-                  0x003e2c                  _readU32FromLittleEndianBuffer
+                  0x003e00                  _readU32FromLittleEndianBuffer
                   0x0009d6                  _readerConfig
-                  0x000daa                  _selectTag
+                  0x000d92                  _selectTag
                   0x0005d2                  _strcat
                   0x0005e6                  _strlen
-                  0x004024                  _testeRSSI
-                  0x003fa2                  _trata_tags_excessao
-                  0x003f4a                  _troca_bytes
+                  0x003ff8                  _testeRSSI
+                  0x003f76                  _trata_tags_excessao
+                  0x003f1e                  _troca_bytes
                   0x000926                  _tunerTable
-                  0x003cd6                  _u32ToEbv
-                  0x003fa8                  _verifMaxRSSI
-                  0x004004                  _verifSeEhCondutor
-                  0x003fe4                  _verifSeEhOperarioComum
-                  0x001bf4                  _writeReadAS3993
-                  0x001c34                  _writeReadAS3993Isr
+                  0x003caa                  _u32ToEbv
+                  0x003f7c                  _verifMaxRSSI
+                  0x003fd8                  _verifSeEhCondutor
+                  0x003fb8                  _verifSeEhOperarioComum
+                  0x001bdc                  _writeReadAS3993
+                  0x001c1c                  _writeReadAS3993Isr
                   0x000a0c                  _writeRegister
-                  0x000f3a                  _writeTagMem
-                  0x000fce                  _writeToTag
-                  0x000ca2                  _writeToTag6B
+                  0x000f22                  _writeTagMem
+                  0x000fb6                  _writeToTag
+                  0x000c8a                  _writeToTag6B
                   0x0006b4                  _wrongCommand
                   0x000666                  build/default/production/appl_commands.o:_continueCheckTimeout
 
@@ -675,7 +675,7 @@ __CONFIG1
 .comment
  *(.comment)
 
-.debug_info       0x000000       0x7e9e
+.debug_info       0x000000       0x7e99
  *(.debug_info)
  .debug_info      0x000000        0x43f build/default/production/mcc_generated_files/clock.o
  .debug_info      0x00043f        0x4a3 build/default/production/mcc_generated_files/interrupt_manager.o
@@ -686,14 +686,14 @@ __CONFIG1
  .debug_info      0x0025b3        0x53b build/default/production/mcc_generated_files/ext_int.o
  .debug_info      0x002aee        0x824 build/default/production/mcc_generated_files/tmr3.o
  .debug_info      0x003312        0x4f3 build/default/production/main.o
- .debug_info      0x003805       0x17aa build/default/production/appl_commands.o
- .debug_info      0x004faf       0x16c3 build/default/production/as3993.o
- .debug_info      0x006672        0xf55 build/default/production/gen2.o
- .debug_info      0x0075c7        0x39d build/default/production/global.o
- .debug_info      0x007964        0x53a build/default/production/tags.o
+ .debug_info      0x003805       0x17a6 build/default/production/appl_commands.o
+ .debug_info      0x004fab       0x16c2 build/default/production/as3993.o
+ .debug_info      0x00666d        0xf55 build/default/production/gen2.o
+ .debug_info      0x0075c2        0x39d build/default/production/global.o
+ .debug_info      0x00795f        0x53a build/default/production/tags.o
  *(.gnu.linkonce.wi.*)
 
-.debug_abbrev     0x000000       0x1077
+.debug_abbrev     0x000000       0x108e
  *(.debug_abbrev)
  .debug_abbrev    0x000000         0xc5 build/default/production/mcc_generated_files/clock.o
  .debug_abbrev    0x0000c5         0xb4 build/default/production/mcc_generated_files/interrupt_manager.o
@@ -705,13 +705,13 @@ __CONFIG1
  .debug_abbrev    0x000569         0x8a build/default/production/mcc_generated_files/ext_int.o
  .debug_abbrev    0x0005f3        0x18d build/default/production/mcc_generated_files/tmr3.o
  .debug_abbrev    0x000780         0xf6 build/default/production/main.o
- .debug_abbrev    0x000876        0x23d build/default/production/appl_commands.o
- .debug_abbrev    0x000ab3        0x1fd build/default/production/as3993.o
- .debug_abbrev    0x000cb0        0x1ea build/default/production/gen2.o
- .debug_abbrev    0x000e9a         0x9a build/default/production/global.o
- .debug_abbrev    0x000f34        0x143 build/default/production/tags.o
+ .debug_abbrev    0x000876        0x254 build/default/production/appl_commands.o
+ .debug_abbrev    0x000aca        0x1fd build/default/production/as3993.o
+ .debug_abbrev    0x000cc7        0x1ea build/default/production/gen2.o
+ .debug_abbrev    0x000eb1         0x9a build/default/production/global.o
+ .debug_abbrev    0x000f4b        0x143 build/default/production/tags.o
 
-.debug_line       0x000000       0x1780
+.debug_line       0x000000       0x1764
  *(.debug_line)
  .debug_line      0x000000        0x111 build/default/production/mcc_generated_files/clock.o
  .debug_line      0x000111        0x112 build/default/production/mcc_generated_files/interrupt_manager.o
@@ -723,11 +723,11 @@ __CONFIG1
  .debug_line      0x000711        0x120 build/default/production/mcc_generated_files/ext_int.o
  .debug_line      0x000831        0x14e build/default/production/mcc_generated_files/tmr3.o
  .debug_line      0x00097f        0x114 build/default/production/main.o
- .debug_line      0x000a93        0x47a build/default/production/appl_commands.o
- .debug_line      0x000f0d        0x38e build/default/production/as3993.o
- .debug_line      0x00129b        0x2ec build/default/production/gen2.o
- .debug_line      0x001587         0xf5 build/default/production/global.o
- .debug_line      0x00167c        0x104 build/default/production/tags.o
+ .debug_line      0x000a93        0x468 build/default/production/appl_commands.o
+ .debug_line      0x000efb        0x38a build/default/production/as3993.o
+ .debug_line      0x001285        0x2e6 build/default/production/gen2.o
+ .debug_line      0x00156b         0xf5 build/default/production/global.o
+ .debug_line      0x001660        0x104 build/default/production/tags.o
 
 .debug_frame      0x000000       0x133c
  *(.debug_frame)
@@ -2324,8 +2324,8 @@ __c30_signature
  .ivt._T3Interrupt
                   0x000024          0x2 build/default/production/mcc_generated_files/tmr3.o
 
-.text             0x0005f2       0x3db2
- .text            0x0005f2       0x1602 build/default/production/appl_commands.o
+.text             0x0005f2       0x3d86
+ .text            0x0005f2       0x15ea build/default/production/appl_commands.o
                   0x0005f2                  _pega_pot_refl
                   0x000666                  build/default/production/appl_commands.o:_continueCheckTimeout
                   0x0006ac                  _callWrongCommand
@@ -2349,147 +2349,147 @@ __c30_signature
                   0x000ba0                  _callConfigGen2
                   0x000ba8                  _readRegisters
                   0x000c5c                  _callInventory6B
-                  0x000c7a                  _readFromTag6B
-                  0x000c92                  _callReadFromTag6B
-                  0x000ca2                  _writeToTag6B
-                  0x000cb2                  _callWriteToTag6B
-                  0x000cc2                  _callInventoryGen2Internal
-                  0x000cda                  _callInventoryGen2
-                  0x000cfe                  _comecaInvetorio
-                  0x000d08                  _TerminaInvetorio
-                  0x000d10                  _inventorioSimplificado
-                  0x000d1c                  _inventoryGen2
-                  0x000da2                  _callSelectTag
-                  0x000daa                  _selectTag
-                  0x000f2c                  _callWriteToTag
-                  0x000f3a                  _writeTagMem
-                  0x000fce                  _writeToTag
-                  0x0010de                  _callChangeFreq
-                  0x00151a                  _callReadFromTag
-                  0x001528                  _readFromTag
-                  0x001668                  _callLockUnlockTag
-                  0x001676                  _lockUnlockTag
-                  0x0016f6                  _callKillTag
-                  0x001754                  _callStartStop
-                  0x00179a                  _callGenericCMD
-                  0x0017a8                  _executeGCMD
-                  0x0018e2                  _callRSSIMeasureCMD
-                  0x0018f0                  _executeRSSICMD
-                  0x0019c4                  _initCommands
-                  0x001b7e                  _doCyclicInventory
- .text            0x001bf4        0xf84 build/default/production/as3993.o
-                  0x001bf4                  _writeReadAS3993
-                  0x001c34                  _writeReadAS3993Isr
-                  0x001c5e                  _as3993Initialize
-                  0x001de0                  _EX_INT1_CallBack
-                  0x001e12                  _as3993ReadChipVersion
-                  0x001e2a                  _as3993SingleCommand
-                  0x001e44                  _as3993SingleWriteNoStop
-                  0x001e64                  _as3993ContinuousRead
-                  0x001e8a                  _as3993FifoRead
-                  0x001ea8                  _as3993SingleRead
-                  0x001eca                  _as3993ContinuousWrite
-                  0x001ef8                  _as3993SingleWrite
-                  0x001f1c                  _as3993CommandContinuousAddress
-                  0x001f5a                  _as3993WaitForResponseTimed
-                  0x001f8c                  _as3993WaitForResponse
-                  0x001fc2                  _as3993SelectLinkFrequency
-                  0x002066                  _as3993SetBaseFrequency
-                  0x0021c6                  _as3993EnterPowerDownMode
-                  0x002274                  _as3993ExitPowerDownMode
-                  0x00231a                  _as3993Reset
-                  0x00232a                  _as3993ResetDoNotPreserveRegisters
-                  0x002342                  _as3993EnterPowerNormalMode
-                  0x00235c                  _as3993ExitPowerNormalMode
-                  0x002362                  _as3993EnterPowerNormalRfMode
-                  0x00237c                  _as3993ExitPowerNormalRfMode
-                  0x002382                  _as3993EnterPowerStandbyMode
-                  0x00239c                  _as3993ExitPowerStandbyMode
-                  0x0023b2                  _as3993WaitForStartup
-                  0x0023fc                  _as3993AntennaPower
-                  0x0024a4                  _as3993SaveSensitivity
-                  0x0024b0                  _as3993RestoreSensitivity
-                  0x0024be                  _as3993GetSensitivity
-                  0x002562                  _as3993SetSensitivity
-                  0x002644                  _as3993GetRSSI
-                  0x0027b8                  _as3993GetADC
-                  0x0027e4                  _as3993GetReflectedPower
-                  0x002856                  _as3993GetReflectedPowerNoiseLevel
-                  0x0028c8                  _as3993TxRxGen2Bytes
- .text            0x002b78        0xf74 build/default/production/gen2.o
-                  0x002bbe                  _gen2Select
-                  0x002d58                  _gen2QueryMeasureRSSI
-                  0x003164                  _gen2AccessTag
-                  0x00320e                  _gen2LockTag
-                  0x003286                  _gen2KillTag
-                  0x00335e                  _gen2WriteWordToTag
-                  0x003476                  _gen2ReadFromTag
-                  0x003516                  _gen2PrintGen2Settings
-                  0x003524                  _gen2PrintEPC
-                  0x00353e                  _gen2PrintTagInfo
-                  0x00355a                  _gen2SearchForTags
-                  0x003726                  _gen2SearchForTagsAutoAck
-                  0x003894                  _gen2Configure
-                  0x003ada                  _gen2Open
-                  0x003ae6                  _gen2Close
- .text            0x003aec        0x386 build/default/production/global.o
-                  0x003aec                  _bin2Hex
-                  0x003b58                  _bin2Chars
-                  0x003cd6                  _u32ToEbv
-                  0x003d58                  _insertBitStream
-                  0x003e2c                  _readU32FromLittleEndianBuffer
- .text            0x003e72        0x260 build/default/production/tags.o
-                  0x003e72                  _limpa_buffer_tags
-                  0x003f4a                  _troca_bytes
-                  0x003f9a                  _pega_dados_tags
-                  0x003fa2                  _trata_tags_excessao
-                  0x003fa8                  _verifMaxRSSI
-                  0x003fe4                  _verifSeEhOperarioComum
-                  0x004004                  _verifSeEhCondutor
-                  0x004024                  _testeRSSI
- .text            0x0040d2        0x14e build/default/production/mcc_generated_files/spi1.o
-                  0x0040d2                  _SPI1_Initialize
-                  0x0040e4                  _SPI1_Exchange
-                  0x004114                  _SPI1_ExchangeBuffer
-                  0x0041de                  _SPI1_Exchange8bit
-                  0x0041ee                  _SPI1_Exchange8bitBuffer
-                  0x004202                  _SPI1_TransferModeGet
-                  0x004218                  _SPI1_StatusGet
- .text            0x004220         0xcc build/default/production/mcc_generated_files/pin_manager.o
-                  0x004220                  _PIN_MANAGER_Initialize
- .text            0x0042ec         0xb8 build/default/production/mcc_generated_files/tmr3.o
-                  0x0042ec                  _TMR3_Initialize
-                  0x004310                  _TMR3_Period16BitSet
-                  0x004322                  _TMR3_Period16BitGet
-                  0x00432a                  _TMR3_Counter16BitSet
-                  0x00433c                  _TMR3_Counter16BitGet
-                  0x004344                  _TMR3_CallBack
-                  0x00434a                  _TMR3_SetInterruptHandler
-                  0x00435a                  _TMR3_Start
-                  0x00436a                  _TMR3_Stop
-                  0x004374                  _TMR3_GetElapsedThenClear
-                  0x00438c                  _TMR3_SoftwareCounterGet
-                  0x004398                  _TMR3_SoftwareCounterClear
+                  0x000c62                  _readFromTag6B
+                  0x000c7a                  _callReadFromTag6B
+                  0x000c8a                  _writeToTag6B
+                  0x000c9a                  _callWriteToTag6B
+                  0x000caa                  _callInventoryGen2Internal
+                  0x000cc2                  _callInventoryGen2
+                  0x000ce6                  _comecaInvetorio
+                  0x000cf0                  _TerminaInvetorio
+                  0x000cf8                  _inventorioSimplificado
+                  0x000d04                  _inventoryGen2
+                  0x000d8a                  _callSelectTag
+                  0x000d92                  _selectTag
+                  0x000f14                  _callWriteToTag
+                  0x000f22                  _writeTagMem
+                  0x000fb6                  _writeToTag
+                  0x0010c6                  _callChangeFreq
+                  0x001502                  _callReadFromTag
+                  0x001510                  _readFromTag
+                  0x001650                  _callLockUnlockTag
+                  0x00165e                  _lockUnlockTag
+                  0x0016de                  _callKillTag
+                  0x00173c                  _callStartStop
+                  0x001782                  _callGenericCMD
+                  0x001790                  _executeGCMD
+                  0x0018ca                  _callRSSIMeasureCMD
+                  0x0018d8                  _executeRSSICMD
+                  0x0019ac                  _initCommands
+                  0x001b66                  _doCyclicInventory
+ .text            0x001bdc        0xf84 build/default/production/as3993.o
+                  0x001bdc                  _writeReadAS3993
+                  0x001c1c                  _writeReadAS3993Isr
+                  0x001c46                  _as3993Initialize
+                  0x001dc8                  _EX_INT1_CallBack
+                  0x001dfa                  _as3993ReadChipVersion
+                  0x001e12                  _as3993SingleCommand
+                  0x001e2c                  _as3993SingleWriteNoStop
+                  0x001e4c                  _as3993ContinuousRead
+                  0x001e72                  _as3993FifoRead
+                  0x001e90                  _as3993SingleRead
+                  0x001eb2                  _as3993ContinuousWrite
+                  0x001ee0                  _as3993SingleWrite
+                  0x001f04                  _as3993CommandContinuousAddress
+                  0x001f42                  _as3993WaitForResponseTimed
+                  0x001f74                  _as3993WaitForResponse
+                  0x001faa                  _as3993SelectLinkFrequency
+                  0x00204e                  _as3993SetBaseFrequency
+                  0x0021ae                  _as3993EnterPowerDownMode
+                  0x00225c                  _as3993ExitPowerDownMode
+                  0x002302                  _as3993Reset
+                  0x002312                  _as3993ResetDoNotPreserveRegisters
+                  0x00232a                  _as3993EnterPowerNormalMode
+                  0x002344                  _as3993ExitPowerNormalMode
+                  0x00234a                  _as3993EnterPowerNormalRfMode
+                  0x002364                  _as3993ExitPowerNormalRfMode
+                  0x00236a                  _as3993EnterPowerStandbyMode
+                  0x002384                  _as3993ExitPowerStandbyMode
+                  0x00239a                  _as3993WaitForStartup
+                  0x0023e4                  _as3993AntennaPower
+                  0x00248c                  _as3993SaveSensitivity
+                  0x002498                  _as3993RestoreSensitivity
+                  0x0024a6                  _as3993GetSensitivity
+                  0x00254a                  _as3993SetSensitivity
+                  0x00262c                  _as3993GetRSSI
+                  0x0027a0                  _as3993GetADC
+                  0x0027cc                  _as3993GetReflectedPower
+                  0x00283e                  _as3993GetReflectedPowerNoiseLevel
+                  0x0028b0                  _as3993TxRxGen2Bytes
+ .text            0x002b60        0xf60 build/default/production/gen2.o
+                  0x002ba6                  _gen2Select
+                  0x002d40                  _gen2QueryMeasureRSSI
+                  0x00314c                  _gen2AccessTag
+                  0x0031f6                  _gen2LockTag
+                  0x00326e                  _gen2KillTag
+                  0x003346                  _gen2WriteWordToTag
+                  0x00345e                  _gen2ReadFromTag
+                  0x0034fe                  _gen2PrintGen2Settings
+                  0x00350c                  _gen2PrintEPC
+                  0x003526                  _gen2PrintTagInfo
+                  0x003542                  _gen2SearchForTags
+                  0x003704                  _gen2SearchForTagsAutoAck
+                  0x003868                  _gen2Configure
+                  0x003aae                  _gen2Open
+                  0x003aba                  _gen2Close
+ .text            0x003ac0        0x386 build/default/production/global.o
+                  0x003ac0                  _bin2Hex
+                  0x003b2c                  _bin2Chars
+                  0x003caa                  _u32ToEbv
+                  0x003d2c                  _insertBitStream
+                  0x003e00                  _readU32FromLittleEndianBuffer
+ .text            0x003e46        0x260 build/default/production/tags.o
+                  0x003e46                  _limpa_buffer_tags
+                  0x003f1e                  _troca_bytes
+                  0x003f6e                  _pega_dados_tags
+                  0x003f76                  _trata_tags_excessao
+                  0x003f7c                  _verifMaxRSSI
+                  0x003fb8                  _verifSeEhOperarioComum
+                  0x003fd8                  _verifSeEhCondutor
+                  0x003ff8                  _testeRSSI
+ .text            0x0040a6        0x14e build/default/production/mcc_generated_files/spi1.o
+                  0x0040a6                  _SPI1_Initialize
+                  0x0040b8                  _SPI1_Exchange
+                  0x0040e8                  _SPI1_ExchangeBuffer
+                  0x0041b2                  _SPI1_Exchange8bit
+                  0x0041c2                  _SPI1_Exchange8bitBuffer
+                  0x0041d6                  _SPI1_TransferModeGet
+                  0x0041ec                  _SPI1_StatusGet
+ .text            0x0041f4         0xcc build/default/production/mcc_generated_files/pin_manager.o
+                  0x0041f4                  _PIN_MANAGER_Initialize
+ .text            0x0042c0         0xb8 build/default/production/mcc_generated_files/tmr3.o
+                  0x0042c0                  _TMR3_Initialize
+                  0x0042e4                  _TMR3_Period16BitSet
+                  0x0042f6                  _TMR3_Period16BitGet
+                  0x0042fe                  _TMR3_Counter16BitSet
+                  0x004310                  _TMR3_Counter16BitGet
+                  0x004318                  _TMR3_CallBack
+                  0x00431e                  _TMR3_SetInterruptHandler
+                  0x00432e                  _TMR3_Start
+                  0x00433e                  _TMR3_Stop
+                  0x004348                  _TMR3_GetElapsedThenClear
+                  0x004360                  _TMR3_SoftwareCounterGet
+                  0x00436c                  _TMR3_SoftwareCounterClear
 
-.dinit            0x0043a4         0x70
- .dinit           0x0043a4         0x70 data_init
+.dinit            0x004378         0x70
+ .dinit           0x004378         0x70 data_init
 
-.text             0x004414         0x92
- .text            0x004414         0x4c build/default/production/mcc_generated_files/clock.o
-                  0x004414                  _CLOCK_Initialize
- .text            0x004460         0x46 build/default/production/main.o
-                  0x004460                  _main
+.text             0x0043e8         0x92
+ .text            0x0043e8         0x4c build/default/production/mcc_generated_files/clock.o
+                  0x0043e8                  _CLOCK_Initialize
+ .text            0x004434         0x46 build/default/production/main.o
+                  0x004434                  _main
 
-.init.delay32     0x0044a6         0x1c
- .init.delay32    0x0044a6         0x1c c:/programfiles/microchip/xc16/v1.61/bin/bin/../../lib\liblega-pic30-elf.a(delay32da.Leo)
-                  0x0044a6                  ___delay32
+.init.delay32     0x00447a         0x1c
+ .init.delay32    0x00447a         0x1c c:/programfiles/microchip/xc16/v1.61/bin/bin/../../lib\liblega-pic30-elf.a(delay32da.Leo)
+                  0x00447a                  ___delay32
 
-.text             0x0044c2         0x56
- .text            0x0044c2         0x1a build/default/production/mcc_generated_files/interrupt_manager.o
-                  0x0044c2                  _INTERRUPT_Initialize
- .text            0x0044dc         0x18 build/default/production/mcc_generated_files/traps.o
-                  0x0044dc                  _TRAPS_halt_on_error
- .text            0x0044f4         0x12 build/default/production/mcc_generated_files/system.o
-                  0x0044f4                  _SYSTEM_Initialize
- .text            0x004506         0x12 build/default/production/mcc_generated_files/ext_int.o
-                  0x00450c                  _EXT_INT_Initialize
+.text             0x004496         0x56
+ .text            0x004496         0x1a build/default/production/mcc_generated_files/interrupt_manager.o
+                  0x004496                  _INTERRUPT_Initialize
+ .text            0x0044b0         0x18 build/default/production/mcc_generated_files/traps.o
+                  0x0044b0                  _TRAPS_halt_on_error
+ .text            0x0044c8         0x12 build/default/production/mcc_generated_files/system.o
+                  0x0044c8                  _SYSTEM_Initialize
+ .text            0x0044da         0x12 build/default/production/mcc_generated_files/ext_int.o
+                  0x0044e0                  _EXT_INT_Initialize
