@@ -2,12 +2,9 @@
 
 #include "as3993.h"
 #include "as3993_public.h"
-
-//#include "timer.h"
 #include "gen2.h"
 #include "stdlib.h"
 #include "string.h"
-//#include "Compiler.h"
 #include "mcc_generated_files/spi1.h"
 #include "mcc_generated_files/system.h"
 #ifndef FCY

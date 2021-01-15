@@ -32,6 +32,7 @@
 #include "gen2.h"
 #include "string.h"
 #include "appl_commands.h"
+#include "as3993_public.h"
 
 /** Definition for debug output: epc.c */
 #define EPCDEBUG          0

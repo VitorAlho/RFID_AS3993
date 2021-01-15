@@ -106,8 +106,6 @@
 #define __GEN2_H__
 
 #include "as3993_public.h"
-//#include "ams_types.h"
-#include "errno_as3993.h"
 #include <stdint.h>
 #include "appl_commands.h"
 

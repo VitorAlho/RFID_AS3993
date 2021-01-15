@@ -20,8 +20,6 @@
       <itemPath>appl_commands.h</itemPath>
       <itemPath>as3993.h</itemPath>
       <itemPath>as3993_public.h</itemPath>
-      <itemPath>errno.h</itemPath>
-      <itemPath>errno_as3993.h</itemPath>
       <itemPath>gen2.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"

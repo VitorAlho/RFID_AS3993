@@ -637,7 +637,7 @@ __CONFIG1
 .comment
  *(.comment)
 
-.debug_info       0x000000       0x76f1
+.debug_info       0x000000       0x76f6
  *(.debug_info)
  .debug_info      0x000000        0x43f build/default/production/mcc_generated_files/clock.o
  .debug_info      0x00043f        0x4a3 build/default/production/mcc_generated_files/interrupt_manager.o
@@ -648,12 +648,12 @@ __CONFIG1
  .debug_info      0x0025b3        0x53b build/default/production/mcc_generated_files/ext_int.o
  .debug_info      0x002aee        0x824 build/default/production/mcc_generated_files/tmr3.o
  .debug_info      0x003312        0x4f3 build/default/production/main.o
- .debug_info      0x003805       0x184b build/default/production/appl_commands.o
- .debug_info      0x005050       0x16bc build/default/production/as3993.o
- .debug_info      0x00670c        0xfe5 build/default/production/gen2.o
+ .debug_info      0x003805       0x1850 build/default/production/appl_commands.o
+ .debug_info      0x005055       0x16bc build/default/production/as3993.o
+ .debug_info      0x006711        0xfe5 build/default/production/gen2.o
  *(.gnu.linkonce.wi.*)
 
-.debug_abbrev     0x000000        0xec0
+.debug_abbrev     0x000000        0xe9a
  *(.debug_abbrev)
  .debug_abbrev    0x000000         0xc5 build/default/production/mcc_generated_files/clock.o
  .debug_abbrev    0x0000c5         0xb4 build/default/production/mcc_generated_files/interrupt_manager.o
@@ -665,9 +665,9 @@ __CONFIG1
  .debug_abbrev    0x000569         0x8a build/default/production/mcc_generated_files/ext_int.o
  .debug_abbrev    0x0005f3        0x18d build/default/production/mcc_generated_files/tmr3.o
  .debug_abbrev    0x000780         0xf6 build/default/production/main.o
- .debug_abbrev    0x000876        0x263 build/default/production/appl_commands.o
- .debug_abbrev    0x000ad9        0x1fd build/default/production/as3993.o
- .debug_abbrev    0x000cd6        0x1ea build/default/production/gen2.o
+ .debug_abbrev    0x000876        0x23d build/default/production/appl_commands.o
+ .debug_abbrev    0x000ab3        0x1fd build/default/production/as3993.o
+ .debug_abbrev    0x000cb0        0x1ea build/default/production/gen2.o
 
 .debug_line       0x000000       0x158f
  *(.debug_line)

@@ -51,7 +51,7 @@
 #include "gen2.h"
 #include "as3993_public.h"
 #include "appl_commands.h"
-//#include "errno.h"
+//#include ""
 //#include "timer.h"
 #include "string.h"
 #include <limits.h>
@@ -74,6 +74,22 @@
  * DEFINES
  ******************************************************************************
  */
+
+/*!
+ * Error codes to be used within the application.
+ * They are represented by an int8_t
+ */
+#define ERR_NONE     0 /*!< no error occured */
+#define ERR_NOMEM   -1 /*!< not enough memory to perform the requested operation */
+#define ERR_BUSY    -2 /*!< device or resource busy */
+#define ERR_IO      -3 /*!< generic IO error */
+#define ERR_TIMEOUT -4 /*!< error due to timeout */
+#define ERR_REQUEST -5 /*!< invalid request or requested function can't be executed at the moment */
+#define ERR_NOMSG   -6 /*!< No message of desired type */
+#define ERR_PARAM   -7 /*!< Parameter error */
+
+#define ERR_LAST_ERROR -32
+
 /** Define this to 1 if you want to have logging for appl commands. */
 //#define APPLDEBUG               0
 

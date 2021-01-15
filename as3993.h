@@ -39,6 +39,51 @@
 //#include "ams_types.h"
 #include <stdint.h>
 
+///////////////////////////////////////////////////////
+//                      ERRORS
+///////////////////////////////////////////////////////
+
+/*!
+ * Error codes to be used within the application.
+ * They are represented by an int8_t
+ */
+#define ERR_NONE     0 /*!< no error occured */
+#define ERR_NOMEM   -1 /*!< not enough memory to perform the requested operation */
+#define ERR_BUSY    -2 /*!< device or resource busy */
+#define ERR_IO      -3 /*!< generic IO error */
+#define ERR_TIMEOUT -4 /*!< error due to timeout */
+#define ERR_REQUEST -5 /*!< invalid request or requested function can't be executed at the moment */
+#define ERR_NOMSG   -6 /*!< No message of desired type */
+#define ERR_PARAM   -7 /*!< Parameter error */
+
+#define ERR_LAST_ERROR -32
+
+#define ERR_FIRST_AS3993_ERROR (ERR_LAST_ERROR-1)
+
+/* Errors primarily raised by AS3993 itself, however codes like ERR_CHIP_CRCERROR can be reused by ISO6B */
+#define ERR_CHIP_NORESP               (ERR_FIRST_AS3993_ERROR - 0)
+#define ERR_CHIP_HEADER               (ERR_FIRST_AS3993_ERROR - 1)
+#define ERR_CHIP_PREAMBLE             (ERR_FIRST_AS3993_ERROR - 2)
+#define ERR_CHIP_RXCOUNT              (ERR_FIRST_AS3993_ERROR - 3)
+#define ERR_CHIP_CRCERROR             (ERR_FIRST_AS3993_ERROR - 4)
+#define ERR_CHIP_FIFO                 (ERR_FIRST_AS3993_ERROR - 5)
+
+#define ERR_REFLECTED_POWER           (ERR_FIRST_AS3993_ERROR - 16)
+
+/* Upper level protocol errors, e.g. a Write can fail when access command has failed... */
+#define ERR_GEN2_SELECT               (ERR_FIRST_AS3993_ERROR - 32)
+#define ERR_GEN2_ACCESS               (ERR_FIRST_AS3993_ERROR - 33)
+#define ERR_GEN2_REQRN                (ERR_FIRST_AS3993_ERROR - 34)
+#define ERR_GEN2_CHANNEL_TIMEOUT      (ERR_FIRST_AS3993_ERROR - 35)
+
+
+/* ISO6b errors */
+#define ERR_ISO6B_NACK                (ERR_FIRST_AS3993_ERROR - 64)
+
+///////////////////////////////////////////////////////
+//                     END ERRORS
+///////////////////////////////////////////////////////
+
 #define AS3993_REG_STATUSCTRL           0X00
 #define AS3993_REG_PROTOCOLCTRL         0X01
 #define AS3993_REG_TXOPTIONS            0X02

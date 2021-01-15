@@ -35,8 +35,6 @@
 #ifndef _AS3993_PUBLIC_H_
 #define _AS3993_PUBLIC_H_
 
-
-#include "errno_as3993.h"
 #include <stdint.h>
 #include "appl_commands.h"
 
