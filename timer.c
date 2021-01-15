@@ -76,25 +76,3 @@ void timer3Isr(void)	// interrupt handler for Timer3
 }
 
 
-void ligaTimer2 (void)
-{
-    T2CONbits.TON = 0;
-
-    //T2CON = 0x0000;
-    PR2 = 16000;
-    TMR2 = 0;
-    _T2IF = 0;
-    _T2IE = 1;
-    T2CONbits.TON = 1;
-
-}
-
-
-void INTERRUPT timer2Isr (void)    // interrupt handler for Timer2
-{
-    
-    //tick();
-    _T2IF = 0;
-    //_LATC8 = !_LATC8;
-}
-
