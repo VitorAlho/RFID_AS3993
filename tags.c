@@ -16,7 +16,7 @@
 /*                 ---+++>>> Includes <<<+++---	                      */
 /*--------------------------------------------------------------------*/
 
-#include "timer.h"
+//#include "timer.h"
 #include <string.h>
 #include <stdio.h>
 #include <math.h>
@@ -26,6 +26,14 @@
 
 #include "tags.h"
 #include <stdint.h>
+
+#include <libpic30.h>
+
+/* Porting note: replace delay functions which with functions provided with your controller or use timer */
+#ifndef delay_ms
+#define delay_ms(ms)    { __delay_ms(ms); }
+#define delay_us(us)    { __delay_us(us); }
+#endif
 
 /*--------------------------------------------------------------------*/
 /*                 ---+++>>> Variaveis <<<+++---                      */

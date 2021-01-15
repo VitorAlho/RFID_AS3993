@@ -3,12 +3,20 @@
 #include "as3993.h"
 #include "as3993_public.h"
 #include "global.h"
-#include "timer.h"
+//#include "timer.h"
 #include "gen2.h"
 #include "stdlib.h"
 #include "string.h"
 #include "Compiler.h"
 #include "mcc_generated_files/spi1.h"
+
+#include <libpic30.h>
+
+/* Porting note: replace delay functions which with functions provided with your controller or use timer */
+#ifndef delay_ms
+#define delay_ms(ms)    { __delay_ms(ms); }
+#define delay_us(us)    { __delay_us(us); }
+#endif
 
 /** Definition protocol read bit */
 #define READ                    0x40

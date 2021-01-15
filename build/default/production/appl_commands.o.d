@@ -7,5 +7,4 @@ as3993_public.h  \
 errno_as3993.h  \
 errno.h  \
 appl_commands.h  \
- timer.h  \
-as3993.h 
+ as3993.h 

@@ -410,8 +410,7 @@ void as3993WaitForStartup(void);
 #define as3993Isr EX_INT1_CallBack
 
 /*! map timer2Isr to _T3Interrupt */
-#define timer3Isr TMR3_CallBack
-#define timer2Isr _T2Interrupt
+#define timer3Isr //TMR3_CallBack
 
 /** Macro for enable external IRQ */
 #define ENEXTIRQ()                _INT1IE = 1;

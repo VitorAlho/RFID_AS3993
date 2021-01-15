@@ -30,7 +30,7 @@
 #include "as3993_config.h"
 #include "as3993.h"
 //#include "logger.h"
-#include "timer.h"
+//#include "timer.h"
 #include "gen2.h"
 #include "string.h"
 

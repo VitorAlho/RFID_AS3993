@@ -52,11 +52,19 @@
 #include "as3993_public.h"
 #include "appl_commands.h"
 //#include "errno.h"
-#include "timer.h"
+//#include "timer.h"
 #include "string.h"
 #include <limits.h>
 #include "as3993.h"
 #include <stdint.h>
+
+#include <libpic30.h>
+
+/* Porting note: replace delay functions which with functions provided with your controller or use timer */
+#ifndef delay_ms
+#define delay_ms(ms)    { __delay_ms(ms); }
+#define delay_us(us)    { __delay_us(us); }
+#endif
 
 /*
  ******************************************************************************
@@ -309,13 +317,13 @@ void pega_pot_refl (void)
 static uint8_t continueCheckTimeout( ) 
 {
     if (maxSendingLimit == 0) return 1;
-    if ( slowTimerValue() >= maxSendingLimit )
-    {
-        //APPLOG("allocation timeout\n");
-        slowTimerStop();
-        maxSendingLimitTimedOut = 1;
-        return 0;
-    }
+//    if ( slowTimerValue() >= maxSendingLimit )
+//    {
+//        //APPLOG("allocation timeout\n");
+//        slowTimerStop();
+//        maxSendingLimitTimedOut = 1;
+//        return 0;
+//    }
     return 1;
 }
 
@@ -1928,7 +1936,7 @@ static void pseudoRandomContinuousModulation()
 
     //prepare a pseudo random value
     rnd ^= (cmdBuffer.rxData[RNDI+bufferIndex*2] | (cmdBuffer.rxData[RNDI+bufferIndex*2+1]<<8));      // get the random value from the GUI
-    rnd ^= TMR3;            // add currently running timer value, to get some additional entropy
+    //rnd ^= TMR3;            // add currently running timer value, to get some additional entropy
 
     bufferIndex++;
     if (bufferIndex > 5)
@@ -2257,7 +2265,7 @@ void callChangeFreq(void)
                 maxSendingLimitTimedOut = 0;
                 as3993AntennaPower(1);
                 delay_ms(1);
-                slowTimerStart();
+                //slowTimerStart();
                 do{
                     if (cmdBuffer.rxData[6] == 0x01)
                     {   /* pseudo random continuous modulation */
@@ -2697,18 +2705,19 @@ static int8_t hopFrequencies(void)
     uint8_t min_idx;
     int8_t dBm = -128;
     uint8_t rssi;
-    uint16_t idleDelay;
+    //uint16_t idleDelay;
 
-    slowTimerStart();       //start timer for idle delay
+    //slowTimerStart();       //start timer for idle delay
     powerUpReader();
     as3993AntennaPower(0);
 
-    idleDelay = slowTimerValue();
-    if ( idleTime > idleDelay)
-    { /* wait for idle time */
-        delay_ms(idleTime -  idleDelay);
-    }
-    slowTimerStop();
+    //idleDelay = slowTimerValue();
+    //if ( idleTime > idleDelay)
+    //{ /* wait for idle time */
+    //    delay_ms(idleTime -  idleDelay);
+    //}
+    delay_ms(1);
+    //slowTimerStop();
     if (Frequencies.numFreqs == 0)
     {
         if (!cyclicInventory) 
@@ -2727,7 +2736,7 @@ static int8_t hopFrequencies(void)
     }
     if (dBm <= rssiThreshold)
     {
-        slowTimerStart();
+        //slowTimerStart();
         maxSendingLimitTimedOut = 0;
         
         applyTunerSettingForFreq(Frequencies.freq[currentFreqIdx]);
@@ -2767,7 +2776,7 @@ static int8_t hopFrequencies(void)
 
 static void hopChannelRelease(void)
 {
-    slowTimerStop();
+    //slowTimerStop();
     if (readerPowerDownMode != POWER_NORMAL_RF)
         as3993AntennaPower(0);
     if (!cyclicInventory)
