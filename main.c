@@ -67,8 +67,6 @@
 
 uint8_t readerInitStatus;
 
-extern Freq Frequencies;
-
 uint8_t num_of_tags;
 
 /*
@@ -85,9 +83,7 @@ int main(void)
     SEL_A1_2_SetHigh();
     SEL_A3_4_SetLow();
     
-    Frequencies.freq[0] = 915000;
-    Frequencies.numFreqs = 1;
-        readerInitStatus = as3993Initialize(Frequencies.freq[0]);
+    readerInitStatus = as3993Initialize(915000ULL);
         
     while(1){     
         LIGA_PA_SetHigh();

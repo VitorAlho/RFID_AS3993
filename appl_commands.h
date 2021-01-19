@@ -89,6 +89,9 @@ uint8_t inventoryGen2(void);
 
 uint8_t inventorioSimplificado(void);
 
+static void powerDownReader(void);
+static void powerUpReader(void);
+
 /* command functions table */
 extern struct callFunction call_fkt_[CALL_FKT_SIZE];
 

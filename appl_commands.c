@@ -60,26 +60,11 @@
  * LOCAL VARIABLES
  ******************************************************************************
  */
-#if RUN_ON_AS3980 || RUN_ON_AS3981
-/** Default Gen2 configuration, this is the only supported configuration for AS3980. */
-static struct gen2Config gen2Configuration = {TARI_25, GEN2_LF_40, GEN2_COD_MILLER8, TREXT_ON, 0, GEN2_SESSION_S0, 0};
-/** Start value for Q for Gen2 inventory rounds, this is the only supported value for AS3980. */
-uint8_t gen2qbegin = 0;
-#else
 
-#if FEMTO2 || FEMTO2_1 || RADON
-/** Default Gen2 configuration, can be changed callConfigGen2(). */
-static struct gen2Config gen2Configuration = {TARI_25, GEN2_LF_256, GEN2_COD_MILLER4, TREXT_OFF, 0, GEN2_SESSION_S0, 0};
-/** Start value for Q for Gen2 inventory rounds, can be changed callConfigGen2(). */
-uint8_t gen2qbegin = 4;
-#else
 /** Default Gen2 configuration, can be changed callConfigGen2(). */
 static struct gen2Config gen2Configuration = {TARI_125, GEN2_LF_256, GEN2_COD_MILLER4, TREXT_OFF, 0, GEN2_SESSION_S0, 0};
 /** Start value for Q for Gen2 inventory rounds, can be changed callConfigGen2(). */
 uint8_t gen2qbegin = 4;
-#endif
-
-#endif
 
 /** Internal number of currently configured select commands. */
 static int num_selects;
@@ -128,28 +113,6 @@ static int8_t inventoryResult;
 
 /** Currently used protocol, valid values are: #SESSION_GEN2 and #SESSION_ISO6B. */
 static uint8_t currentSession = 0;      // start with invalid session (neither Gen2 nor ISO 6b)
-
-void configTxRx(void);
-void readerConfig(void);
-void antennaPower(void);
-void antennaTuner(void);
-void autoTuner(void);
-void tunerTable(void);
-uint8_t inventoryGen2(void);
-void wrongCommand(void);
-void initCommands(void);
-
-void selectTag(void);
-void writeToTag(void);
-void writeToTag6B(void);
-void readFromTag6B(void);
-void readFromTag(void);
-void executeGCMD(void);
-void executeRSSICMD(void);
-void lockUnlockTag(void);
-static void powerDownReader(void);
-static void powerUpReader(void);
-void pega_pot_refl(void);
 
 void insertBitStream(uint8_t *dest, uint8_t const *source, uint8_t len, uint8_t bitpos)
 {
@@ -263,7 +226,6 @@ uint8_t inventoryGen2(void)
     //APPLOG("end inventory, found tags: %hhx\n", num_of_tags);
     return num_of_tags;
 }
-
 
 void initCommands(void)
 {

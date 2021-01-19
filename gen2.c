@@ -545,8 +545,6 @@ int8_t gen2ReadFromTag(Tag *tag, uint8_t memBank, uint32_t wordPtr,
 
     ret = as3993TxRxGen2Bytes(AS3993_CMD_TRANSMCRCEHEAD, buf_, 34+8*ebvlen, destbuf, &bit_count, gen2IntConfig.no_resp_time, 0, 1);
     
-    //EPCLOG("bank=%hhx, w=%hx%hx, wc = %hhx ret=%hhx\n",memBank,wordPtr,wordCount,ret);
-    //EPCLOGDUMP(destbuf,wordCount*2);
     return ret;
 }
 
@@ -554,9 +552,6 @@ void gen2PrintGen2Settings()
 {
     uint8_t buf[9];
     as3993ContinuousRead(AS3993_REG_PROTOCOLCTRL, 9, buf);
-    //LOG("Gen2 registers:\n");
-    //LOGDUMP(buf, 9);
-
 }
 
 unsigned gen2SearchForTags(Tag *tags_

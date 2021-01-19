@@ -70,106 +70,108 @@ uint16_t as3993Initialize(uint32_t baseFreq)
     myBuf[0] = 0x55;
     myBuf[1] = 0xAA;
     myBuf[2] = 0xFF;
-    myBuf[3] = 0x00;
-    as3993ContinuousWrite(AS3993_REG_MODULATORCONTROL1, myBuf, 4);
+    myBuf[3] = 0x22;
+    
+    as3993ContinuousWrite( AS3993_REG_MODULATORCONTROL1, myBuf, 4 );
+    
     memset(myBuf, 0x33, sizeof(myBuf));
-    as3993ContinuousRead(AS3993_REG_MODULATORCONTROL1, 4,myBuf);
-    if ((myBuf[0]!=0x55) || 
-        (myBuf[1]!=0xAA) || 
-        (myBuf[2]!=0xFF) ||
-        (myBuf[3]!=0x00))
-    {
+    
+    as3993ContinuousRead( AS3993_REG_MODULATORCONTROL1, 4, myBuf );
+    
+    if ( ( myBuf[ 0 ] != 0x55 ) || ( myBuf[ 1 ] != 0xAA ) || 
+         ( myBuf[ 2 ] != 0xFF ) || ( myBuf[ 3 ] != 0x22 ) ) {
         //LOG("%hhx %hhx %hhx %hhx\n", myBuf[0], myBuf[1], myBuf[2], myBuf[3]);
         return 1; // data bus interface pins not working
     }
 
     // check EN pin + SPI communication
     as3993ResetDoNotPreserveRegisters();
+    
     as3993ContinuousRead(AS3993_REG_MODULATORCONTROL1, 4, myBuf);
-    if ((myBuf[0]==0x55) || 
-        (myBuf[1]==0xAA) || 
-        (myBuf[2]==0xFF) ||
-        (myBuf[3]==0x00))
-    {
+    if ( ( myBuf[ 0 ] == 0x55 ) || ( myBuf[ 1 ] == 0xAA ) || 
+         ( myBuf[ 2 ] == 0xFF ) || ( myBuf[ 3 ] == 0x22 ) ) {
         //LOG("EN pin failed\n");
         return 2; /* enable pin not working */
     }
 
     // check IRQ line
     delay_ms(1);
-    as3993SingleWrite(AS3993_REG_IRQMASK1, 0x20);
+    as3993SingleWrite( AS3993_REG_IRQMASK1, 0x20 );
     // set up 48Byte transmission, but we supply less, therefore a fifo underflow IRQ is produced
-    as3993SingleWrite(AS3993_REG_TXLENGTHUP, 0x03);
-    as3993SingleCommand(AS3993_CMD_TRANSMCRC);
-    as3993ContinuousWrite(AS3993_REG_FIFO,myBuf,4);
-    as3993ContinuousWrite(AS3993_REG_FIFO,myBuf,4);
-    as3993ContinuousWrite(AS3993_REG_FIFO,myBuf,4);
-    as3993ContinuousWrite(AS3993_REG_FIFO,myBuf,4);
-    as3993ContinuousWrite(AS3993_REG_FIFO,myBuf,4);
-    as3993ContinuousWrite(AS3993_REG_FIFO,myBuf,4);
+    as3993SingleWrite( AS3993_REG_TXLENGTHUP, 0x03 );
+    as3993SingleCommand( AS3993_CMD_TRANSMCRC );
+    as3993ContinuousWrite( AS3993_REG_FIFO, myBuf, 4 );
+    as3993ContinuousWrite( AS3993_REG_FIFO, myBuf, 4 );
+    as3993ContinuousWrite( AS3993_REG_FIFO, myBuf, 4 );
+    as3993ContinuousWrite( AS3993_REG_FIFO, myBuf, 4 );
+    as3993ContinuousWrite( AS3993_REG_FIFO, myBuf, 4 );
+    as3993ContinuousWrite( AS3993_REG_FIFO, myBuf, 4 );
 
-    as3993WaitForResponse(RESP_FIFO);
-    if ( !(as3993GetResponse() & RESP_FIFO) )
-    {
+    as3993WaitForResponse( RESP_FIFO );
+    if ( !( as3993GetResponse() & RESP_FIFO ) ) {
         return 3;
     }
     
     as3993ClrResponse();
 
     as3993ResetDoNotPreserveRegisters();
-    as3993SingleCommand(AS3993_CMD_HOP_TO_MAIN_FREQUENCY);
+    as3993SingleCommand( AS3993_CMD_HOP_TO_MAIN_FREQUENCY );
 
+/*
+ * Inicio da configuracao dos registradores do AS3993
+ */
     /* chip status control 0x00 */
     /*STBY - - - - AGC REC RF */
     /* 0   0 0 0 0  0   1  0  = 0x02 */
-    as3993SingleWrite(AS3993_REG_STATUSCTRL, 0x02);
+    as3993SingleWrite( AS3993_REG_STATUSCTRL, 0x02 );
 
     /*protocl control register 0x01 */
     /*RX_CRC_N DIR_MODE AutoACK1 AutoACK2 - PROT1 PROT0  */
     /*   0         0       0         0    0   0     0 = 0x00 */
-    as3993SingleWrite(AS3993_REG_PROTOCOLCTRL, 0x00);
+    as3993SingleWrite( AS3993_REG_PROTOCOLCTRL, 0x00 );
 
     /* TX options 0x02 */
     /* - - TxOne1 TxOne0 - Tari2 Tari1 Tari0 */
 
     /* 0 0   1      1    0   0     0     0   = 0x30 */
-    as3993SingleWrite(AS3993_REG_TXOPTIONS, 0x30);
+    as3993SingleWrite( AS3993_REG_TXOPTIONS, 0x30 );
 
     /* RX options register is set by gen2 configuration */
     /* TRcal high + low register is set by gen2 configuration */
-
-    /* PLL Main REgister 0x17*/
-    /* use 100kHz as pll reference as we use ETSI as default */
-    //as3993SingleWrite(AS3993_REG_PLLMAIN1, 0x54);
-    as3993SingleWrite(AS3993_REG_PLLMAIN1, 0x41);   //125kHz
-    as3993SingleWrite(AS3993_REG_PLLMAIN2, 0xA0);   //e B = 104
-    as3993SingleWrite(AS3993_REG_PLLMAIN3, 0x76);   //e A = 118
-
-    as3993SingleWrite(AS3993_REG_MEASUREMENTCONTROL, 0x00);
-
-    /*MISC1 0x0D */
-    /*hs_output hs_oad miso_pd2 miso_pd1 open_dr s_mix iadd_sink2 iadd_sink1 */
-    /*     1       0       0        0        0     0       0          0 = 0xC0 */
-    as3993SingleWrite(AS3993_REG_MISC1, 0x00 | 0x80);
 
     /*REGULATOR and PA Bias 0x0B */
     /*pa_bias1-0 rvs_rf2-1 rvs2-0  */
     /*   0 0       0 1 1    0 1 1   = 0x1B */
     //as3993SingleWrite(AS3993_REG_REGULATORCONTROL, 0x1B);
-    as3993SingleWrite(AS3993_REG_REGULATORCONTROL, 0x3F);
-
+    as3993SingleWrite( AS3993_REG_REGULATORCONTROL, 0x3F );
+    
     /*RF Output and LO Control Register 0x0C */
     /*eTX7 - eTX0  */
     /*  0 0 0 0 0 0 1 0   = 0x58 */
     /* int pa, PA 14mA */
-    as3993SingleWrite(AS3993_REG_RFOUTPUTCONTROL, 0x22);
-
+    as3993SingleWrite( AS3993_REG_RFOUTPUTCONTROL, 0x22 );
+    
+    /*MISC1 0x0D */
+    /*hs_output hs_oad miso_pd2 miso_pd1 open_dr s_mix iadd_sink2 iadd_sink1 */
+    /*     1       0       0        0        0     0       0          0 = 0xC0 */
+    as3993SingleWrite( AS3993_REG_MISC1, 0x00 | 0x80 );
+    
+    as3993SingleWrite(AS3993_REG_MISC2, 0x00);      // no clsys
+    
+    as3993SingleWrite( AS3993_REG_MEASUREMENTCONTROL, 0x00 );
+    
+    /*RF Output and LO Control Register 0x0C */
+    /*LF_R3<2-1> LF_C3<5-3> cp<2-0>  */
+    /*    0 0       1 1 0    1 0 1   = 0x25 */
+    /* 30kOhm, 160pF, 1500uA */    
+        as3993SingleWrite(AS3993_REG_CPCONTROL, 0x35);
+    
     /*Modulator Control Register 1 0x13 */
     /* - MAIN_MOD AUXMOD tpreset use_corr ELFP ASKRATE1 ASKRATE0 */
     /* 0    0       1       0       0       0      0        0      =0x20 */
     myBuf[0] = 0x20;
+    
     /*Modulator Control Register 2 0x14 */
-
     /*ook_ask PR_ASK MOD_DEP5-MOD_DEP0 */
     /*    1      1     0 1     1 1 0 1   = 0xDD */
     myBuf[1] = 0xDD;
@@ -181,14 +183,13 @@ uint16_t as3993Initialize(uint32_t baseFreq)
     myBuf[2] = 0x00;    //potencia saida em 0dbm (max)
 
     as3993ContinuousWrite(AS3993_REG_MODULATORCONTROL1, myBuf, 3);
-
-    /*RF Output and LO Control Register 0x0C */
-    /*LF_R3<2-1> LF_C3<5-3> cp<2-0>  */
-    /*    0 0       1 1 0    1 0 1   = 0x25 */
-    /* 30kOhm, 160pF, 1500uA */    
-        as3993SingleWrite(AS3993_REG_CPCONTROL, 0x35);
-
-    as3993SingleWrite(AS3993_REG_MISC2, 0x00);      // no clsys
+    
+    /* PLL Main REgister 0x17*/
+    /* use 100kHz as pll reference as we use ETSI as default */
+    //as3993SingleWrite(AS3993_REG_PLLMAIN1, 0x54);
+    as3993SingleWrite( AS3993_REG_PLLMAIN1, 0x41 );   //125kHz
+    as3993SingleWrite( AS3993_REG_PLLMAIN2, 0xA0 );   //e B = 104
+    as3993SingleWrite( AS3993_REG_PLLMAIN3, 0x76 );   //e A = 118
 
     /*Enable Interrupt Register Register 1 0x35 */
     /*e_irq_TX e_irq_RX e_irq_fifo e_irq_err e_irq_header RFU e_irq_AutoAck e_irq_noresp  */
@@ -203,6 +204,10 @@ uint16_t as3993Initialize(uint32_t baseFreq)
     /*RX_crc_n2 fifo_dir_irq2 rep_irg2 auto_errcode_RXl RXl11-RXl8 */
     /*    0           0           0            1         0 0 0 0  = 0x10 */
     as3993SingleWrite(AS3993_REG_RXLENGTHUP, 0x10);
+    
+ /*
+  * Fim da configuracao dos registradores do AS3993
+  */
 
     /* Give base freq. a reasonable value */
     as3993SetBaseFrequency(AS3993_REG_PLLMAIN1, baseFreq);

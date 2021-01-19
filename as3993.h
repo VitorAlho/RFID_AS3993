@@ -114,11 +114,6 @@
 #define AS3993_REG_PLLAUX3              0X1C
 #define AS3993_REG_ICD                  0X1D
 #define AS3993_REG_MIXOPTS              0X22
-#define AS3993_REG_TEST1                0X23
-#define AS3993_REG_TEST2                0X24
-#define AS3993_REG_TEST3                0X25
-#define AS3993_REG_TEST4                0X26
-#define AS3993_REG_TXRESHAPE            0X27 /* ? */
 #define AS3993_REG_STATUSPAGE           0X29
 #define AS3993_REG_AGCANDSTATUS         0X2A
 #define AS3993_REG_RSSILEVELS           0X2B
@@ -146,14 +141,14 @@
 #define AS3993_CMD_HOP_TO_AUX_FREQUENCY  0x85
 #define AS3993_CMD_TRIGGERADCCON         0x87
 #define AS3993_CMD_TRIG_RX_FILTER_CAL    0x88
-#define AS3993_CMD_INC_RX_FILTER_CAL     0x89
-#define AS3993_CMD_DEC_RX_FILTER_CAL     0x8A
+#define AS3993_CMD_DEC_RX_FILTER_CAL     0x89
+#define AS3993_CMD_INC_RX_FILTER_CAL     0x8A
 #define AS3993_CMD_TRANSMCRC             0x90
 #define AS3993_CMD_TRANSMCRCEHEAD        0x91
 #define AS3993_CMD_TRANSMNOCRC           0x92
-#define AS3993_CMD_DELAY_TRANSMIT_CRC    0x93 /* ? */
-#define AS3993_CMD_DELAY_TRANSMIT_NO_CRC 0x94 /* ? */
-#define AS3993_CMD_CLOSE_SLOT_SEQUENCE   0x95 /* ? */
+//#define AS3993_CMD_DELAY_TRANSMIT_CRC    0x93 /* ? */
+//#define AS3993_CMD_DELAY_TRANSMIT_NO_CRC 0x94 /* ? */
+//#define AS3993_CMD_CLOSE_SLOT_SEQUENCE   0x95 /* ? */
 #define AS3993_CMD_BLOCKRX               0x96
 #define AS3993_CMD_ENABLERX              0x97
 #define AS3993_CMD_QUERY                 0x98
@@ -222,11 +217,8 @@
 #define RESP_END_CMD       (AS3993_IRQ2_END_CMD  << 8)
 #define RESP_END_ANA       (AS3993_IRQ2_END_ANA  << 8)
 
-#if RUN_ON_AS3980 || RUN_ON_AS3981   //as3980/81 produces irq_err2 (without irq_err) if new epc is read 500ms after last one.
-#define RESP_RXDONE_OR_ERROR  (RESP_RXIRQ | RESP_AUTOACK | RESP_RXERR | RESP_NORESINTERRUPT | RESP_RXCOUNTERROR)
-#else
 #define RESP_RXDONE_OR_ERROR  (RESP_RXIRQ | RESP_AUTOACK | RESP_RXERR | RESP_NORESINTERRUPT)
-#endif
+
 /* RESP_FIFOOVERFLOW does not work reliably */
 #define RESP_ANY    (AS3993_IRQ1_MASK_ALL | (AS3993_IRQ2_MASK_ALL << 8))
 
@@ -237,7 +229,6 @@
 
 #define AS3993_NOM_SENSITIVITY              87
 
-
 /* at 40kHz BLF one gen2 slot takes ~40ms, we are going to wait
  * 50ms (in as3993WaitForResponse()) to be on the safe side. */
 /** delay in us which will be used as3993WaitForResponse() loop */
@@ -246,7 +237,6 @@
 #define WAITFORRESPONSETIMEOUT  50000
 /** number of loop iterations in as3993WaitForResponse() */
 #define WAITFORRESPONSECOUNT    WAITFORRESPONSETIMEOUT/WAITFORRESPONSEDELAY
-
 
 extern volatile uint16_t as3993Response;
 extern uint32_t as3993CurrentBaseFreq;
@@ -318,26 +308,11 @@ void as3993WaitForResponse(uint16_t waitMask);
   */
 void as3993WaitForResponseTimed(uint16_t waitMask, uint16_t ms);
 
-#if 0
-/*------------------------------------------------------------------------- */
-/** This function gets the current response
-  */
-uint16_t as3993GetResponse(void);
 
-/*------------------------------------------------------------------------- */
-/** This function clears the response bits according to mask
-  */
-uint16_t as3993ClrResponseMask(uint16_t mask);
-
-/*------------------------------------------------------------------------- */
-/** This function clears all responses
-  */
-uint16_t as3993ClrResponse(void);
-#else
 #define as3993GetResponse() as3993Response
 #define as3993ClrResponseMask(mask) as3993Response&=~(mask)
 #define as3993ClrResponse() as3993Response=0
-#endif
+
 
 /*!
  *****************************************************************************
@@ -485,70 +460,6 @@ void as3993WaitForStartup(void);
 
 /** Definition for the enable pin */
 #define ENABLE                    _LATB2 //_LATB13
-
-#define SAIDA_RS(x)                 _LATD11=(x)     //SAIDA RS
-#define SAIDA_ELCD(x)               _LATD0=(x)      //SAIDA ELCD
-#define SAIDA_BD4(x)                _LATD6=(x)      //SAIDA BD4
-#define SAIDA_BD5(x)                _LATD7=(x)      //SAIDA BD5
-#define SAIDA_BD6(x)                _LATD13=(x)     //SAIDA BD6
-#define SAIDA_BD7(x)                _LATD12=(x)     //SAIDA BD7
-#define SAIDA_DIR(x)                _LATG13=(x)     //SAIDA DIR
-
-#define LED_A1(x)                   _LATE0=(x)      //SAIDA LED_A1
-#define LED_A2(x)                   _LATE1=(x)      //SAIDA LED A2
-#define LED_A3(x)                   _LATE2=(x)      //SAIDA LED A3
-#define LED_A4(x)                   _LATE3=(x)      //SAIDA LED_A4
-#define LED_A5(x)                   _LATE4=(x)      //SAIDA LED A5
-#define LED_A6(x)                   _LATE5=(x)      //SAIDA LED A6
-
-#define LED_A7(x)                   _LATA1=(x)      //SAIDA LED A7
-#define LED_A8(x)                   _LATA6=(x)      //SAIDA LED A8
-
-#define LED_TAG(x)                  _LATE8=(x)      //SAIDA LED TAG
-#define LIGA_PA(x)                  _LATE9=(x)      //SAIDA LIGA PA
-
-#define SEL_BBA(x)                  _LATB10=(x)     //SAIDA SEL_BBA
-#define SEL_A1_4(x)                 _LATB11=(x)     //SAIDA SEL_A1-4
-#define SEL_B5_8(x)                 _LATB12=(x)     //SAIDA SEL_B5-8
-#define SEL_A1_2(x)                 _LATB13=(x)     //SAIDA SEL_A1-2
-#define SEL_A3_4(x)                 _LATB15=(x)     //SAIDA SEL_A3-4
-#define SEL_B5_6(x)                 _LATF13=(x)     //SAIDA SEL_B5-6
-#define SEL_B7_8(x)                 _LATF12=(x)     //SAIDA SEL_B7-8
-#define TUNE_CAP3(x)                _LATF4=(x)      //SAIDA TUNE_CAP3
-
-#define SAI_1(x)                    _LATG15=(x)     //SAIDA SAI_1
-#define SAI_2(x)                    _LATB3=(x)      //SAIDA SAI_2
-#define SAI_3(x)                    _LATC4=(x)      //SAIDA SAI_3
-#define SAI_4(x)                    _LATC3=(x)      //SAIDA SAI_4
-#define SAI_5(x)                    _LATC2=(x)      //SAIDA SAI_5
-#define SAI_6(x)                    _LATC1=(x)      //SAIDA SAI_6
-#define SAI_7(x)                    _LATB6=(x)      //SAIDA SAI_6
-#define TUNE_CAP1(x)                _LATD15=(x)     //SAIDA TUNE_CAP1
-#define TUNE_CAP2(x)                _LATD14=(x)     //SAIDA TUNE_CAP2
-
-#define GP_0(x)                     _LATB4=(x)      //SAIDA GP_0
-#define GP_1(x)                     _LATC13=(x)      //SAIDA GP_1
-#define GP_2(x)                     _LATF2=(x)      //SAIDA GP_2
-#define GP_3(x)                     _LATA4=(x)      //SAIDA GP_3
-#define GP_4(x)                     _LATA5=(x)      //SAIDA GP_4
-#define GP_5(x)                     _LATA2=(x)      //SAIDA GP_5
-#define GP_6(x)                     _LATG12=(x)      //SAIDA GP_6
-#define GP_7(x)                     _LATA9=(x)      //SAIDA GP_7
-#define GP_8(x)                     _LATA0=(x)      //SAIDA GP_8
-#define GP_9(x)                     _LATC14=(x)      //SAIDA GP_9
-#define GP_10(x)                     _LATF0=(x)      //SAIDA GP_10
-#define GP_11(x)                     _LATF1=(x)      //SAIDA GP_11
-#define GP_12(x)                     _LATA1=(x)      //SAIDA GP_12
-#define GP_13(x)                     _LATD10=(x)      //SAIDA GP_13
-#define GP_14(x)                     _LATA6=(x)      //SAIDA GP_14
-#define GP_15(x)                     _LATA7=(x)      //SAIDA GP_15
-#define GP_16(x)                     _LATB5=(x)      //SAIDA GP_16
-
-#define LED_ZIG(x)                   _LATA10=(x)     //SAIDA LED_ZIG
-#define LED_WIFI                     _LATA10
-#define LED_WF(x)                    _LATG1=(x)//_LATG14=(x)     //SAIDA RIO4
-#define LED_3G(x)                    _LATG14=(x)//_LATG0=(x)      //SAIDA LED0
-#define LED_GPS(x)                   _LATG0=(x)//_LATG1=(x)      //SAIDA LED1
 
 //----------------------------------------------------------------------
 #endif /* _AS3993_H_ */
