@@ -1,106 +1,3 @@
-/*
- *****************************************************************************
- * Copyright by ams AG                                                       *
- * All rights are reserved.                                                  *
- *                                                                           *
- * IMPORTANT - PLEASE READ CAREFULLY BEFORE COPYING, INSTALLING OR USING     *
- * THE SOFTWARE.                                                             *
- *                                                                           *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS       *
- * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT         *
- * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS         *
- * FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT  *
- * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,     *
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT          *
- * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,     *
- * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY     *
- * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT       *
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE     *
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.      *
- *****************************************************************************
- */
-/** @file
-  * @brief
-  * This file provides declarations for functions for the GEN2 aka ISO6c protocol.
-  *
-  * @author Ulrich Herrmann
-  * @author Bernhard Breinbauer
-  *
-  * Before calling any of the functions herein the AS3993 chip needs to
-  * be initialized using as3993Initialize(). Thereafter the function 
-  * gen2Open() needs to be called for opening a session.
-  * gen2SearchForTags() should be called to identify the tags in
-  * reach. Usually the the user then wants to select one of the found
-  * tags. For doing this gen2Select() can be used. If gen2Config and gen2SelectParams
-  * provide a matching configuration the next call to gen2SearchForTags() will only
-  * return 1 tag. If singulate parameter of gen2SearchForTags() is set to true
-  * the found tag will be in the Open state and
-  * can then be accessed using the other functions ,
-  * gen2WriteWordToTag(), gen2ReadFromTag()...
-  * When finished with gen2 operations this session should be closed using 
-  * gen2Close(). 
-  *
-  * The tag state diagram looks as follows using the
-  * provided functions. For exact details please refer to
-  * the standard document provided by EPCglobal under 
-  * <a href="http://www.epcglobalinc.org/standards/uhfc1g2/uhfc1g2_1_2_0-standard-20080511.pdf">uhfc1g2_1_2_0-standard-20080511.pdf</a>
-  *
-  * If the tag in question does have a password set:
-  * \dot
-  * digraph gen2_statesp{
-  * Ready -> Open [ label="gen2SearchForTags()" ];
-  * Ready->Ready;
-  * Open -> Secured [ label="gen2AccessTag() + correct PW" ];
-  * Open -> Open [ label="gen2ReadFromTag()\n..." ];
-  * Secured -> Secured [ label="gen2WriteWordToTag()\ngen2ReadFromTag()\n..." ];
-  * }
-  * \enddot
-  *
-  * If the tag in question does <b>not</b> have a password set:
-  * \dot
-  * digraph gen2_statesn{
-  * Ready -> Secured [ label="gen2SearchForTags()" ];
-  * Secured -> Secured [ label="gen2WriteWordToTag()\ngen2ReadFromTag()\n..." ];
-  * }
-  * \enddot
-  *
-  * So a typical use case may look like this:
-  * \code
-  * Tag tags[16];
-  * uint8_t tag_error;
-  * struct gen2Config config = = {TARI_125, GEN2_LF_256, GEN2_COD_MILLER4, TREXT_OFF, 0, GEN2_SESSION_S0, 0};
-  * // setup gen2SelectParams
-  * unsigned n;
-  * uint8_t buf[4];
-  * ...
-  * as3993Initialize(912000);
-  *
-  * gen2Open(&config);
- *
-  * performSelects();
-  * n = gen2SearchForTags(tags_+1, 1, 0, continueAlways, 1);
-  * if ( n == 0) return;
-  *
-  * //Pick one of the tags based on the contents of tags. Here we use the very first tag
-  *
-  * if (gen2ReadFromTag(tags+0, MEM_USER, 0, 2, buf))
-  *     return;
-  *
-  * buf[0] ^= 0xff; buf[1]^= 0x55; // change the data
-  *
-  * if (gen2WriteWordToTag( tags+0, MEM_USER, 0, buf, &tag_error))
-  * { // wrote back one of the two read words
-  *     gen2Close();
-  *     return;
-  * }
-  *
-  * //...
-  *
-  * gen2Close();
-  *
-  * \endcode
-  *
-  */
 
 #ifndef __GEN2_H__
 #define __GEN2_H__
@@ -184,6 +81,13 @@
 /** Identifier for gen2 protocol session */
 #define SESSION_GEN2            1
 
+/** Definition for the maximal EPC length */
+#define EPCLENGTH              12 //32  // number of bytes for EPC, standard allows up to 62 bytes
+/** Definition for the PC length */
+#define PCLENGTH                2
+/** Definition for the CRC length */
+#define CRCLENGTH               2
+
 struct gen2Config{
     uint8_t tari;        /*< Tari setting */
     uint8_t linkFreq;    /*< GEN2_LF_40, ... */
@@ -203,6 +107,34 @@ struct gen2SelectParams{
     uint8_t mask_len;
     uint8_t truncation;
 };
+
+/** @struct TagInfo_
+  * This struct stores the whole information of one tag.
+  *
+  */
+//typedef uint8_tx unsigned char __attribute__((far));
+
+ //struct __attribute__((far)) TagInfo_
+struct TagInfo_
+{
+    /** RN16 number */
+    uint8_t rn16[2];
+    /** PC value */
+    uint8_t pc[2];
+    /** EPC array */
+    uint8_t epc[EPCLENGTH]; /* epc must immediately follow pc */
+    /** EPC length */
+    uint8_t epclen;  /*length in bytes */
+    /** Handle for write and read communication with the Tag */
+    uint8_t handle[2];
+    /** rssi which has been measured when reading this Tag. */
+    uint8_t rssi;
+    /** content of AGC and Internal Status Display Register 0x2A after reading a tag. */
+    uint8_t agc;
+};
+
+/** Type definition struct: TagInfo_ is named Tag */
+typedef struct TagInfo_ Tag;
 
 /*------------------------------------------------------------------------- */
 /** Search for tags (aka do an inventory round). Before calling any other

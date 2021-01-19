@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <project>
-  <executable name="dist/default/production/Ex_AS3993.production.elf">
+  <executable name="dist/default/production/RFID_AS3993.production.elf">
     <memory name="data">
       <units>bytes</units>
       <length>98304</length>
-      <used>800</used>
-      <free>97504</free>
+      <used>808</used>
+      <free>97496</free>
     </memory>
     <memory name="program">
       <units>bytes</units>
       <length>261876</length>
-      <used>15258</used>
-      <free>246618</free>
+      <used>16470</used>
+      <free>245406</free>
     </memory>
   </executable>
 </project>

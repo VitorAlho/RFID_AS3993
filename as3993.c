@@ -1,10 +1,7 @@
 
-
 #include "as3993.h"
-#include "gen2.h"
-#include "stdlib.h"
-#include "string.h"
-#include "mcc_generated_files/spi1.h"
+//#include "gen2.h"
+#include <string.h>
 #include "mcc_generated_files/system.h"
 
 /** Definition high */
@@ -63,17 +60,46 @@ int8_t inventoryResult;
 /** Currently used protocol, valid values are: #SESSION_GEN2 and #SESSION_ISO6B. */
 uint8_t currentSession = 0;      // start with invalid session (neither Gen2 nor ISO 6b)
 
+uint16_t (*RFID_AS3993_SPI_wrapper_readWrite) (uint8_t *wbuf, uint16_t wrlen, uint8_t *rbuf);
+
+void (*RFID_AS3993_wrapper_delay_ms) (uint16_t delay);
+
+void (*RFID_AS3993_wrapper_delay_us) (uint16_t delay);
+
+void RFID_AS3993_load_callbacks(void* spi_write,
+                                void* delay_ms,
+                                void* delay_us){
+    
+    RFID_AS3993_SPI_wrapper_readWrite = (uint16_t(*)(uint8_t*, uint16_t, uint8_t*)) spi_write;
+    
+    RFID_AS3993_wrapper_delay_ms = (void (*) (uint16_t)) delay_ms;
+    
+    RFID_AS3993_wrapper_delay_us = (void (*) (uint16_t)) delay_us;
+}
+
+void RFID_AS3993_delay_ms(uint16_t delay){
+    (*RFID_AS3993_wrapper_delay_ms)(delay);
+}
+
+void RFID_AS3993_delay_us(uint16_t delay){
+    (*RFID_AS3993_wrapper_delay_us)(delay);
+}
+
+uint16_t RFID_AS3993_SPI_readWrite(uint8_t *wbuf, uint16_t wrlen, uint8_t *rbuf){
+    return (*RFID_AS3993_SPI_wrapper_readWrite)(wbuf, wrlen, rbuf);
+}
+
 /*------------------------------------------------------------------------- */
 void writeReadAS3993( const uint8_t* wbuf, uint8_t wlen, uint8_t* rbuf, uint8_t rlen, uint8_t stopMode, uint8_t doStart )
 {
     if (doStart) NCS_SELECT();
     
     //WriteReadSPI1(wbuf, 0, wlen);
-    SPI1_Exchange8bitBuffer((uint8_t *)wbuf,(uint16_t)wlen,0);
+    RFID_AS3993_SPI_readWrite((uint8_t *)wbuf,(uint16_t)wlen,0);
     //WriteReadSPI1(wbuf,0,wlen);
     if (rlen)
         //WriteReadSPI1(0, rbuf, rlen);
-        SPI1_Exchange8bitBuffer(0,(uint16_t)rlen,rbuf);
+        RFID_AS3993_SPI_readWrite(0,(uint16_t)rlen,rbuf);
         //WriteReadSPI1(0,rbuf,rlen);
     if (stopMode != STOP_NONE) NCS_DESELECT();
 }
@@ -83,8 +109,8 @@ void writeReadAS3993Isr( const uint8_t* wbuf, uint8_t wlen, uint8_t* rbuf, uint8
 {
     NCS_SELECT();
 
-    SPI1_Exchange8bitBuffer((uint8_t *)wbuf,(uint16_t)wlen,0);
-    SPI1_Exchange8bitBuffer(0,(uint16_t)rlen,rbuf);
+    RFID_AS3993_SPI_readWrite((uint8_t *)wbuf,(uint16_t)wlen,0);
+    RFID_AS3993_SPI_readWrite(0,(uint16_t)rlen,rbuf);
 
     NCS_DESELECT();
 }
@@ -134,7 +160,7 @@ uint16_t as3993Initialize(uint32_t baseFreq)
     }
 
     // check IRQ line
-    delay_ms(1);
+    RFID_AS3993_wrapper_delay_ms(1);
     as3993SingleWrite( AS3993_REG_IRQMASK1, 0x20 );
     // set up 48Byte transmission, but we supply less, therefore a fifo underflow IRQ is produced
     as3993SingleWrite( AS3993_REG_TXLENGTHUP, 0x03 );
@@ -254,7 +280,7 @@ uint16_t as3993Initialize(uint32_t baseFreq)
 
     /* Now that the chip is configured with correct ref frequency the PLL 
        should lock */
-    delay_ms(20);
+    RFID_AS3993_wrapper_delay_ms(20);
     myBuf[0] = as3993SingleRead(AS3993_REG_AGCANDSTATUS);
     if (!(myBuf[0] & 0x03))
     {
@@ -280,7 +306,7 @@ void as3993Isr(void)
     uint8_t regs[2];
     static uint8_t addr = READ | AS3993_REG_IRQSTATUS1;
     if (gChipRevisionZero)
-        delay_us(30);
+        RFID_AS3993_delay_us(30);
 
     writeReadAS3993Isr(&addr, 1, regs, 2);
     as3993Response |= (regs[0] | (regs[1] << 8));
@@ -380,7 +406,7 @@ void as3993WaitForResponseTimed(uint16_t waitMask, uint16_t counter)
 {
     while (((as3993Response & waitMask) == 0) && (counter))
     {
-        delay_ms(1);
+        RFID_AS3993_wrapper_delay_ms(1);
         counter--;
     }
     if (counter==0)
@@ -399,7 +425,7 @@ void as3993WaitForResponse(uint16_t waitMask)
     while (((as3993Response & waitMask) == 0) && (counter < WAITFORRESPONSECOUNT))
     {
         counter++;
-        delay_us(WAITFORRESPONSEDELAY);
+        RFID_AS3993_delay_us(WAITFORRESPONSEDELAY);
     }
     if (counter >= WAITFORRESPONSECOUNT)
     {
@@ -437,7 +463,7 @@ static void as3993LockPLL(void)
     buf = as3993SingleRead(AS3993_REG_VCOCONTROL);
     buf |= 0x80; /* set mvco bit */
     as3993SingleWrite(AS3993_REG_VCOCONTROL, buf);
-    delay_ms(1); /* give PLL some settling time, should be around 500us */
+    RFID_AS3993_wrapper_delay_ms(1); /* give PLL some settling time, should be around 500us */
 
     vco_voltage = as3993SingleRead(AS3993_REG_AGL) & 0x07;
 
@@ -451,7 +477,7 @@ static void as3993LockPLL(void)
         {
             i++;
             as3993SingleCommand(AS3993_CMD_VCO_AUTO_RANGE);
-            delay_ms(10);  /* Please keep in mind, that the Auto Bit procedure will take app. 6 ms whereby the locktime of PLL is just 400us */
+            RFID_AS3993_wrapper_delay_ms(10);  /* Please keep in mind, that the Auto Bit procedure will take app. 6 ms whereby the locktime of PLL is just 400us */
             var=as3993SingleRead(AS3993_REG_AGCANDSTATUS);
         } while ( (var & 0x02)==0 && (i<3));/* wait for PLL to be locked and give a few attempts */
     }
@@ -569,7 +595,7 @@ void as3993EnterPowerDownMode()
     count = 500;
     while(count-- && (as3993SingleRead(AS3993_REG_AGCANDSTATUS) & 0x04))
     {
-        delay_ms(1);
+        RFID_AS3993_wrapper_delay_ms(1);
     }
     EN(LOW);
 }
@@ -582,7 +608,7 @@ void as3993ExitPowerDownMode()
     if (ENABLE) return;
 
     EN(HIGH);
-    delay_us(10);
+    RFID_AS3993_delay_us(10);
     as3993WaitForStartup();
 
     /* Do not switch on antenna before PLL is locked.*/
@@ -598,7 +624,7 @@ void as3993ExitPowerDownMode()
     as3993SingleWrite(AS3993_REG_IRQMASK2,   as3993PowerDownRegs[AS3993_REG_ICD+3]);
     as3993SingleWrite(AS3993_REG_TXSETTING,  as3993PowerDownRegs[AS3993_REG_ICD+4]);
     as3993SingleWrite(AS3993_REG_RXLENGTHUP, as3993PowerDownRegs[AS3993_REG_ICD+5] & 0xF0);
-    delay_us(300);
+    RFID_AS3993_delay_us(300);
     as3993LockPLL();
     as3993SingleWrite(AS3993_REG_STATUSCTRL, as3993PowerDownRegs[0]);
 
@@ -618,16 +644,16 @@ void as3993ExitPowerDownMode()
 void as3993Reset(void)
 {
     as3993EnterPowerDownMode();
-    delay_ms(1);
+    RFID_AS3993_wrapper_delay_ms(1);
     as3993ExitPowerDownMode();
 }
 
 void as3993ResetDoNotPreserveRegisters(void)
 {
     EN(LOW);
-    delay_ms(1);
+    RFID_AS3993_wrapper_delay_ms(1);
     EN(HIGH);
-    delay_us(10);
+    RFID_AS3993_delay_us(10);
     as3993WaitForStartup();
 }
 
@@ -695,10 +721,10 @@ void as3993WaitForStartup(void)
         count++;
     }
     while (!((version == 0x60 && osc_ok & 0x01) || count > 250));    //wait for startup
-    delay_us(500);
+    RFID_AS3993_delay_us(500);
     as3993ContinuousRead(AS3993_REG_IRQSTATUS1, 2, &myBuf[0]);    // ensure that IRQ bits are reset
     as3993ClrResponse();
-    delay_ms(2);            // give AS3993 some time to fully initialize
+    RFID_AS3993_wrapper_delay_ms(2);            // give AS3993 some time to fully initialize
 }
 
 void as3993AntennaPower( uint8_t on)
@@ -713,7 +739,7 @@ void as3993AntennaPower( uint8_t on)
             return;
         val |= 3;
 
-        delay_us(300);
+        RFID_AS3993_delay_us(300);
         as3993SingleWrite(AS3993_REG_STATUSCTRL, val);
     }
     else
@@ -726,12 +752,12 @@ void as3993AntennaPower( uint8_t on)
         count = 500;
         while(count-- && (as3993SingleRead(AS3993_REG_AGCANDSTATUS) & 0x04))
         {
-            delay_us(100);
+            RFID_AS3993_delay_us(100);
         }
 
     }
 
-    if(on) delay_ms(6); /* according to standard we have to wait 1.5ms before issuing commands  */
+    if(on) RFID_AS3993_wrapper_delay_ms(6); /* according to standard we have to wait 1.5ms before issuing commands  */
 }
 
 static uint8_t as3993GetRawRSSI( void )
@@ -740,7 +766,7 @@ static uint8_t as3993GetRawRSSI( void )
 
     as3993SingleCommand(AS3993_CMD_BLOCKRX);
     as3993SingleCommand(AS3993_CMD_ENABLERX);
-    delay_us(500);/* According to architecture note we have to wait here at least 100us
+    RFID_AS3993_delay_us(500);/* According to architecture note we have to wait here at least 100us
                     however experiments show 350us to be necessary on AS3992 */
     value = as3993SingleRead(AS3993_REG_RSSILEVELS);
     as3993SingleCommand(AS3993_CMD_BLOCKRX);
@@ -877,7 +903,7 @@ void as3993GetRSSI( uint16_t num_of_ms_to_scan, uint8_t *rawIQ, int8_t* dBm )
     as3993SingleWrite(AS3993_REG_STATUSPAGE, val);
     regFilter = as3993SingleRead(AS3993_REG_RXFILTER);
     as3993SingleWrite(AS3993_REG_RXFILTER, 0xff ); /* Optimal filter settings */
-    if(!(regStatus & 0x02)) delay_ms(10); /* rec_on needs about 6ms settling time, to be sure wait 10 ms */
+    if(!(regStatus & 0x02)) RFID_AS3993_wrapper_delay_ms(10); /* rec_on needs about 6ms settling time, to be sure wait 10 ms */
 
     sum = 0;
     while (num_of_reads--)
@@ -927,7 +953,7 @@ void as3993GetRSSI( uint16_t num_of_ms_to_scan, uint8_t *rawIQ, int8_t* dBm )
 end:
     as3993SingleWrite(AS3993_REG_RXFILTER, regFilter ); /* Restore filter */
     as3993SingleWrite(AS3993_REG_STATUSCTRL, regStatus);
-    if(regStatus & 1) delay_ms(2); /* according to standard we have to wait 1.5ms before issuing commands  */
+    if(regStatus & 1) RFID_AS3993_wrapper_delay_ms(2); /* according to standard we have to wait 1.5ms before issuing commands  */
     return;
 }
 
@@ -937,7 +963,7 @@ int8_t as3993GetADC( void )
 {
     int8_t val;
     as3993SingleCommand(AS3993_CMD_TRIGGERADCCON);
-    delay_us(20); /* according to spec */
+    RFID_AS3993_delay_us(20); /* according to spec */
     val = as3993SingleRead(AS3993_REG_ADC);
     val = CONVERT_ADC_TO_NAT(val);
     return val;
@@ -956,10 +982,10 @@ uint16_t as3993GetReflectedPower( void )
     as3993SingleCommand(AS3993_CMD_BLOCKRX); /* Reset the receiver - otherwise the I values seem to oscillate */
     as3993SingleCommand(AS3993_CMD_ENABLERX);
     as3993SingleWrite(AS3993_REG_MEASUREMENTCONTROL, 0x01); /* Mixer A DC */
-    delay_us(300); /* settling time */
+    RFID_AS3993_delay_us(300); /* settling time */
     value = as3993GetADC();
     as3993SingleWrite(AS3993_REG_MEASUREMENTCONTROL, 0x02); /* Mixer B DC */
-    delay_us(300); /* settling time */
+    RFID_AS3993_delay_us(300); /* settling time */
     adcVal = as3993GetADC();
     as3993SingleCommand(AS3993_CMD_BLOCKRX); /* Disable the receiver since we enabled it before */
 
@@ -984,10 +1010,10 @@ uint16_t as3993GetReflectedPowerNoiseLevel( void )
     as3993SingleCommand(AS3993_CMD_BLOCKRX); /* Reset the receiver - otherwise the I values seem to oscillate */
     as3993SingleCommand(AS3993_CMD_ENABLERX);
     as3993SingleWrite(AS3993_REG_MEASUREMENTCONTROL, 0x01); /* Mixer A DC */
-    delay_us(300); /* settling time */
+    RFID_AS3993_delay_us(300); /* settling time */
     i_0 = as3993GetADC();
     as3993SingleWrite(AS3993_REG_MEASUREMENTCONTROL, 0x02); /* Mixer B DC */
-    delay_us(300); /* settling time */
+    RFID_AS3993_delay_us(300); /* settling time */
     q_0 = as3993GetADC();
 
     value = (i_0 & 0xff) | (q_0 << 8);

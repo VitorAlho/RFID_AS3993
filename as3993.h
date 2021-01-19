@@ -1,49 +1,8 @@
-/*
- *****************************************************************************
- * Copyright by ams AG                                                       *
- * All rights are reserved.                                                  *
- *                                                                           *
- * IMPORTANT - PLEASE READ CAREFULLY BEFORE COPYING, INSTALLING OR USING     *
- * THE SOFTWARE.                                                             *
- *                                                                           *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS       *
- * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT         *
- * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS         *
- * FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT  *
- * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,     *
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT          *
- * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,     *
- * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY     *
- * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT       *
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE     *
- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.      *
- *****************************************************************************
- */
-/*! \file
- *
- *  \author U.Herrmann ( based on work by E.Grubmueller
- *  \author T. Luecker (Substitute)
- *  \author Bernhard Breinbauer
- *
- *   \brief Declaration of low level functions provided by the as3993 series chips
- *
- *   Declares low level functions provided by the as3993 series chips. All 
- *   higher level functions are provided by as3993_public.h and protocol
- *   work is contained in gen2.h and iso6b.h
- */
 
 #ifndef _AS3993_H_
 #define _AS3993_H_
 
-
 #include <stdint.h>
-
-/** Definition for the maximal EPC length */
-#define EPCLENGTH              12 //32  // number of bytes for EPC, standard allows up to 62 bytes
-/** Definition for the PC length */
-#define PCLENGTH                2
-/** Definition for the CRC length */
-#define CRCLENGTH               2
 
 ///** Definition of the maximum frequencies for the hopping */
 #define MAXFREQ                 53
@@ -51,21 +10,7 @@
 #define MAXTUNE                 52
 
 /** Definition of the maximum number of tags, which can be read in 1 round */
-//#define MAXTAG 255
 #define MAXTAG 12//20//120
-
-/** @struct TagInfo_
-  * This struct stores the whole Tag information
-  * @{
-  */
-
-#define AS3993_ERR_NORES      ERR_CHIP_NORESP
-#define AS3993_ERR_PREAMBLE   ERR_CHIP_PREAMBLE
-#define AS3993_ERR_HEADER     ERR_CHIP_HEADER
-#define AS3993_ERR_FIFO_OVER  ERR_CHIP_FIFO
-#define AS3993_ERR_RXCOUNT    ERR_CHIP_RXCOUNT
-#define AS3993_ERR_CRC        ERR_CHIP_CRCERROR
-#define AS3993_ERR_RXERR      ERR_CHIP_RXERR
 
 ///////////////////////////////////////////////////////
 //                      ERRORS
@@ -104,9 +49,13 @@
 #define ERR_GEN2_REQRN                (ERR_FIRST_AS3993_ERROR - 34)
 #define ERR_GEN2_CHANNEL_TIMEOUT      (ERR_FIRST_AS3993_ERROR - 35)
 
-
-/* ISO6b errors */
-#define ERR_ISO6B_NACK                (ERR_FIRST_AS3993_ERROR - 64)
+#define AS3993_ERR_NORES      ERR_CHIP_NORESP
+#define AS3993_ERR_PREAMBLE   ERR_CHIP_PREAMBLE
+#define AS3993_ERR_HEADER     ERR_CHIP_HEADER
+#define AS3993_ERR_FIFO_OVER  ERR_CHIP_FIFO
+#define AS3993_ERR_RXCOUNT    ERR_CHIP_RXCOUNT
+#define AS3993_ERR_CRC        ERR_CHIP_CRCERROR
+#define AS3993_ERR_RXERR      ERR_CHIP_RXERR
 
 ///////////////////////////////////////////////////////
 //                     END ERRORS
@@ -266,7 +215,55 @@
 /** number of loop iterations in as3993WaitForResponse() */
 #define WAITFORRESPONSECOUNT    WAITFORRESPONSETIMEOUT/WAITFORRESPONSEDELAY
 
+/** value for #readerPowerDownMode. Activates power down mode. (EN low)*/
+#define POWER_DOWN              0
+/** value for #readerPowerDownMode. Activates normal mode. (EN high, RF off, stdby 0)*/
+#define POWER_NORMAL            1
+/** value for #readerPowerDownMode. Activates normal mode with rf field on. (EN high, RF off, stdby 0)*/
+#define POWER_NORMAL_RF         2
+/** value for #readerPowerDownMode. Activates standby mode. (EN high, RF off, stdby 1)*/
+#define POWER_STANDBY           3
+
+/** define for stopMode parameter of writeReadAS3993() */
+#define STOP_NONE               0
+/** define for stopMode parameter of writeReadAS3993() */
+#define STOP_SGL                1
+/** define for stopMode parameter of writeReadAS3993() */
+#define STOP_CONT               2
+
+/** Macro for enable external IRQ */
+#define ENEXTIRQ()                _INT1IE = 1;
+
+/** Macro for disable external IRQ */
+#define DISEXTIRQ()               _INT1IE = 0
+
+/** Macro for clearing external IRQ flag*/
+#define CLREXTIRQ()               _INT1IF = 0
+
+/** Definition for the serial enable pin */
+#define NCSPIN                    _LATF8 //_LATB15
+/** Definition for the Direct data mode Pin*/
+
+/** Definition for the enable pin */
+#define ENABLE                    _LATB2 //_LATB13
+
+/** Macro for setting enable pin */
+#define EN(x)                     ENABLE=(x)
+
+/** Macro for setting DCDC on/off */
+#define DCDC(x)                   DCDCPIN=(x)
+
+/** Macro for setting NCS pin, serial enable line */
+#define NCS(x)                    NCSPIN=(x)
+/** Macro for activating AS3993 for SPI communication */
+#define NCS_SELECT()              NCS(0)
+/** Macro for deactivating AS3993 for SPI communication */
+#define NCS_DESELECT()            NCS(1)
+
+
+
 extern volatile uint16_t as3993Response;
+
 extern uint32_t as3993CurrentBaseFreq;
 
 /** If rssi measurement is above this threshold the channel is regarded as
@@ -296,34 +293,6 @@ extern int8_t inventoryResult;
 /** Currently used protocol, valid values are: #SESSION_GEN2 and #SESSION_ISO6B. */
 extern uint8_t currentSession;      // start with invalid session (neither Gen2 nor ISO 6b)
 
-/** @struct TagInfo_
-  * This struct stores the whole information of one tag.
-  *
-  */
-//typedef uint8_tx unsigned char __attribute__((far));
-
- //struct __attribute__((far)) TagInfo_
-struct TagInfo_
-{
-    /** RN16 number */
-    uint8_t rn16[2];
-    /** PC value */
-    uint8_t pc[2];
-    /** EPC array */
-    uint8_t epc[EPCLENGTH]; /* epc must immediately follow pc */
-    /** EPC length */
-    uint8_t epclen;  /*length in bytes */
-    /** Handle for write and read communication with the Tag */
-    uint8_t handle[2];
-    /** rssi which has been measured when reading this Tag. */
-    uint8_t rssi;
-    /** content of AGC and Internal Status Display Register 0x2A after reading a tag. */
-    uint8_t agc;
-};
-
-/** Type definition struct: TagInfo_ is named Tag */
-typedef struct TagInfo_ Tag;
-
 /** @struct Frequencies_
   * This struct stores the list of frequencies which are used for hopping.
   * For tuning enabled boards the struct also stores the tuning settings for
@@ -342,7 +311,6 @@ typedef struct
     uint16_t countFreqHop[MAXFREQ];
 
 } Freq;
-
 
 typedef struct
 {
@@ -363,7 +331,6 @@ typedef struct
     /** Reflected power which was measured after last tuning. */
     uint16_t      tunedIQ[2][MAXTUNE];
 } TuningTable;
-
 
 /** This function initialises the AS3993. A return value greater 0 indicates an error.\n
  *
@@ -613,11 +580,11 @@ void as3993WaitForResponse(uint16_t waitMask);
   */
 void as3993WaitForResponseTimed(uint16_t waitMask, uint16_t ms);
 
-
 #define as3993GetResponse() as3993Response
-#define as3993ClrResponseMask(mask) as3993Response&=~(mask)
-#define as3993ClrResponse() as3993Response=0
 
+#define as3993ClrResponseMask(mask) as3993Response&=~(mask)
+
+#define as3993ClrResponse() as3993Response=0
 
 /*!
  *****************************************************************************
@@ -709,8 +676,6 @@ void as3993EnterPowerStandbyMode();
  */
 void as3993ExitPowerStandbyMode();
 
-extern uint8_t as3993ChipVersion;
-
 /*!
  *****************************************************************************
  *  \brief  after EN goes high the IRQ register has to be read after osc_ok
@@ -719,65 +684,15 @@ extern uint8_t as3993ChipVersion;
  */
 void as3993WaitForStartup(void);
 
-/** value for #readerPowerDownMode. Activates power down mode. (EN low)*/
-#define POWER_DOWN              0
-/** value for #readerPowerDownMode. Activates normal mode. (EN high, RF off, stdby 0)*/
-#define POWER_NORMAL            1
-/** value for #readerPowerDownMode. Activates normal mode with rf field on. (EN high, RF off, stdby 0)*/
-#define POWER_NORMAL_RF         2
-/** value for #readerPowerDownMode. Activates standby mode. (EN high, RF off, stdby 1)*/
-#define POWER_STANDBY           3
-
 void powerDownReader(void);
 
 void powerUpReader(void);
 
-/*
-******************************************************************************
-* DEFINES
-******************************************************************************
-*/
-/** define for stopMode parameter of writeReadAS3993() */
-#define STOP_NONE               0
-/** define for stopMode parameter of writeReadAS3993() */
-#define STOP_SGL                1
-/** define for stopMode parameter of writeReadAS3993() */
-#define STOP_CONT               2
+void as3993Isr(void);
 
-/** map as3993Isr to _INT1Interrupt */
-#define as3993Isr EX_INT1_CallBack
-
-/*! map timer2Isr to _T3Interrupt */
-#define timer3Isr //TMR3_CallBack
-
-/** Macro for enable external IRQ */
-#define ENEXTIRQ()                _INT1IE = 1;
-
-/** Macro for disable external IRQ */
-#define DISEXTIRQ()               _INT1IE = 0
-
-/** Macro for clearing external IRQ flag*/
-#define CLREXTIRQ()               _INT1IF = 0
-
-/** Macro for setting enable pin */
-#define EN(x)                     ENABLE=(x)
-
-/** Macro for setting DCDC on/off */
-#define DCDC(x)                   DCDCPIN=(x)
-
-/** Macro for setting NCS pin, serial enable line */
-#define NCS(x)                    NCSPIN=(x)
-/** Macro for activating AS3993 for SPI communication */
-#define NCS_SELECT()              NCS(0)
-/** Macro for deactivating AS3993 for SPI communication */
-#define NCS_DESELECT()            NCS(1)
-
-/** Definition for the serial enable pin */
-#define NCSPIN                    _LATF8 //_LATB15
-/** Definition for the Direct data mode Pin*/
-
-/** Definition for the enable pin */
-#define ENABLE                    _LATB2 //_LATB13
+void RFID_AS3993_load_callbacks(void* spi_write,
+                                void* delay_ms,
+                                void* delay_us);
 
 //----------------------------------------------------------------------
 #endif /* _AS3993_H_ */
