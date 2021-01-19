@@ -58,8 +58,8 @@
 #include "mcc_generated_files/system.h"
 #include "mcc_generated_files/pin_manager.h"
 
-#include "as3993_public.h"
-#include "appl_commands.h"
+#include "as3993.h"
+#include "gen2.h"
         
 /*
   Section: Global variables 

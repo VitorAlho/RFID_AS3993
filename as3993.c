@@ -1,7 +1,6 @@
 
 
 #include "as3993.h"
-#include "as3993_public.h"
 #include "gen2.h"
 #include "stdlib.h"
 #include "string.h"
@@ -33,6 +32,37 @@ static uint8_t as3993PowerDownRegs[AS3993_REG_ICD+6];
  specific handling in some functions. */
 static uint8_t gChipRevisionZero = 1;
 
+/** Currently configured power down mode of reader. Available modes are: #POWER_DOWN, #POWER_NORMAL,
+ *  #POWER_NORMAL_RF and #POWER_STANDBY */
+static uint8_t readerPowerDownMode;
+
+/** If rssi measurement is above this threshold the channel is regarded as
+    used and the system will hop to the next frequency. Otherwise this frequency is used */
+int8_t rssiThreshold;
+
+/** Will be set to 1 if a cyclic inventory is performed, see callStartStop(). */
+uint8_t cyclicInventory;
+
+/** If set to 0 inventory round commandos will be triggered by the FW, otherwise
+ * the autoACK feature of the reader will be used which sends the required Gen2
+ * commands automatically.*/
+uint8_t autoAckMode;
+
+/** If set to 0 normal inventory round will be performed, if set to 1 fast inventory rounds will be performed.
+ * The value is set in callStartStop() and callInventoryGen2().
+ * For details on normal/fast inventory rounds see parameter singulate of gen2SearchForTags().*/
+uint8_t fastInventory;
+
+/** Value for register #AS3993_REG_STATUSPAGE. This defines what RSSI value is sent
+ * to the host along with the tag data. The value is set in callStartStop() and callInventoryGen2(). */
+uint8_t rssiMode;
+
+///** To be communicated to GUI, basically result of hopFrequencies(), having information on skipped rounds */
+int8_t inventoryResult;
+
+/** Currently used protocol, valid values are: #SESSION_GEN2 and #SESSION_ISO6B. */
+uint8_t currentSession = 0;      // start with invalid session (neither Gen2 nor ISO 6b)
+
 /*------------------------------------------------------------------------- */
 void writeReadAS3993( const uint8_t* wbuf, uint8_t wlen, uint8_t* rbuf, uint8_t rlen, uint8_t stopMode, uint8_t doStart )
 {
@@ -63,6 +93,15 @@ void writeReadAS3993Isr( const uint8_t* wbuf, uint8_t wlen, uint8_t* rbuf, uint8
 uint16_t as3993Initialize(uint32_t baseFreq)
 {
     uint8_t myBuf[4];
+    
+    readerPowerDownMode = POWER_NORMAL;
+    currentSession = 0;
+    cyclicInventory = 0;
+    fastInventory = 0;
+    autoAckMode = 1;
+    //rssiMode = RSSI_MODE_PEAK;
+    rssiMode = 0x06;    //rssi at 2nd byte
+    rssiThreshold = -40;
 
     as3993ResetDoNotPreserveRegisters();
 
@@ -1103,4 +1142,53 @@ int8_t as3993TxRxGen2Bytes(uint8_t cmd, uint8_t *txbuf, uint16_t txbits,
         }
     }
     return ERR_NONE;
+}
+
+/** Handles the configured power down mode of the reader. The power down mode
+ * is define in readerPowerDownMode variable and can be changed via callReaderConfig().
+ * Available modes are: #POWER_DOWN, #POWER_NORMAL, #POWER_NORMAL_RF and #POWER_STANDBY
+ */
+void powerDownReader(void)
+{
+    switch (readerPowerDownMode)
+    {
+        case POWER_DOWN:
+            as3993EnterPowerDownMode();
+            break;
+        case POWER_NORMAL:
+            as3993EnterPowerNormalMode();
+            break;
+        case POWER_NORMAL_RF:
+            as3993EnterPowerNormalRfMode();
+            break;
+        case POWER_STANDBY:
+            as3993EnterPowerStandbyMode();
+            break;
+        default:
+            as3993EnterPowerDownMode();
+    }
+}
+
+/**
+ * Handles power up of reader. Basically reverts changes done by powerDownReader().
+ */
+void powerUpReader(void)
+{
+    switch (readerPowerDownMode)
+    {
+        case POWER_DOWN:
+            as3993ExitPowerDownMode();
+            break;
+        case POWER_NORMAL:
+            as3993ExitPowerNormalMode();
+            break;
+        case POWER_NORMAL_RF:
+            as3993ExitPowerNormalRfMode();
+            break;
+        case POWER_STANDBY:
+            as3993ExitPowerStandbyMode();
+            break;
+        default:
+            as3993ExitPowerDownMode();
+    }
 }

@@ -2,8 +2,7 @@
 #include "as3993.h"
 #include "gen2.h"
 #include "string.h"
-#include "appl_commands.h"
-#include "as3993_public.h"
+#include "mcc_generated_files/system.h"
 
 /*EPC Commands */
 /** Definition for queryrep EPC command */
@@ -39,6 +38,9 @@
 
 #define GEN2_RESET_TIMEOUT 10
 
+/** Maximum of consecutive select commands currently supported. */
+#define MAX_SELECTS             2
+
 /*------------------------------------------------------------------------- */
 /* local types */
 /*------------------------------------------------------------------------- */
@@ -61,6 +63,33 @@ static uint16_t gen2ResetTimeout = GEN2_RESET_TIMEOUT;
 static uint8_t buf_[8+EPCLENGTH+PCLENGTH+CRCLENGTH]; /*8->tx_length+EPCcommand+wordptr+wordcount+handle+broken byte */
 
 static struct gen2InternalConfig gen2IntConfig;
+
+/** Default Gen2 configuration, can be changed callConfigGen2(). */
+static struct gen2Config gen2Configuration = {TARI_125, GEN2_LF_256, GEN2_COD_MILLER4, TREXT_OFF, 0, GEN2_SESSION_S0, 0};
+
+/** Start value for Q for Gen2 inventory rounds, can be changed callConfigGen2(). */
+uint8_t gen2qbegin = 4;
+
+/** Internal number of currently configured select commands. */
+static int num_selects;
+/** Parameters for select commands, can be changed via callSelectTag()*/
+static struct gen2SelectParams selParams[MAX_SELECTS];
+
+/** Internal variable which contains the number of received tags in the last inventory round. */
+static uint8_t num_of_tags;
+
+/** AS3993 init status. This is the return value of as3993Initialize() */
+//uint16_t readerInitStatus;
+
+/** Array of Structures which stores all necessary Information about the Tags.
+ */
+Tag __attribute__((far)) tags_[MAXTAG];
+
+/**Pointer to data of currently selected Tag.*/
+Tag *selectedTag;
+
+/**Contains the list of used frequencies.*/
+Freq Frequencies;
 
 /*------------------------------------------------------------------------- */
 /* local prototypes */
@@ -615,7 +644,7 @@ unsigned gen2SearchForTags(Tag *tags_
                 default:
                     break;
             }
-            goOn = cbContinueScanning(); // timeout check routine
+            goOn = 1;// cbContinueScanning(); // timeout check routine
         } while (slot_count && goOn );
         addRounds--;
         //EPCLOG("q=%hhx, collisions=%x, num_of_tags=%x",q,collisions,num_of_tags);
@@ -937,4 +966,92 @@ void u32ToEbv(uint32_t value, uint8_t *ebv, uint8_t *len)
         buf--;
         ebv[i] = *buf;
     }
+}
+
+/** This funcition checks the current session, if necessary closes it
+and opens a new session. Valid session values are: #SESSION_GEN2 and #SESSION_ISO6B. */
+void checkAndSetSession( uint8_t newSession)
+{
+    if (currentSession == newSession) return;
+    switch (currentSession)
+    {
+        case SESSION_GEN2:
+            gen2Close();
+            break;
+    }
+    switch (newSession)
+    {
+        case SESSION_GEN2:
+            gen2Open(&gen2Configuration);
+            break;
+    }
+    currentSession = newSession;
+}
+
+void insertBitStream(uint8_t *dest, uint8_t const *source, uint8_t len, uint8_t bitpos)
+{
+    int16_t i;
+    uint8_t mask0 = (1<<bitpos)-1;
+    uint8_t mask1 = (1<<(8-bitpos))-1;
+
+    for (i=0; i<len; i++)
+    {
+        dest[i+0] &= (~mask0);
+        dest[i+0] |= ((source[i]>>(8-bitpos)) & mask0);
+        dest[i+1] &= ((~mask1) << bitpos);
+        dest[i+1] |= ((source[i] & mask1) << bitpos);
+    }
+}
+
+static uint8_t continueCheckTimeout( ) 
+{
+        
+    return 1;
+}
+
+void performSelects()
+{
+    int i;
+    for (i = 0; i<num_selects; i++)
+    {
+        gen2Select(selParams + i);
+        /* We would have to wait T4=2*RTcal here (max 140us). Logic analyzer showed enough time without delaying */
+    }
+}
+
+uint8_t inventoryGen2(void)
+{
+    int8_t result;
+
+    powerUpReader();
+    as3993AntennaPower(1);
+    delay_ms(1);
+    
+    result = 0;// hopFrequencies();
+    
+    if( !result )
+    {
+        checkAndSetSession(SESSION_GEN2);
+        as3993SingleWrite(AS3993_REG_STATUSPAGE, rssiMode);
+        if (rssiMode == RSSI_MODE_PEAK)      //if we use peak rssi mode, we have to send anti collision commands
+            as3993SingleCommand(AS3993_CMD_ANTI_COLL_ON);
+
+        num_of_tags = 0;
+        //total_tags = 0;
+        performSelects();
+        if( !autoAckMode )
+            num_of_tags = gen2SearchForTags(tags_, MAXTAG, gen2qbegin, continueCheckTimeout, fastInventory?0:1, 1);
+        else
+            num_of_tags = gen2SearchForTagsAutoAck(tags_, MAXTAG, gen2qbegin, continueCheckTimeout, fastInventory?0:1, 1);
+        //total_tags = num_of_tags;
+        if (rssiMode == RSSI_MODE_PEAK)      //if we use peak rssi mode, we have to send anti collision commands
+            as3993SingleCommand(AS3993_CMD_ANTI_COLL_OFF);
+    }
+    inventoryResult = result;
+    
+    as3993AntennaPower(0);
+    powerDownReader();    
+
+    //APPLOG("end inventory, found tags: %hhx\n", num_of_tags);
+    return num_of_tags;
 }

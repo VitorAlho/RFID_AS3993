@@ -105,9 +105,8 @@
 #ifndef __GEN2_H__
 #define __GEN2_H__
 
-#include "as3993_public.h"
 #include <stdint.h>
-#include "appl_commands.h"
+#include "as3993.h"
 
 /* Protocol configuration settings */
 #define GEN2_LF_40  0   /*!<link frequency 40 kHz*/
@@ -181,6 +180,9 @@
 #define GEN2_ERR_ACCESS          ERR_GEN2_ACCESS /**< Error sending Access password */
 #define GEN2_ERR_SELECT          ERR_GEN2_SELECT /**< Error when selecting tag*/
 #define GEN2_ERR_CHANNEL_TIMEOUT ERR_GEN2_CHANNEL_TIMEOUT /**< Error RF channel timed out*/
+
+/** Identifier for gen2 protocol session */
+#define SESSION_GEN2            1
 
 struct gen2Config{
     uint8_t tari;        /*< Tari setting */
@@ -393,4 +395,11 @@ void u32ToEbv(uint32_t value, uint8_t *ebv, uint8_t *len);
  *****************************************************************************
  */
 int8_t gen2QueryMeasureRSSI(uint8_t *agc, uint8_t *log_rssis, int8_t *irssi, int8_t *qrssi);
+
+void checkAndSetSession( uint8_t newSession);
+
+void insertBitStream(uint8_t *dest, uint8_t const *source, uint8_t len, uint8_t bitpos);
+
+uint8_t inventoryGen2(void);
+
 #endif

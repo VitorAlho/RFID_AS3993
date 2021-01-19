@@ -17,9 +17,7 @@
         <itemPath>mcc_generated_files/ext_int.h</itemPath>
         <itemPath>mcc_generated_files/tmr3.h</itemPath>
       </logicalFolder>
-      <itemPath>appl_commands.h</itemPath>
       <itemPath>as3993.h</itemPath>
-      <itemPath>as3993_public.h</itemPath>
       <itemPath>gen2.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
@@ -43,7 +41,6 @@
         <itemPath>mcc_generated_files/tmr3.c</itemPath>
       </logicalFolder>
       <itemPath>main.c</itemPath>
-      <itemPath>appl_commands.c</itemPath>
       <itemPath>as3993.c</itemPath>
       <itemPath>gen2.c</itemPath>
     </logicalFolder>
