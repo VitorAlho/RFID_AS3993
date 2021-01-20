@@ -1,8 +1,7 @@
 
-#include "as3993.h"
 #include "gen2.h"
-#include "string.h"
-#include "mcc_generated_files/system.h"
+#include "as3993.h"
+#include <string.h>
 
 /*EPC Commands */
 /** Definition for queryrep EPC command */
@@ -1025,7 +1024,7 @@ uint8_t inventoryGen2(void)
 
     powerUpReader();
     as3993AntennaPower(1);
-    delay_ms(1);
+    RFID_AS3993_delay_ms(1);
     
     result = 0;// hopFrequencies();
     

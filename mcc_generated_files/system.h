@@ -54,11 +54,6 @@
 #endif
 
 #include <libpic30.h>
-#include <xc.h>
-#include <stdint.h>
-
-#define delay_ms(ms)    { __delay_ms(ms); }
-#define delay_us(us)    { __delay_us(us); }
 
 /**
  * @Param

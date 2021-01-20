@@ -3,6 +3,7 @@
 #define _AS3993_H_
 
 #include <stdint.h>
+#include "mcc_generated_files/system.h"
 
 ///** Definition of the maximum frequencies for the hopping */
 #define MAXFREQ                 53
@@ -232,35 +233,28 @@
 #define STOP_CONT               2
 
 /** Macro for enable external IRQ */
-#define ENEXTIRQ()                _INT1IE = 1;
+//#define ENEXTIRQ()                _INT1IE = 1;
 
 /** Macro for disable external IRQ */
-#define DISEXTIRQ()               _INT1IE = 0
+//#define DISEXTIRQ()               _INT1IE = 0
 
 /** Macro for clearing external IRQ flag*/
-#define CLREXTIRQ()               _INT1IF = 0
+//#define CLREXTIRQ()               _INT1IF = 0
 
 /** Definition for the serial enable pin */
-#define NCSPIN                    _LATF8 //_LATB15
+//#define NCSPIN                     //_LATB15
 /** Definition for the Direct data mode Pin*/
 
 /** Definition for the enable pin */
-#define ENABLE                    _LATB2 //_LATB13
+//#define ENABLE                    _LATB2 //_LATB13
 
 /** Macro for setting enable pin */
-#define EN(x)                     ENABLE=(x)
+//#define EN(x)                     ENABLE=(x)
 
-/** Macro for setting DCDC on/off */
-#define DCDC(x)                   DCDCPIN=(x)
-
-/** Macro for setting NCS pin, serial enable line */
-#define NCS(x)                    NCSPIN=(x)
 /** Macro for activating AS3993 for SPI communication */
-#define NCS_SELECT()              NCS(0)
+//#define NCS_SELECT()               _LATF8 = 0
 /** Macro for deactivating AS3993 for SPI communication */
-#define NCS_DESELECT()            NCS(1)
-
-
+//#define NCS_DESELECT()             _LATF8 = 1
 
 extern volatile uint16_t as3993Response;
 
@@ -692,7 +686,17 @@ void as3993Isr(void);
 
 void RFID_AS3993_load_callbacks(void* spi_write,
                                 void* delay_ms,
-                                void* delay_us);
+                                void* delay_us,
+                                void* enableExtInterrupt,
+                                void* disableExtInterrupt,
+                                void* clearExtInterrupt,
+                                void* setEnablePin,
+                                void* isEnabledPin,
+                                void* setSpiEnablePin);
+
+void RFID_AS3993_delay_ms(uint16_t delay);
+
+void RFID_AS3993_delay_us(uint16_t delay);
 
 //----------------------------------------------------------------------
 #endif /* _AS3993_H_ */

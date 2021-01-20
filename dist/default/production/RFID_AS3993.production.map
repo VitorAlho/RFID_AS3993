@@ -1,23 +1,23 @@
 Microchip Technology Inc, v1.61 (B)
 
 Tool Name:
-  c:\program files\microchip\xc16\v1.61\bin\bin\..\bin/elf-ld.exe
+  c:\programfiles\microchip\xc16\v1.61\bin\bin\..\bin/elf-ld.exe
 
 Command:
   -p24FJ256DA210 \
-  --mdfp=C:/Users/Vitor/.mchp_packs/Microchip/PIC24F-DA-GB_DFP/1.3.63/xc16 \
+  --mdfp=C:/Users/vitor/.mchp_packs/Microchip/PIC24F-DA-GB_DFP/1.3.63/xc16 \
   -o \
   dist/default/production/RFID_AS3993.production.elf \
-  -Lc:/program files/microchip/xc16/v1.61/bin/bin/.. \
-  -LC:/Users/Vitor/.mchp_packs/Microchip/PIC24F-DA-GB_DFP/1.3.63/xc16/bin/../support/PIC24F/gld \
-  -Lc:/program files/microchip/xc16/v1.61/bin/bin/../../lib \
-  -Lc:/program files/microchip/xc16/v1.61/bin/bin/../../support/PIC24E/gld \
-  -Lc:/program files/microchip/xc16/v1.61/bin/bin/../../support/PIC24F/gld \
-  -Lc:/program files/microchip/xc16/v1.61/bin/bin/../../support/PIC24H/gld \
-  -Lc:/program files/microchip/xc16/v1.61/bin/bin/../../support/dsPIC30F/gld \
-  -Lc:/program files/microchip/xc16/v1.61/bin/bin/../../support/dsPIC33C/gld \
-  -Lc:/program files/microchip/xc16/v1.61/bin/bin/../../support/dsPIC33E/gld \
-  -Lc:/program files/microchip/xc16/v1.61/bin/bin/../../support/dsPIC33F/gld \
+  -Lc:/programfiles/microchip/xc16/v1.61/bin/bin/.. \
+  -LC:/Users/vitor/.mchp_packs/Microchip/PIC24F-DA-GB_DFP/1.3.63/xc16/bin/../support/PIC24F/gld \
+  -Lc:/programfiles/microchip/xc16/v1.61/bin/bin/../../lib \
+  -Lc:/programfiles/microchip/xc16/v1.61/bin/bin/../../support/PIC24E/gld \
+  -Lc:/programfiles/microchip/xc16/v1.61/bin/bin/../../support/PIC24F/gld \
+  -Lc:/programfiles/microchip/xc16/v1.61/bin/bin/../../support/PIC24H/gld \
+  -Lc:/programfiles/microchip/xc16/v1.61/bin/bin/../../support/dsPIC30F/gld \
+  -Lc:/programfiles/microchip/xc16/v1.61/bin/bin/../../support/dsPIC33C/gld \
+  -Lc:/programfiles/microchip/xc16/v1.61/bin/bin/../../support/dsPIC33E/gld \
+  -Lc:/programfiles/microchip/xc16/v1.61/bin/bin/../../support/dsPIC33F/gld \
   build/default/production/mcc_generated_files/clock.o \
   build/default/production/mcc_generated_files/interrupt_manager.o \
   build/default/production/mcc_generated_files/mcc.o \
@@ -30,6 +30,8 @@ Command:
   build/default/production/main.o \
   build/default/production/as3993.o \
   build/default/production/gen2.o \
+  build/default/production/bsp.o \
+  build/default/production/delay.o \
   --local-stack \
   --defsym=__MPLAB_BUILD=1 \
   -Tp24FJ256DA210.gld.00 \
@@ -58,25 +60,25 @@ Command:
 Optional library libpPIC24Fxxx.a not found
 Archive member included because of file (symbol)
 
-c:/program files/microchip/xc16/v1.61/bin/bin/../../lib\liblega-pic30-elf.a(crt0_extended24.o)
+c:/programfiles/microchip/xc16/v1.61/bin/bin/../../lib\liblega-pic30-elf.a(crt0_extended24.o)
                               (__resetPRI)
-c:/program files/microchip/xc16/v1.61/bin/bin/../../lib\liblega-pic30-elf.a(data_init_24.o)
-                              c:/program files/microchip/xc16/v1.61/bin/bin/../../lib\liblega-pic30-elf.a(crt0_extended24.o) (__data_init_da)
-c:/program files/microchip/xc16/v1.61/bin/bin/../../lib\liblega-pic30-elf.a(crt_start_mode_normalda.Leo)
+c:/programfiles/microchip/xc16/v1.61/bin/bin/../../lib\liblega-pic30-elf.a(data_init_24.o)
+                              c:/programfiles/microchip/xc16/v1.61/bin/bin/../../lib\liblega-pic30-elf.a(crt0_extended24.o) (__data_init_da)
+c:/programfiles/microchip/xc16/v1.61/bin/bin/../../lib\liblega-pic30-elf.a(crt_start_mode_normalda.Leo)
                               (__crt_start_mode_normal)
-c:/program files/microchip/xc16/v1.61/bin/bin/../../lib\liblega-pic30-elf.a(delay32da.Leo)
-                              build/default/production/main.o (___delay32)
-c:/program files/microchip/xc16/v1.61/bin/bin/../../lib\libm-elf.a(udivsi3.daeo)
+c:/programfiles/microchip/xc16/v1.61/bin/bin/../../lib\liblega-pic30-elf.a(delay32da.Leo)
+                              build/default/production/delay.o (___delay32)
+c:/programfiles/microchip/xc16/v1.61/bin/bin/../../lib\libm-elf.a(udivsi3.daeo)
                               build/default/production/as3993.o (___udivsi3)
-c:/program files/microchip/xc16/v1.61/bin/bin/../../lib\libm-elf.a(divmoddi3.daeo)
-                              build/default/production/main.o (___udivdi3)
-c:/program files/microchip/xc16/v1.61/bin/bin/../../lib\libm-elf.a(muldi3.daeo)
-                              build/default/production/main.o (___muldi3)
-c:/program files/microchip/xc16/v1.61/bin/bin/../../lib\libm-elf.a(umuldi3.daeo)
-                              c:/program files/microchip/xc16/v1.61/bin/bin/../../lib\libm-elf.a(muldi3.daeo) (___umuldi3)
-c:/program files/microchip/xc16/v1.61/bin/bin/../../lib\liblega-c-elf.a(memcpy.DA_eo)
+c:/programfiles/microchip/xc16/v1.61/bin/bin/../../lib\libm-elf.a(divmoddi3.daeo)
+                              build/default/production/delay.o (___udivdi3)
+c:/programfiles/microchip/xc16/v1.61/bin/bin/../../lib\libm-elf.a(muldi3.daeo)
+                              build/default/production/delay.o (___muldi3)
+c:/programfiles/microchip/xc16/v1.61/bin/bin/../../lib\libm-elf.a(umuldi3.daeo)
+                              c:/programfiles/microchip/xc16/v1.61/bin/bin/../../lib\libm-elf.a(muldi3.daeo) (___umuldi3)
+c:/programfiles/microchip/xc16/v1.61/bin/bin/../../lib\liblega-c-elf.a(memcpy.DA_eo)
                               build/default/production/gen2.o (_memcpy)
-c:/program files/microchip/xc16/v1.61/bin/bin/../../lib\liblega-c-elf.a(memset.DA_eo)
+c:/programfiles/microchip/xc16/v1.61/bin/bin/../../lib\liblega-c-elf.a(memset.DA_eo)
                               build/default/production/as3993.o (_memset)
 
 
@@ -90,28 +92,28 @@ Default Scalar Model: Small
 
 section                    address   length (PC units)   length (bytes) (dec)
 -------                    -------   -----------------   --------------------
-.text                        0x200               0x4ca           0x72f  (1839)
-.text                        0x6ca              0x2502          0x3783  (14211)
-.dinit                      0x2bcc                0x5a            0x87  (135)
-.text                       0x2c26                0x4c            0x72  (114)
-.init.delay32               0x2c72                0x1c            0x2a  (42)
-.text                       0x2c8e                0x56            0x81  (129)
+.text                        0x200               0x4e2           0x753  (1875)
+.text                        0x6e2              0x2546          0x37e9  (14313)
+.dinit                      0x2c28                0x5a            0x87  (135)
+.text                       0x2c82                0xde           0x14d  (333)
+.init.delay32               0x2d60                0x1c            0x2a  (42)
+.text                       0x2d7c                0x56            0x81  (129)
 
-                 Total "program" memory used (bytes):         0x4056  (16470) 6%
+                 Total "program" memory used (bytes):         0x41bb  (16827) 6%
 
 
 "data" Memory  [Origin = 0x800, Length = 0x18000]
 
 section                    address      alignment gaps    total length  (dec)
 -------                    -------      --------------    -------------------
-.nbss                        0x800                   0            0x1a  (26)
-.ndata                       0x81a                   0             0xa  (10)
-.nbss                        0x824                   0             0x4  (4)
-.bss                         0x828                   0           0x2f6  (758)
-.data                        0xb1e                   0             0x8  (8)
-.bss                         0xb26                   0             0x2  (2)
+.nbss                        0x800                   0            0x26  (38)
+.ndata                       0x826                   0             0xa  (10)
+.nbss                        0x830                   0             0x4  (4)
+.bss                         0x834                   0           0x2f6  (758)
+.data                        0xb2a                   0             0x8  (8)
+.bss                         0xb32                   0             0x2  (2)
 
-                 Total "data" memory used (bytes):          0x328  (808) <1%
+                 Total "data" memory used (bytes):          0x334  (820) <1%
 
 
 Dynamic Memory Usage
@@ -119,9 +121,9 @@ Dynamic Memory Usage
 region                     address                      maximum length  (dec)
 ------                     -------                      ---------------------
 heap                             0                                   0  (0)
-stack                        0xb28                              0x74d8  (29912)
+stack                        0xb34                              0x74cc  (29900)
 
-                 Maximum dynamic memory (bytes):         0x74d8  (29912)
+                 Maximum dynamic memory (bytes):         0x74cc  (29900)
 
 Info: Project is using a large data memory model when small data memory model is sufficient.
 
@@ -139,34 +141,46 @@ External Symbols in Data Memory (by address):
                     0x080c                  _RFID_AS3993_SPI_wrapper_readWrite
                     0x080e                  _RFID_AS3993_wrapper_delay_ms
                     0x0810                  _RFID_AS3993_wrapper_delay_us
-                    0x0818                  _selectedTag
-                    0x0820                  _gen2qbegin
-                    0x0824                  _TMR3_InterruptHandler
-                    0x0826                  _readerInitStatus
-                    0x0827                  _num_of_tags
-                    0x089e                  _tags_
-                    0x099a                  _Frequencies
+                    0x0812                  _RFID_AS3993_wrapper_enableExtInterrupt
+                    0x0814                  _RFID_AS3993_wrapper_disableExtInterrupt
+                    0x0816                  _RFID_AS3993_wrapper_clearExtInterrupt
+                    0x0818                  _RFID_AS3993_wrapper_setEnablePin
+                    0x081a                  _RFID_AS3993_wrapper_isEnabled
+                    0x081c                  _RFID_AS3993_wrapper_setSpiEnablePin
+                    0x0824                  _selectedTag
+                    0x082c                  _gen2qbegin
+                    0x0830                  _TMR3_InterruptHandler
+                    0x0832                  _readerInitStatus
+                    0x0833                  _num_of_tags
+                    0x08aa                  _tags_
+                    0x09a6                  _Frequencies
 
 External Symbols in Data Memory (by name):
 
-                    0x099a                  _Frequencies
+                    0x09a6                  _Frequencies
                     0x080c                  _RFID_AS3993_SPI_wrapper_readWrite
+                    0x0816                  _RFID_AS3993_wrapper_clearExtInterrupt
                     0x080e                  _RFID_AS3993_wrapper_delay_ms
                     0x0810                  _RFID_AS3993_wrapper_delay_us
-                    0x0824                  _TMR3_InterruptHandler
+                    0x0814                  _RFID_AS3993_wrapper_disableExtInterrupt
+                    0x0812                  _RFID_AS3993_wrapper_enableExtInterrupt
+                    0x081a                  _RFID_AS3993_wrapper_isEnabled
+                    0x0818                  _RFID_AS3993_wrapper_setEnablePin
+                    0x081c                  _RFID_AS3993_wrapper_setSpiEnablePin
+                    0x0830                  _TMR3_InterruptHandler
                     0x0800                  _as3993Response
                     0x0806                  _autoAckMode
                     0x080a                  _currentSession
                     0x0805                  _cyclicInventory
                     0x0807                  _fastInventory
-                    0x0820                  _gen2qbegin
+                    0x082c                  _gen2qbegin
                     0x0809                  _inventoryResult
-                    0x0827                  _num_of_tags
-                    0x0826                  _readerInitStatus
+                    0x0833                  _num_of_tags
+                    0x0832                  _readerInitStatus
                     0x0808                  _rssiMode
                     0x0804                  _rssiThreshold
-                    0x0818                  _selectedTag
-                    0x089e                  _tags_
+                    0x0824                  _selectedTag
+                    0x08aa                  _tags_
 
 External Symbols in Program Memory (by address):
 
@@ -174,229 +188,253 @@ External Symbols in Program Memory (by address):
                   0x00023c                  __psv_init
                   0x000252                  __data_init_da
                   0x000252                  __data_init
-                  0x000318                  __OscillatorFail
-                  0x000338                  __StackError
-                  0x00035a                  __AddressError
-                  0x00037a                  __MathError
-                  0x00039a                  __INT1Interrupt
-                  0x0003b8                  __T3Interrupt
-                  0x0003ee                  __DefaultInterrupt
-                  0x0003f4                  ___udivsi3
-                  0x000460                  ___udivmoddi3
-                  0x000546                  ___udivdi3
-                  0x000554                  ___umoddi3
-                  0x00055c                  ___divdi3
-                  0x0005bc                  ___moddi3
-                  0x000618                  ___muldi3
-                  0x00066a                  ___umuldi3
-                  0x0006ae                  _memcpy
-                  0x0006bc                  _memset
-                  0x000710                  _gen2Select
-                  0x0008aa                  _gen2QueryMeasureRSSI
-                  0x000cb6                  _gen2AccessTag
-                  0x000d60                  _gen2LockTag
-                  0x000dd8                  _gen2KillTag
-                  0x000eb0                  _gen2WriteWordToTag
-                  0x000fc8                  _gen2ReadFromTag
-                  0x001068                  _gen2PrintGen2Settings
-                  0x001076                  _gen2SearchForTags
-                  0x001236                  _gen2SearchForTagsAutoAck
-                  0x00139a                  _gen2Configure
-                  0x0015e0                  _gen2Open
-                  0x0015ec                  _gen2Close
-                  0x0015f2                  _u32ToEbv
-                  0x001674                  _checkAndSetSession
-                  0x0016a4                  _insertBitStream
-                  0x001778                  build/default/production/gen2.o:_continueCheckTimeout
-                  0x001780                  _performSelects
-                  0x0017a4                  _inventoryGen2
-                  0x00183a                  _RFID_AS3993_load_callbacks
-                  0x001852                  _RFID_AS3993_delay_ms
-                  0x001860                  _RFID_AS3993_delay_us
-                  0x00186e                  _RFID_AS3993_SPI_readWrite
-                  0x001884                  _writeReadAS3993
-                  0x0018c4                  _writeReadAS3993Isr
-                  0x0018ee                  _as3993Initialize
-                  0x001a8a                  _as3993Isr
-                  0x001aba                  _as3993ReadChipVersion
-                  0x001ad2                  _as3993SingleCommand
-                  0x001aec                  _as3993SingleWriteNoStop
-                  0x001b0c                  _as3993ContinuousRead
-                  0x001b32                  _as3993FifoRead
-                  0x001b50                  _as3993SingleRead
-                  0x001b72                  _as3993ContinuousWrite
-                  0x001ba0                  _as3993SingleWrite
-                  0x001bc4                  _as3993CommandContinuousAddress
-                  0x001c02                  _as3993WaitForResponseTimed
-                  0x001c34                  _as3993WaitForResponse
-                  0x001c68                  _as3993SelectLinkFrequency
-                  0x001d0c                  _as3993SetBaseFrequency
-                  0x001e6c                  _as3993EnterPowerDownMode
-                  0x001f1a                  _as3993ExitPowerDownMode
-                  0x001fbc                  _as3993Reset
-                  0x001fcc                  _as3993ResetDoNotPreserveRegisters
-                  0x001fe2                  _as3993EnterPowerNormalMode
-                  0x001ffc                  _as3993ExitPowerNormalMode
-                  0x002002                  _as3993EnterPowerNormalRfMode
-                  0x00201c                  _as3993ExitPowerNormalRfMode
-                  0x002022                  _as3993EnterPowerStandbyMode
-                  0x00203c                  _as3993ExitPowerStandbyMode
-                  0x002052                  _as3993WaitForStartup
-                  0x00209a                  _as3993AntennaPower
-                  0x00213c                  _as3993SaveSensitivity
-                  0x002148                  _as3993RestoreSensitivity
-                  0x002156                  _as3993GetSensitivity
-                  0x0021fa                  _as3993SetSensitivity
-                  0x0022dc                  _as3993GetRSSI
-                  0x002450                  _as3993GetADC
-                  0x00247a                  _as3993GetReflectedPower
-                  0x0024e8                  _as3993GetReflectedPowerNoiseLevel
-                  0x002556                  _as3993TxRxGen2Bytes
-                  0x002806                  _powerDownReader
-                  0x00283a                  _powerUpReader
-                  0x00286e                  _SPI1_Initialize
-                  0x002880                  _SPI1_Exchange
-                  0x0028b0                  _SPI1_ExchangeBuffer
-                  0x00297a                  _SPI1_Exchange8bit
-                  0x00298a                  _SPI1_Exchange8bitBuffer
-                  0x00299e                  _SPI1_TransferModeGet
-                  0x0029b4                  _SPI1_StatusGet
-                  0x0029bc                  _PIN_MANAGER_Initialize
-                  0x002a88                  _TMR3_Initialize
-                  0x002aac                  _TMR3_Period16BitSet
-                  0x002abe                  _TMR3_Period16BitGet
-                  0x002ac6                  _TMR3_Counter16BitSet
-                  0x002ad8                  _TMR3_Counter16BitGet
-                  0x002ae6                  _TMR3_SetInterruptHandler
-                  0x002af6                  _TMR3_Start
-                  0x002b06                  _TMR3_Stop
-                  0x002b10                  _TMR3_GetElapsedThenClear
-                  0x002b28                  _TMR3_SoftwareCounterGet
-                  0x002b34                  _TMR3_SoftwareCounterClear
-                  0x002b40                  _EX_INT1_CallBack
-                  0x002b48                  _Delay_ms
-                  0x002b6a                  _Delay_us
-                  0x002b8c                  _main
-                  0x002c26                  _CLOCK_Initialize
-                  0x002c72                  ___delay32
-                  0x002c8e                  _INTERRUPT_Initialize
-                  0x002cc0                  _SYSTEM_Initialize
-                  0x002cd8                  _EXT_INT_Initialize
+                  0x000330                  __OscillatorFail
+                  0x000350                  __StackError
+                  0x000372                  __AddressError
+                  0x000392                  __MathError
+                  0x0003b2                  __INT1Interrupt
+                  0x0003d0                  __T3Interrupt
+                  0x000406                  __DefaultInterrupt
+                  0x00040c                  ___udivsi3
+                  0x000478                  ___udivmoddi3
+                  0x00055e                  ___udivdi3
+                  0x00056c                  ___umoddi3
+                  0x000574                  ___divdi3
+                  0x0005d4                  ___moddi3
+                  0x000630                  ___muldi3
+                  0x000682                  ___umuldi3
+                  0x0006c6                  _memcpy
+                  0x0006d4                  _memset
+                  0x000728                  _gen2Select
+                  0x0008c2                  _gen2QueryMeasureRSSI
+                  0x000cce                  _gen2AccessTag
+                  0x000d78                  _gen2LockTag
+                  0x000df0                  _gen2KillTag
+                  0x000ec8                  _gen2WriteWordToTag
+                  0x000fe0                  _gen2ReadFromTag
+                  0x001080                  _gen2PrintGen2Settings
+                  0x00108e                  _gen2SearchForTags
+                  0x00124e                  _gen2SearchForTagsAutoAck
+                  0x0013b2                  _gen2Configure
+                  0x0015f8                  _gen2Open
+                  0x001604                  _gen2Close
+                  0x00160a                  _u32ToEbv
+                  0x00168c                  _checkAndSetSession
+                  0x0016bc                  _insertBitStream
+                  0x001790                  build/default/production/gen2.o:_continueCheckTimeout
+                  0x001798                  _performSelects
+                  0x0017bc                  _inventoryGen2
+                  0x001850                  _RFID_AS3993_load_callbacks
+                  0x00188a                  _RFID_AS3993_delay_ms
+                  0x001898                  _RFID_AS3993_delay_us
+                  0x0018a6                  _RFID_AS3993_SPI_readWrite
+                  0x0018bc                  _RFID_AS3993_enableExtInterrupt
+                  0x0018c6                  _RFID_AS3993_disableExtInterrupt
+                  0x0018d0                  _RFID_AS3993_clearExtInterrupt
+                  0x0018da                  _RFID_AS3993_setEnablePin
+                  0x0018e8                  _RFID_AS3993_isEnabled
+                  0x0018f2                  _RFID_AS3993_setSpiEnablePin
+                  0x001900                  _writeReadAS3993
+                  0x001944                  _writeReadAS3993Isr
+                  0x001972                  _as3993Initialize
+                  0x001b0e                  _as3993Isr
+                  0x001b3e                  _as3993ReadChipVersion
+                  0x001b56                  _as3993SingleCommand
+                  0x001b70                  _as3993SingleWriteNoStop
+                  0x001b90                  _as3993ContinuousRead
+                  0x001bb6                  _as3993FifoRead
+                  0x001bd4                  _as3993SingleRead
+                  0x001bf6                  _as3993ContinuousWrite
+                  0x001c24                  _as3993SingleWrite
+                  0x001c48                  _as3993CommandContinuousAddress
+                  0x001c86                  _as3993WaitForResponseTimed
+                  0x001cb8                  _as3993WaitForResponse
+                  0x001cec                  _as3993SelectLinkFrequency
+                  0x001d90                  _as3993SetBaseFrequency
+                  0x001ef0                  _as3993EnterPowerDownMode
+                  0x001f9e                  _as3993ExitPowerDownMode
+                  0x002040                  _as3993Reset
+                  0x002050                  _as3993ResetDoNotPreserveRegisters
+                  0x00206a                  _as3993EnterPowerNormalMode
+                  0x002084                  _as3993ExitPowerNormalMode
+                  0x00208a                  _as3993EnterPowerNormalRfMode
+                  0x0020a4                  _as3993ExitPowerNormalRfMode
+                  0x0020aa                  _as3993EnterPowerStandbyMode
+                  0x0020c4                  _as3993ExitPowerStandbyMode
+                  0x0020da                  _as3993WaitForStartup
+                  0x002122                  _as3993AntennaPower
+                  0x0021c4                  _as3993SaveSensitivity
+                  0x0021d0                  _as3993RestoreSensitivity
+                  0x0021de                  _as3993GetSensitivity
+                  0x002282                  _as3993SetSensitivity
+                  0x002364                  _as3993GetRSSI
+                  0x0024d8                  _as3993GetADC
+                  0x002502                  _as3993GetReflectedPower
+                  0x002570                  _as3993GetReflectedPowerNoiseLevel
+                  0x0025de                  _as3993TxRxGen2Bytes
+                  0x00288e                  _powerDownReader
+                  0x0028c2                  _powerUpReader
+                  0x0028f6                  _SPI1_Initialize
+                  0x002908                  _SPI1_Exchange
+                  0x002938                  _SPI1_ExchangeBuffer
+                  0x002a02                  _SPI1_Exchange8bit
+                  0x002a12                  _SPI1_Exchange8bitBuffer
+                  0x002a26                  _SPI1_TransferModeGet
+                  0x002a3c                  _SPI1_StatusGet
+                  0x002a44                  _PIN_MANAGER_Initialize
+                  0x002b10                  _TMR3_Initialize
+                  0x002b34                  _TMR3_Period16BitSet
+                  0x002b46                  _TMR3_Period16BitGet
+                  0x002b4e                  _TMR3_Counter16BitSet
+                  0x002b60                  _TMR3_Counter16BitGet
+                  0x002b6e                  _TMR3_SetInterruptHandler
+                  0x002b7e                  _TMR3_Start
+                  0x002b8e                  _TMR3_Stop
+                  0x002b98                  _TMR3_GetElapsedThenClear
+                  0x002bb0                  _TMR3_SoftwareCounterGet
+                  0x002bbc                  _TMR3_SoftwareCounterClear
+                  0x002bc8                  _EX_INT1_CallBack
+                  0x002bd0                  _enableExtInterrupt
+                  0x002bd8                  _disableExtInterrupt
+                  0x002be0                  _clearExtInterrupt
+                  0x002be8                  _setAS3993_enablePin
+                  0x002c02                  _AS3993_isEnabled
+                  0x002c0e                  _setAS3993_SPI_enablePin
+                  0x002c82                  _main
+                  0x002cd0                  _CLOCK_Initialize
+                  0x002d1c                  _delay_ms
+                  0x002d3e                  _delay_us
+                  0x002d60                  ___delay32
+                  0x002d7c                  _INTERRUPT_Initialize
+                  0x002dae                  _SYSTEM_Initialize
+                  0x002dc6                  _EXT_INT_Initialize
 
 External Symbols in Program Memory (by name):
 
-                  0x002c26                  _CLOCK_Initialize
-                  0x002b48                  _Delay_ms
-                  0x002b6a                  _Delay_us
-                  0x002cd8                  _EXT_INT_Initialize
-                  0x002b40                  _EX_INT1_CallBack
-                  0x002c8e                  _INTERRUPT_Initialize
-                  0x0029bc                  _PIN_MANAGER_Initialize
-                  0x00186e                  _RFID_AS3993_SPI_readWrite
-                  0x001852                  _RFID_AS3993_delay_ms
-                  0x001860                  _RFID_AS3993_delay_us
-                  0x00183a                  _RFID_AS3993_load_callbacks
-                  0x002880                  _SPI1_Exchange
-                  0x00297a                  _SPI1_Exchange8bit
-                  0x00298a                  _SPI1_Exchange8bitBuffer
-                  0x0028b0                  _SPI1_ExchangeBuffer
-                  0x00286e                  _SPI1_Initialize
-                  0x0029b4                  _SPI1_StatusGet
-                  0x00299e                  _SPI1_TransferModeGet
-                  0x002cc0                  _SYSTEM_Initialize
-                  0x002ad8                  _TMR3_Counter16BitGet
-                  0x002ac6                  _TMR3_Counter16BitSet
-                  0x002b10                  _TMR3_GetElapsedThenClear
-                  0x002a88                  _TMR3_Initialize
-                  0x002abe                  _TMR3_Period16BitGet
-                  0x002aac                  _TMR3_Period16BitSet
-                  0x002ae6                  _TMR3_SetInterruptHandler
-                  0x002b34                  _TMR3_SoftwareCounterClear
-                  0x002b28                  _TMR3_SoftwareCounterGet
-                  0x002af6                  _TMR3_Start
-                  0x002b06                  _TMR3_Stop
-                  0x00035a                  __AddressError
-                  0x0003ee                  __DefaultInterrupt
-                  0x00039a                  __INT1Interrupt
-                  0x00037a                  __MathError
-                  0x000318                  __OscillatorFail
-                  0x000338                  __StackError
-                  0x0003b8                  __T3Interrupt
-                  0x002c72                  ___delay32
-                  0x00055c                  ___divdi3
-                  0x0005bc                  ___moddi3
-                  0x000618                  ___muldi3
-                  0x000546                  ___udivdi3
-                  0x000460                  ___udivmoddi3
-                  0x0003f4                  ___udivsi3
-                  0x000554                  ___umoddi3
-                  0x00066a                  ___umuldi3
+                  0x002c02                  _AS3993_isEnabled
+                  0x002cd0                  _CLOCK_Initialize
+                  0x002dc6                  _EXT_INT_Initialize
+                  0x002bc8                  _EX_INT1_CallBack
+                  0x002d7c                  _INTERRUPT_Initialize
+                  0x002a44                  _PIN_MANAGER_Initialize
+                  0x0018a6                  _RFID_AS3993_SPI_readWrite
+                  0x0018d0                  _RFID_AS3993_clearExtInterrupt
+                  0x00188a                  _RFID_AS3993_delay_ms
+                  0x001898                  _RFID_AS3993_delay_us
+                  0x0018c6                  _RFID_AS3993_disableExtInterrupt
+                  0x0018bc                  _RFID_AS3993_enableExtInterrupt
+                  0x0018e8                  _RFID_AS3993_isEnabled
+                  0x001850                  _RFID_AS3993_load_callbacks
+                  0x0018da                  _RFID_AS3993_setEnablePin
+                  0x0018f2                  _RFID_AS3993_setSpiEnablePin
+                  0x002908                  _SPI1_Exchange
+                  0x002a02                  _SPI1_Exchange8bit
+                  0x002a12                  _SPI1_Exchange8bitBuffer
+                  0x002938                  _SPI1_ExchangeBuffer
+                  0x0028f6                  _SPI1_Initialize
+                  0x002a3c                  _SPI1_StatusGet
+                  0x002a26                  _SPI1_TransferModeGet
+                  0x002dae                  _SYSTEM_Initialize
+                  0x002b60                  _TMR3_Counter16BitGet
+                  0x002b4e                  _TMR3_Counter16BitSet
+                  0x002b98                  _TMR3_GetElapsedThenClear
+                  0x002b10                  _TMR3_Initialize
+                  0x002b46                  _TMR3_Period16BitGet
+                  0x002b34                  _TMR3_Period16BitSet
+                  0x002b6e                  _TMR3_SetInterruptHandler
+                  0x002bbc                  _TMR3_SoftwareCounterClear
+                  0x002bb0                  _TMR3_SoftwareCounterGet
+                  0x002b7e                  _TMR3_Start
+                  0x002b8e                  _TMR3_Stop
+                  0x000372                  __AddressError
+                  0x000406                  __DefaultInterrupt
+                  0x0003b2                  __INT1Interrupt
+                  0x000392                  __MathError
+                  0x000330                  __OscillatorFail
+                  0x000350                  __StackError
+                  0x0003d0                  __T3Interrupt
+                  0x002d60                  ___delay32
+                  0x000574                  ___divdi3
+                  0x0005d4                  ___moddi3
+                  0x000630                  ___muldi3
+                  0x00055e                  ___udivdi3
+                  0x000478                  ___udivmoddi3
+                  0x00040c                  ___udivsi3
+                  0x00056c                  ___umoddi3
+                  0x000682                  ___umuldi3
                   0x000252                  __data_init
                   0x000252                  __data_init_da
                   0x00023c                  __psv_init
                   0x000200                  __resetPRI
-                  0x00209a                  _as3993AntennaPower
-                  0x001bc4                  _as3993CommandContinuousAddress
-                  0x001b0c                  _as3993ContinuousRead
-                  0x001b72                  _as3993ContinuousWrite
-                  0x001e6c                  _as3993EnterPowerDownMode
-                  0x001fe2                  _as3993EnterPowerNormalMode
-                  0x002002                  _as3993EnterPowerNormalRfMode
-                  0x002022                  _as3993EnterPowerStandbyMode
-                  0x001f1a                  _as3993ExitPowerDownMode
-                  0x001ffc                  _as3993ExitPowerNormalMode
-                  0x00201c                  _as3993ExitPowerNormalRfMode
-                  0x00203c                  _as3993ExitPowerStandbyMode
-                  0x001b32                  _as3993FifoRead
-                  0x002450                  _as3993GetADC
-                  0x0022dc                  _as3993GetRSSI
-                  0x00247a                  _as3993GetReflectedPower
-                  0x0024e8                  _as3993GetReflectedPowerNoiseLevel
-                  0x002156                  _as3993GetSensitivity
-                  0x0018ee                  _as3993Initialize
-                  0x001a8a                  _as3993Isr
-                  0x001aba                  _as3993ReadChipVersion
-                  0x001fbc                  _as3993Reset
-                  0x001fcc                  _as3993ResetDoNotPreserveRegisters
-                  0x002148                  _as3993RestoreSensitivity
-                  0x00213c                  _as3993SaveSensitivity
-                  0x001c68                  _as3993SelectLinkFrequency
-                  0x001d0c                  _as3993SetBaseFrequency
-                  0x0021fa                  _as3993SetSensitivity
-                  0x001ad2                  _as3993SingleCommand
-                  0x001b50                  _as3993SingleRead
-                  0x001ba0                  _as3993SingleWrite
-                  0x001aec                  _as3993SingleWriteNoStop
-                  0x002556                  _as3993TxRxGen2Bytes
-                  0x001c34                  _as3993WaitForResponse
-                  0x001c02                  _as3993WaitForResponseTimed
-                  0x002052                  _as3993WaitForStartup
-                  0x001674                  _checkAndSetSession
-                  0x000cb6                  _gen2AccessTag
-                  0x0015ec                  _gen2Close
-                  0x00139a                  _gen2Configure
-                  0x000dd8                  _gen2KillTag
-                  0x000d60                  _gen2LockTag
-                  0x0015e0                  _gen2Open
-                  0x001068                  _gen2PrintGen2Settings
-                  0x0008aa                  _gen2QueryMeasureRSSI
-                  0x000fc8                  _gen2ReadFromTag
-                  0x001076                  _gen2SearchForTags
-                  0x001236                  _gen2SearchForTagsAutoAck
-                  0x000710                  _gen2Select
-                  0x000eb0                  _gen2WriteWordToTag
-                  0x0016a4                  _insertBitStream
-                  0x0017a4                  _inventoryGen2
-                  0x002b8c                  _main
-                  0x0006ae                  _memcpy
-                  0x0006bc                  _memset
-                  0x001780                  _performSelects
-                  0x002806                  _powerDownReader
-                  0x00283a                  _powerUpReader
-                  0x0015f2                  _u32ToEbv
-                  0x001884                  _writeReadAS3993
-                  0x0018c4                  _writeReadAS3993Isr
-                  0x001778                  build/default/production/gen2.o:_continueCheckTimeout
+                  0x002122                  _as3993AntennaPower
+                  0x001c48                  _as3993CommandContinuousAddress
+                  0x001b90                  _as3993ContinuousRead
+                  0x001bf6                  _as3993ContinuousWrite
+                  0x001ef0                  _as3993EnterPowerDownMode
+                  0x00206a                  _as3993EnterPowerNormalMode
+                  0x00208a                  _as3993EnterPowerNormalRfMode
+                  0x0020aa                  _as3993EnterPowerStandbyMode
+                  0x001f9e                  _as3993ExitPowerDownMode
+                  0x002084                  _as3993ExitPowerNormalMode
+                  0x0020a4                  _as3993ExitPowerNormalRfMode
+                  0x0020c4                  _as3993ExitPowerStandbyMode
+                  0x001bb6                  _as3993FifoRead
+                  0x0024d8                  _as3993GetADC
+                  0x002364                  _as3993GetRSSI
+                  0x002502                  _as3993GetReflectedPower
+                  0x002570                  _as3993GetReflectedPowerNoiseLevel
+                  0x0021de                  _as3993GetSensitivity
+                  0x001972                  _as3993Initialize
+                  0x001b0e                  _as3993Isr
+                  0x001b3e                  _as3993ReadChipVersion
+                  0x002040                  _as3993Reset
+                  0x002050                  _as3993ResetDoNotPreserveRegisters
+                  0x0021d0                  _as3993RestoreSensitivity
+                  0x0021c4                  _as3993SaveSensitivity
+                  0x001cec                  _as3993SelectLinkFrequency
+                  0x001d90                  _as3993SetBaseFrequency
+                  0x002282                  _as3993SetSensitivity
+                  0x001b56                  _as3993SingleCommand
+                  0x001bd4                  _as3993SingleRead
+                  0x001c24                  _as3993SingleWrite
+                  0x001b70                  _as3993SingleWriteNoStop
+                  0x0025de                  _as3993TxRxGen2Bytes
+                  0x001cb8                  _as3993WaitForResponse
+                  0x001c86                  _as3993WaitForResponseTimed
+                  0x0020da                  _as3993WaitForStartup
+                  0x00168c                  _checkAndSetSession
+                  0x002be0                  _clearExtInterrupt
+                  0x002d1c                  _delay_ms
+                  0x002d3e                  _delay_us
+                  0x002bd8                  _disableExtInterrupt
+                  0x002bd0                  _enableExtInterrupt
+                  0x000cce                  _gen2AccessTag
+                  0x001604                  _gen2Close
+                  0x0013b2                  _gen2Configure
+                  0x000df0                  _gen2KillTag
+                  0x000d78                  _gen2LockTag
+                  0x0015f8                  _gen2Open
+                  0x001080                  _gen2PrintGen2Settings
+                  0x0008c2                  _gen2QueryMeasureRSSI
+                  0x000fe0                  _gen2ReadFromTag
+                  0x00108e                  _gen2SearchForTags
+                  0x00124e                  _gen2SearchForTagsAutoAck
+                  0x000728                  _gen2Select
+                  0x000ec8                  _gen2WriteWordToTag
+                  0x0016bc                  _insertBitStream
+                  0x0017bc                  _inventoryGen2
+                  0x002c82                  _main
+                  0x0006c6                  _memcpy
+                  0x0006d4                  _memset
+                  0x001798                  _performSelects
+                  0x00288e                  _powerDownReader
+                  0x0028c2                  _powerUpReader
+                  0x002c0e                  _setAS3993_SPI_enablePin
+                  0x002be8                  _setAS3993_enablePin
+                  0x00160a                  _u32ToEbv
+                  0x001900                  _writeReadAS3993
+                  0x001944                  _writeReadAS3993Isr
+                  0x001790                  build/default/production/gen2.o:_continueCheckTimeout
 
 Memory Configuration
 
@@ -427,9 +465,11 @@ LOAD build/default/production/mcc_generated_files/tmr3.o
 LOAD build/default/production/main.o
 LOAD build/default/production/as3993.o
 LOAD build/default/production/gen2.o
+LOAD build/default/production/bsp.o
+LOAD build/default/production/delay.o
                     0x0001                  __MPLAB_BUILD = 0x1
 LOAD pPIC24Fxxx
-LOAD c:/program files/microchip/xc16/v1.61/bin/bin/../../lib\libfx-elf.a
+LOAD c:/programfiles/microchip/xc16/v1.61/bin/bin/../../lib\libfx-elf.a
                     0x2abf8                  __CONFIG4 = 0x2abf8
                     0x2abfa                  __CONFIG3 = 0x2abfa
                     0x2abfc                  __CONFIG2 = 0x2abfc
@@ -447,68 +487,68 @@ LOAD c:/program files/microchip/xc16/v1.61/bin/bin/../../lib\libfx-elf.a
                   0x000002          0x2 SHORT 0x0 ((ABSOLUTE (__reset) >> 0x10) & 0x7f)
                   0x000003          0x2 SHORT 0x0
 
-.text             0x000200        0x4ca
+.text             0x000200        0x4e2
  *(.init)
- .init            0x000200         0x4c c:/program files/microchip/xc16/v1.61/bin/bin/../../lib\liblega-pic30-elf.a(crt0_extended24.o)
+ .init            0x000200         0x4c c:/programfiles/microchip/xc16/v1.61/bin/bin/../../lib\liblega-pic30-elf.a(crt0_extended24.o)
                   0x000200                  __resetPRI
                   0x000200                  __reset
                   0x00023c                  __psv_init
- .init            0x00024c         0xb8 c:/program files/microchip/xc16/v1.61/bin/bin/../../lib\liblega-pic30-elf.a(data_init_24.o)
+ .init            0x00024c         0xb8 c:/programfiles/microchip/xc16/v1.61/bin/bin/../../lib\liblega-pic30-elf.a(data_init_24.o)
                   0x000252                  __data_init
                   0x000252                  __data_init_da
  *(.user_init)
  *(.handle)
- .handle          0x000304         0x14 jump_table
+ .handle          0x000304         0x2c jump_table
  *(.isr*)
- .isr.text        0x000318         0x82 build/default/production/mcc_generated_files/traps.o
-                  0x000318                  __OscillatorFail
-                  0x000338                  __StackError
-                  0x00035a                  __AddressError
-                  0x00037a                  __MathError
- .isr.text        0x00039a         0x1e build/default/production/mcc_generated_files/ext_int.o
-                  0x00039a                  __INT1Interrupt
- .isr.text        0x0003b8         0x36 build/default/production/mcc_generated_files/tmr3.o
-                  0x0003b8                  __T3Interrupt
- .isr             0x0003ee          0x4 default_isr
-                  0x0003ee                  __DefaultInterrupt
+ .isr.text        0x000330         0x82 build/default/production/mcc_generated_files/traps.o
+                  0x000330                  __OscillatorFail
+                  0x000350                  __StackError
+                  0x000372                  __AddressError
+                  0x000392                  __MathError
+ .isr.text        0x0003b2         0x1e build/default/production/mcc_generated_files/ext_int.o
+                  0x0003b2                  __INT1Interrupt
+ .isr.text        0x0003d0         0x36 build/default/production/mcc_generated_files/tmr3.o
+                  0x0003d0                  __T3Interrupt
+ .isr             0x000406          0x4 default_isr
+                  0x000406                  __DefaultInterrupt
  *(.libc)
  *(.libm)
  *(.libdsp)
  *(.lib*)
  .libpic30_crt_start_mode
-                  0x0003f2          0x2 c:/program files/microchip/xc16/v1.61/bin/bin/../../lib\liblega-pic30-elf.a(crt_start_mode_normalda.Leo)
-                  0x0003f2                  __crt_start_mode
-                  0x0003f2                  __crt_start_mode_normal
- .libm.udivsi3    0x0003f4         0x20 c:/program files/microchip/xc16/v1.61/bin/bin/../../lib\libm-elf.a(udivsi3.daeo)
-                  0x0003f4                  ___udivsi3
+                  0x00040a          0x2 c:/programfiles/microchip/xc16/v1.61/bin/bin/../../lib\liblega-pic30-elf.a(crt_start_mode_normalda.Leo)
+                  0x00040a                  __crt_start_mode
+                  0x00040a                  __crt_start_mode_normal
+ .libm.udivsi3    0x00040c         0x20 c:/programfiles/microchip/xc16/v1.61/bin/bin/../../lib\libm-elf.a(udivsi3.daeo)
+                  0x00040c                  ___udivsi3
  .libm.__PplusBdi
-                  0x000414         0x26 c:/program files/microchip/xc16/v1.61/bin/bin/../../lib\libm-elf.a(divmoddi3.daeo)
+                  0x00042c         0x26 c:/programfiles/microchip/xc16/v1.61/bin/bin/../../lib\libm-elf.a(divmoddi3.daeo)
  .libm.__PminusBdi
-                  0x00043a         0x26 c:/program files/microchip/xc16/v1.61/bin/bin/../../lib\libm-elf.a(divmoddi3.daeo)
+                  0x000452         0x26 c:/programfiles/microchip/xc16/v1.61/bin/bin/../../lib\libm-elf.a(divmoddi3.daeo)
  .libm.__udivmoddi3
-                  0x000460         0xe6 c:/program files/microchip/xc16/v1.61/bin/bin/../../lib\libm-elf.a(divmoddi3.daeo)
-                  0x000460                  ___udivmoddi3
+                  0x000478         0xe6 c:/programfiles/microchip/xc16/v1.61/bin/bin/../../lib\libm-elf.a(divmoddi3.daeo)
+                  0x000478                  ___udivmoddi3
  .libm.__udivdi3
-                  0x000546          0xe c:/program files/microchip/xc16/v1.61/bin/bin/../../lib\libm-elf.a(divmoddi3.daeo)
-                  0x000546                  ___udivdi3
+                  0x00055e          0xe c:/programfiles/microchip/xc16/v1.61/bin/bin/../../lib\libm-elf.a(divmoddi3.daeo)
+                  0x00055e                  ___udivdi3
  .libm.__umoddi3
-                  0x000554          0x8 c:/program files/microchip/xc16/v1.61/bin/bin/../../lib\libm-elf.a(divmoddi3.daeo)
-                  0x000554                  ___umoddi3
+                  0x00056c          0x8 c:/programfiles/microchip/xc16/v1.61/bin/bin/../../lib\libm-elf.a(divmoddi3.daeo)
+                  0x00056c                  ___umoddi3
  .libm.__divdi3
-                  0x00055c         0x60 c:/program files/microchip/xc16/v1.61/bin/bin/../../lib\libm-elf.a(divmoddi3.daeo)
-                  0x00055c                  ___divdi3
+                  0x000574         0x60 c:/programfiles/microchip/xc16/v1.61/bin/bin/../../lib\libm-elf.a(divmoddi3.daeo)
+                  0x000574                  ___divdi3
  .libm.__moddi3
-                  0x0005bc         0x5c c:/program files/microchip/xc16/v1.61/bin/bin/../../lib\libm-elf.a(divmoddi3.daeo)
-                  0x0005bc                  ___moddi3
+                  0x0005d4         0x5c c:/programfiles/microchip/xc16/v1.61/bin/bin/../../lib\libm-elf.a(divmoddi3.daeo)
+                  0x0005d4                  ___moddi3
  .libm.__muldi3
-                  0x000618         0x52 c:/program files/microchip/xc16/v1.61/bin/bin/../../lib\libm-elf.a(muldi3.daeo)
-                  0x000618                  ___muldi3
- .libm.umuldi3    0x00066a         0x44 c:/program files/microchip/xc16/v1.61/bin/bin/../../lib\libm-elf.a(umuldi3.daeo)
-                  0x00066a                  ___umuldi3
- .libc.memcpy     0x0006ae          0xe c:/program files/microchip/xc16/v1.61/bin/bin/../../lib\liblega-c-elf.a(memcpy.DA_eo)
-                  0x0006ae                  _memcpy
- .libc.memset     0x0006bc          0xe c:/program files/microchip/xc16/v1.61/bin/bin/../../lib\liblega-c-elf.a(memset.DA_eo)
-                  0x0006bc                  _memset
+                  0x000630         0x52 c:/programfiles/microchip/xc16/v1.61/bin/bin/../../lib\libm-elf.a(muldi3.daeo)
+                  0x000630                  ___muldi3
+ .libm.umuldi3    0x000682         0x44 c:/programfiles/microchip/xc16/v1.61/bin/bin/../../lib\libm-elf.a(umuldi3.daeo)
+                  0x000682                  ___umuldi3
+ .libc.memcpy     0x0006c6          0xe c:/programfiles/microchip/xc16/v1.61/bin/bin/../../lib\liblega-c-elf.a(memcpy.DA_eo)
+                  0x0006c6                  _memcpy
+ .libc.memset     0x0006d4          0xe c:/programfiles/microchip/xc16/v1.61/bin/bin/../../lib\liblega-c-elf.a(memset.DA_eo)
+                  0x0006d4                  _memset
 
 usercode
  *(usercode)
@@ -528,22 +568,24 @@ __CONFIG1
 .comment
  *(.comment)
 
-.debug_info       0x000000       0x6459
+.debug_info       0x000000       0x6a7e
  *(.debug_info)
- .debug_info      0x000000        0x440 build/default/production/mcc_generated_files/clock.o
- .debug_info      0x000440        0x4a4 build/default/production/mcc_generated_files/interrupt_manager.o
- .debug_info      0x0008e4        0x388 build/default/production/mcc_generated_files/traps.o
- .debug_info      0x000c6c        0xd20 build/default/production/mcc_generated_files/pin_manager.o
- .debug_info      0x00198c        0x31f build/default/production/mcc_generated_files/system.o
- .debug_info      0x001cab        0x90e build/default/production/mcc_generated_files/spi1.o
- .debug_info      0x0025b9        0x53c build/default/production/mcc_generated_files/ext_int.o
- .debug_info      0x002af5        0x825 build/default/production/mcc_generated_files/tmr3.o
- .debug_info      0x00331a        0x4d4 build/default/production/main.o
- .debug_info      0x0037ee       0x19c3 build/default/production/as3993.o
- .debug_info      0x0051b1       0x12a8 build/default/production/gen2.o
+ .debug_info      0x000000        0x441 build/default/production/mcc_generated_files/clock.o
+ .debug_info      0x000441        0x4a5 build/default/production/mcc_generated_files/interrupt_manager.o
+ .debug_info      0x0008e6        0x389 build/default/production/mcc_generated_files/traps.o
+ .debug_info      0x000c6f        0xd21 build/default/production/mcc_generated_files/pin_manager.o
+ .debug_info      0x001990        0x320 build/default/production/mcc_generated_files/system.o
+ .debug_info      0x001cb0        0x90f build/default/production/mcc_generated_files/spi1.o
+ .debug_info      0x0025bf        0x53d build/default/production/mcc_generated_files/ext_int.o
+ .debug_info      0x002afc        0x826 build/default/production/mcc_generated_files/tmr3.o
+ .debug_info      0x003322        0x45b build/default/production/main.o
+ .debug_info      0x00377d       0x1707 build/default/production/as3993.o
+ .debug_info      0x004e84       0x12a9 build/default/production/gen2.o
+ .debug_info      0x00612d        0x7c5 build/default/production/bsp.o
+ .debug_info      0x0068f2        0x18c build/default/production/delay.o
  *(.gnu.linkonce.wi.*)
 
-.debug_abbrev     0x000000        0xd0c
+.debug_abbrev     0x000000        0xe0a
  *(.debug_abbrev)
  .debug_abbrev    0x000000         0xc5 build/default/production/mcc_generated_files/clock.o
  .debug_abbrev    0x0000c5         0xb4 build/default/production/mcc_generated_files/interrupt_manager.o
@@ -554,26 +596,30 @@ __CONFIG1
  .debug_abbrev    0x000411        0x158 build/default/production/mcc_generated_files/spi1.o
  .debug_abbrev    0x000569         0x8a build/default/production/mcc_generated_files/ext_int.o
  .debug_abbrev    0x0005f3        0x18d build/default/production/mcc_generated_files/tmr3.o
- .debug_abbrev    0x000780        0x103 build/default/production/main.o
- .debug_abbrev    0x000883        0x230 build/default/production/as3993.o
- .debug_abbrev    0x000ab3        0x259 build/default/production/gen2.o
+ .debug_abbrev    0x000780         0xc8 build/default/production/main.o
+ .debug_abbrev    0x000848        0x23b build/default/production/as3993.o
+ .debug_abbrev    0x000a83        0x259 build/default/production/gen2.o
+ .debug_abbrev    0x000cdc         0xc7 build/default/production/bsp.o
+ .debug_abbrev    0x000da3         0x67 build/default/production/delay.o
 
-.debug_line       0x000000       0x1162
+.debug_line       0x000000       0x1287
  *(.debug_line)
- .debug_line      0x000000        0x112 build/default/production/mcc_generated_files/clock.o
- .debug_line      0x000112        0x113 build/default/production/mcc_generated_files/interrupt_manager.o
- .debug_line      0x000225         0x1a build/default/production/mcc_generated_files/mcc.o
- .debug_line      0x00023f        0x138 build/default/production/mcc_generated_files/traps.o
- .debug_line      0x000377        0x13c build/default/production/mcc_generated_files/pin_manager.o
- .debug_line      0x0004b3        0x10d build/default/production/mcc_generated_files/system.o
- .debug_line      0x0005c0        0x157 build/default/production/mcc_generated_files/spi1.o
- .debug_line      0x000717        0x121 build/default/production/mcc_generated_files/ext_int.o
- .debug_line      0x000838        0x14f build/default/production/mcc_generated_files/tmr3.o
- .debug_line      0x000987        0x10b build/default/production/main.o
- .debug_line      0x000a92        0x3b7 build/default/production/as3993.o
- .debug_line      0x000e49        0x319 build/default/production/gen2.o
+ .debug_line      0x000000        0x111 build/default/production/mcc_generated_files/clock.o
+ .debug_line      0x000111        0x112 build/default/production/mcc_generated_files/interrupt_manager.o
+ .debug_line      0x000223         0x1a build/default/production/mcc_generated_files/mcc.o
+ .debug_line      0x00023d        0x137 build/default/production/mcc_generated_files/traps.o
+ .debug_line      0x000374        0x13b build/default/production/mcc_generated_files/pin_manager.o
+ .debug_line      0x0004af        0x10c build/default/production/mcc_generated_files/system.o
+ .debug_line      0x0005bb        0x156 build/default/production/mcc_generated_files/spi1.o
+ .debug_line      0x000711        0x120 build/default/production/mcc_generated_files/ext_int.o
+ .debug_line      0x000831        0x14e build/default/production/mcc_generated_files/tmr3.o
+ .debug_line      0x00097f        0x102 build/default/production/main.o
+ .debug_line      0x000a81        0x362 build/default/production/as3993.o
+ .debug_line      0x000de3        0x318 build/default/production/gen2.o
+ .debug_line      0x0010fb        0x103 build/default/production/bsp.o
+ .debug_line      0x0011fe         0x89 build/default/production/delay.o
 
-.debug_frame      0x000000        0xcb4
+.debug_frame      0x000000        0xe22
  *(.debug_frame)
  .debug_frame     0x000000         0x2e build/default/production/mcc_generated_files/clock.o
  .debug_frame     0x00002e         0x2e build/default/production/mcc_generated_files/interrupt_manager.o
@@ -583,11 +629,13 @@ __CONFIG1
  .debug_frame     0x0001f8         0xca build/default/production/mcc_generated_files/spi1.o
  .debug_frame     0x0002c2         0x86 build/default/production/mcc_generated_files/ext_int.o
  .debug_frame     0x000348        0x18a build/default/production/mcc_generated_files/tmr3.o
- .debug_frame     0x0004d2         0x7c build/default/production/main.o
- .debug_frame     0x00054e        0x4c8 build/default/production/as3993.o
- .debug_frame     0x000a16        0x29e build/default/production/gen2.o
+ .debug_frame     0x0004d2         0x3c build/default/production/main.o
+ .debug_frame     0x00050e        0x564 build/default/production/as3993.o
+ .debug_frame     0x000a72        0x29e build/default/production/gen2.o
+ .debug_frame     0x000d10         0xca build/default/production/bsp.o
+ .debug_frame     0x000dda         0x48 build/default/production/delay.o
 
-.debug_str        0x000000        0x35a
+.debug_str        0x000000        0x432
  *(.debug_str)
  .debug_str       0x000000          0xb build/default/production/mcc_generated_files/clock.o
  .debug_str       0x00000b         0x12 build/default/production/mcc_generated_files/interrupt_manager.o
@@ -598,8 +646,9 @@ __CONFIG1
  .debug_str       0x0000c6         0x1e build/default/production/mcc_generated_files/ext_int.o
  .debug_str       0x0000e4         0x32 build/default/production/mcc_generated_files/tmr3.o
  .debug_str       0x000116         0x2f build/default/production/main.o
- .debug_str       0x000145        0x106 build/default/production/as3993.o
- .debug_str       0x00024b        0x10f build/default/production/gen2.o
+ .debug_str       0x000145        0x1ba build/default/production/as3993.o
+ .debug_str       0x0002ff        0x10f build/default/production/gen2.o
+ .debug_str       0x00040e         0x24 build/default/production/bsp.o
 
 .debug_loc
  *(.debug_loc)
@@ -608,7 +657,7 @@ __CONFIG1
  *(.debug_macinfo)
 
 .debug_pubnames
-                  0x000000        0xb03
+                  0x000000        0xd65
  *(.debug_pubnames)
  .debug_pubnames
                   0x000000         0x27 build/default/production/mcc_generated_files/clock.o
@@ -627,16 +676,20 @@ __CONFIG1
  .debug_pubnames
                   0x000215        0x156 build/default/production/mcc_generated_files/tmr3.o
  .debug_pubnames
-                  0x00036b         0x6f build/default/production/main.o
+                  0x00036b         0x40 build/default/production/main.o
  .debug_pubnames
-                  0x0003da        0x582 build/default/production/as3993.o
+                  0x0003ab        0x732 build/default/production/as3993.o
  .debug_pubnames
-                  0x00095c        0x1a7 build/default/production/gen2.o
+                  0x000add        0x1a7 build/default/production/gen2.o
+ .debug_pubnames
+                  0x000c84         0xb5 build/default/production/bsp.o
+ .debug_pubnames
+                  0x000d39         0x2c build/default/production/delay.o
 
 .debug_ranges
  *(.debug_ranges)
 
-.debug_aranges    0x000000        0x108
+.debug_aranges    0x000000        0x138
  *(.debug_aranges)
  .debug_aranges
                   0x000000         0x18 build/default/production/mcc_generated_files/clock.o
@@ -660,6 +713,10 @@ __CONFIG1
                   0x0000d8         0x18 build/default/production/as3993.o
  .debug_aranges
                   0x0000f0         0x18 build/default/production/gen2.o
+ .debug_aranges
+                  0x000108         0x18 build/default/production/bsp.o
+ .debug_aranges
+                  0x000120         0x18 build/default/production/delay.o
                     0x0000                  WREG0 = 0x0
                     0x0000                  _WREG0 = 0x0
                     0x0002                  WREG1 = 0x2
@@ -1960,9 +2017,9 @@ __CONFIG1
                     0x0230                  UART2 = 0x230
                     0x0230                  _UART2 = 0x230
 START GROUP
-LOAD c:/program files/microchip/xc16/v1.61/bin/bin/../../lib\liblega-pic30-elf.a
-LOAD c:/program files/microchip/xc16/v1.61/bin/bin/../../lib\libm-elf.a
-LOAD c:/program files/microchip/xc16/v1.61/bin/bin/../../lib\liblega-c-elf.a
+LOAD c:/programfiles/microchip/xc16/v1.61/bin/bin/../../lib\liblega-pic30-elf.a
+LOAD c:/programfiles/microchip/xc16/v1.61/bin/bin/../../lib\libm-elf.a
+LOAD c:/programfiles/microchip/xc16/v1.61/bin/bin/../../lib\liblega-c-elf.a
 END GROUP
 OUTPUT(dist/default/production/RFID_AS3993.production.elf elf32-pic30)
 LOAD jump_table
@@ -1970,77 +2027,85 @@ LOAD default_isr
 LOAD data_init
 
 .debug_pubtypes
-                  0x000108        0x579
+                  0x000138        0x5c3
  .debug_pubtypes
-                  0x000108         0x4c build/default/production/mcc_generated_files/clock.o
+                  0x000138         0x4c build/default/production/mcc_generated_files/clock.o
  .debug_pubtypes
-                  0x000154         0x59 build/default/production/mcc_generated_files/interrupt_manager.o
+                  0x000184         0x59 build/default/production/mcc_generated_files/interrupt_manager.o
  .debug_pubtypes
-                  0x0001ad         0x4e build/default/production/mcc_generated_files/traps.o
+                  0x0001dd         0x4e build/default/production/mcc_generated_files/traps.o
  .debug_pubtypes
-                  0x0001fb         0xc4 build/default/production/mcc_generated_files/pin_manager.o
+                  0x00022b         0xc4 build/default/production/mcc_generated_files/pin_manager.o
  .debug_pubtypes
-                  0x0002bf         0x42 build/default/production/mcc_generated_files/system.o
+                  0x0002ef         0x42 build/default/production/mcc_generated_files/system.o
  .debug_pubtypes
-                  0x000301         0x9c build/default/production/mcc_generated_files/spi1.o
+                  0x000331         0x9c build/default/production/mcc_generated_files/spi1.o
  .debug_pubtypes
-                  0x00039d         0x7c build/default/production/mcc_generated_files/ext_int.o
+                  0x0003cd         0x7c build/default/production/mcc_generated_files/ext_int.o
  .debug_pubtypes
-                  0x000419         0xa4 build/default/production/mcc_generated_files/tmr3.o
+                  0x000449         0xa4 build/default/production/mcc_generated_files/tmr3.o
  .debug_pubtypes
-                  0x0004bd         0x65 build/default/production/main.o
+                  0x0004ed         0x65 build/default/production/main.o
  .debug_pubtypes
-                  0x000522         0xb7 build/default/production/as3993.o
+                  0x000552         0x43 build/default/production/as3993.o
  .debug_pubtypes
-                  0x0005d9         0xa8 build/default/production/gen2.o
+                  0x000595         0xa8 build/default/production/gen2.o
+ .debug_pubtypes
+                  0x00063d         0x9f build/default/production/bsp.o
+ .debug_pubtypes
+                  0x0006dc         0x1f build/default/production/delay.o
 
 __c30_signature
-                  0x000681         0x7e
+                  0x0006fb         0x8a
  __c30_signature
-                  0x000681          0x6 build/default/production/mcc_generated_files/clock.o
+                  0x0006fb          0x6 build/default/production/mcc_generated_files/clock.o
  __c30_signature
-                  0x000687          0x6 build/default/production/mcc_generated_files/interrupt_manager.o
+                  0x000701          0x6 build/default/production/mcc_generated_files/interrupt_manager.o
  __c30_signature
-                  0x00068d          0x6 build/default/production/mcc_generated_files/mcc.o
+                  0x000707          0x6 build/default/production/mcc_generated_files/mcc.o
  __c30_signature
-                  0x000693          0x6 build/default/production/mcc_generated_files/traps.o
+                  0x00070d          0x6 build/default/production/mcc_generated_files/traps.o
  __c30_signature
-                  0x000699          0x6 build/default/production/mcc_generated_files/pin_manager.o
+                  0x000713          0x6 build/default/production/mcc_generated_files/pin_manager.o
  __c30_signature
-                  0x00069f          0x6 build/default/production/mcc_generated_files/system.o
+                  0x000719          0x6 build/default/production/mcc_generated_files/system.o
  __c30_signature
-                  0x0006a5          0x6 build/default/production/mcc_generated_files/spi1.o
+                  0x00071f          0x6 build/default/production/mcc_generated_files/spi1.o
  __c30_signature
-                  0x0006ab          0x6 build/default/production/mcc_generated_files/ext_int.o
+                  0x000725          0x6 build/default/production/mcc_generated_files/ext_int.o
  __c30_signature
-                  0x0006b1          0x6 build/default/production/mcc_generated_files/tmr3.o
+                  0x00072b          0x6 build/default/production/mcc_generated_files/tmr3.o
  __c30_signature
-                  0x0006b7          0x6 build/default/production/main.o
+                  0x000731          0x6 build/default/production/main.o
  __c30_signature
-                  0x0006bd          0x6 build/default/production/as3993.o
+                  0x000737          0x6 build/default/production/as3993.o
  __c30_signature
-                  0x0006c3          0x6 build/default/production/gen2.o
+                  0x00073d          0x6 build/default/production/gen2.o
  __c30_signature
-                  0x0006c9          0x6 c:/program files/microchip/xc16/v1.61/bin/bin/../../lib\liblega-pic30-elf.a(crt0_extended24.o)
+                  0x000743          0x6 build/default/production/bsp.o
  __c30_signature
-                  0x0006cf          0x6 c:/program files/microchip/xc16/v1.61/bin/bin/../../lib\liblega-pic30-elf.a(data_init_24.o)
+                  0x000749          0x6 build/default/production/delay.o
  __c30_signature
-                  0x0006d5          0x6 c:/program files/microchip/xc16/v1.61/bin/bin/../../lib\liblega-pic30-elf.a(delay32da.Leo)
+                  0x00074f          0x6 c:/programfiles/microchip/xc16/v1.61/bin/bin/../../lib\liblega-pic30-elf.a(crt0_extended24.o)
  __c30_signature
-                  0x0006db          0x6 c:/program files/microchip/xc16/v1.61/bin/bin/../../lib\libm-elf.a(udivsi3.daeo)
+                  0x000755          0x6 c:/programfiles/microchip/xc16/v1.61/bin/bin/../../lib\liblega-pic30-elf.a(data_init_24.o)
  __c30_signature
-                  0x0006e1          0x6 c:/program files/microchip/xc16/v1.61/bin/bin/../../lib\libm-elf.a(divmoddi3.daeo)
+                  0x00075b          0x6 c:/programfiles/microchip/xc16/v1.61/bin/bin/../../lib\liblega-pic30-elf.a(delay32da.Leo)
  __c30_signature
-                  0x0006e7          0x6 c:/program files/microchip/xc16/v1.61/bin/bin/../../lib\libm-elf.a(muldi3.daeo)
+                  0x000761          0x6 c:/programfiles/microchip/xc16/v1.61/bin/bin/../../lib\libm-elf.a(udivsi3.daeo)
  __c30_signature
-                  0x0006ed          0x6 c:/program files/microchip/xc16/v1.61/bin/bin/../../lib\libm-elf.a(umuldi3.daeo)
+                  0x000767          0x6 c:/programfiles/microchip/xc16/v1.61/bin/bin/../../lib\libm-elf.a(divmoddi3.daeo)
  __c30_signature
-                  0x0006f3          0x6 c:/program files/microchip/xc16/v1.61/bin/bin/../../lib\liblega-c-elf.a(memcpy.DA_eo)
+                  0x00076d          0x6 c:/programfiles/microchip/xc16/v1.61/bin/bin/../../lib\libm-elf.a(muldi3.daeo)
  __c30_signature
-                  0x0006f9          0x6 c:/program files/microchip/xc16/v1.61/bin/bin/../../lib\liblega-c-elf.a(memset.DA_eo)
+                  0x000773          0x6 c:/programfiles/microchip/xc16/v1.61/bin/bin/../../lib\libm-elf.a(umuldi3.daeo)
+ __c30_signature
+                  0x000779          0x6 c:/programfiles/microchip/xc16/v1.61/bin/bin/../../lib\liblega-c-elf.a(memcpy.DA_eo)
+ __c30_signature
+                  0x00077f          0x6 c:/programfiles/microchip/xc16/v1.61/bin/bin/../../lib\liblega-c-elf.a(memset.DA_eo)
 
-.nbss               0x0800         0x1a
- .nbss              0x0800         0x14 build/default/production/as3993.o
+.nbss               0x0800         0x26
+ .nbss              0x0800         0x20 build/default/production/as3993.o
                     0x0800                  _as3993Response
                     0x0804                  _rssiThreshold
                     0x0805                  _cyclicInventory
@@ -2052,34 +2117,40 @@ __c30_signature
                     0x080c                  _RFID_AS3993_SPI_wrapper_readWrite
                     0x080e                  _RFID_AS3993_wrapper_delay_ms
                     0x0810                  _RFID_AS3993_wrapper_delay_us
- .nbss              0x0814          0x6 build/default/production/gen2.o
-                    0x0818                  _selectedTag
+                    0x0812                  _RFID_AS3993_wrapper_enableExtInterrupt
+                    0x0814                  _RFID_AS3993_wrapper_disableExtInterrupt
+                    0x0816                  _RFID_AS3993_wrapper_clearExtInterrupt
+                    0x0818                  _RFID_AS3993_wrapper_setEnablePin
+                    0x081a                  _RFID_AS3993_wrapper_isEnabled
+                    0x081c                  _RFID_AS3993_wrapper_setSpiEnablePin
+ .nbss              0x0820          0x6 build/default/production/gen2.o
+                    0x0824                  _selectedTag
 
-.ndata              0x081a          0xa
- .ndata             0x081a          0x4 build/default/production/as3993.o
- .ndata             0x081e          0x4 build/default/production/gen2.o
-                    0x0820                  _gen2qbegin
- .ndata             0x0822          0x2 build/default/production/mcc_generated_files/traps.o
+.ndata              0x0826          0xa
+ .ndata             0x0826          0x4 build/default/production/as3993.o
+ .ndata             0x082a          0x4 build/default/production/gen2.o
+                    0x082c                  _gen2qbegin
+ .ndata             0x082e          0x2 build/default/production/mcc_generated_files/traps.o
 
-.nbss               0x0824          0x4
- .nbss              0x0824          0x2 build/default/production/mcc_generated_files/tmr3.o
-                    0x0824                  _TMR3_InterruptHandler
- .nbss              0x0826          0x2 build/default/production/main.o
-                    0x0826                  _readerInitStatus
-                    0x0827                  _num_of_tags
+.nbss               0x0830          0x4
+ .nbss              0x0830          0x2 build/default/production/mcc_generated_files/tmr3.o
+                    0x0830                  _TMR3_InterruptHandler
+ .nbss              0x0832          0x2 build/default/production/main.o
+                    0x0832                  _readerInitStatus
+                    0x0833                  _num_of_tags
 
-.bss                0x0828        0x2f6
- .bss               0x0828        0x2b2 build/default/production/gen2.o
-                    0x089e                  _tags_
-                    0x099a                  _Frequencies
- .bss               0x0ada         0x24 build/default/production/as3993.o
- .bss               0x0afe         0x20 build/default/production/mcc_generated_files/traps.o
+.bss                0x0834        0x2f6
+ .bss               0x0834        0x2b2 build/default/production/gen2.o
+                    0x08aa                  _tags_
+                    0x09a6                  _Frequencies
+ .bss               0x0ae6         0x24 build/default/production/as3993.o
+ .bss               0x0b0a         0x20 build/default/production/mcc_generated_files/traps.o
 
-.data               0x0b1e          0x8
- .data              0x0b1e          0x8 build/default/production/gen2.o
+.data               0x0b2a          0x8
+ .data              0x0b2a          0x8 build/default/production/gen2.o
 
-.bss                0x0b26          0x2
- .bss               0x0b26          0x2 build/default/production/mcc_generated_files/tmr3.o
+.bss                0x0b32          0x2
+ .bss               0x0b32          0x2 build/default/production/mcc_generated_files/tmr3.o
 
 .ivt._OscillatorFail
                   0x000006          0x2
@@ -2121,118 +2192,132 @@ __c30_signature
  .ivt._T3Interrupt
                   0x000024          0x2 build/default/production/mcc_generated_files/tmr3.o
 
-.text             0x0006ca       0x2502
- .text            0x0006ca       0x1170 build/default/production/gen2.o
-                  0x000710                  _gen2Select
-                  0x0008aa                  _gen2QueryMeasureRSSI
-                  0x000cb6                  _gen2AccessTag
-                  0x000d60                  _gen2LockTag
-                  0x000dd8                  _gen2KillTag
-                  0x000eb0                  _gen2WriteWordToTag
-                  0x000fc8                  _gen2ReadFromTag
-                  0x001068                  _gen2PrintGen2Settings
-                  0x001076                  _gen2SearchForTags
-                  0x001236                  _gen2SearchForTagsAutoAck
-                  0x00139a                  _gen2Configure
-                  0x0015e0                  _gen2Open
-                  0x0015ec                  _gen2Close
-                  0x0015f2                  _u32ToEbv
-                  0x001674                  _checkAndSetSession
-                  0x0016a4                  _insertBitStream
-                  0x001778                  build/default/production/gen2.o:_continueCheckTimeout
-                  0x001780                  _performSelects
-                  0x0017a4                  _inventoryGen2
- .text            0x00183a       0x1034 build/default/production/as3993.o
-                  0x00183a                  _RFID_AS3993_load_callbacks
-                  0x001852                  _RFID_AS3993_delay_ms
-                  0x001860                  _RFID_AS3993_delay_us
-                  0x00186e                  _RFID_AS3993_SPI_readWrite
-                  0x001884                  _writeReadAS3993
-                  0x0018c4                  _writeReadAS3993Isr
-                  0x0018ee                  _as3993Initialize
-                  0x001a8a                  _as3993Isr
-                  0x001aba                  _as3993ReadChipVersion
-                  0x001ad2                  _as3993SingleCommand
-                  0x001aec                  _as3993SingleWriteNoStop
-                  0x001b0c                  _as3993ContinuousRead
-                  0x001b32                  _as3993FifoRead
-                  0x001b50                  _as3993SingleRead
-                  0x001b72                  _as3993ContinuousWrite
-                  0x001ba0                  _as3993SingleWrite
-                  0x001bc4                  _as3993CommandContinuousAddress
-                  0x001c02                  _as3993WaitForResponseTimed
-                  0x001c34                  _as3993WaitForResponse
-                  0x001c68                  _as3993SelectLinkFrequency
-                  0x001d0c                  _as3993SetBaseFrequency
-                  0x001e6c                  _as3993EnterPowerDownMode
-                  0x001f1a                  _as3993ExitPowerDownMode
-                  0x001fbc                  _as3993Reset
-                  0x001fcc                  _as3993ResetDoNotPreserveRegisters
-                  0x001fe2                  _as3993EnterPowerNormalMode
-                  0x001ffc                  _as3993ExitPowerNormalMode
-                  0x002002                  _as3993EnterPowerNormalRfMode
-                  0x00201c                  _as3993ExitPowerNormalRfMode
-                  0x002022                  _as3993EnterPowerStandbyMode
-                  0x00203c                  _as3993ExitPowerStandbyMode
-                  0x002052                  _as3993WaitForStartup
-                  0x00209a                  _as3993AntennaPower
-                  0x00213c                  _as3993SaveSensitivity
-                  0x002148                  _as3993RestoreSensitivity
-                  0x002156                  _as3993GetSensitivity
-                  0x0021fa                  _as3993SetSensitivity
-                  0x0022dc                  _as3993GetRSSI
-                  0x002450                  _as3993GetADC
-                  0x00247a                  _as3993GetReflectedPower
-                  0x0024e8                  _as3993GetReflectedPowerNoiseLevel
-                  0x002556                  _as3993TxRxGen2Bytes
-                  0x002806                  _powerDownReader
-                  0x00283a                  _powerUpReader
- .text            0x00286e        0x14e build/default/production/mcc_generated_files/spi1.o
-                  0x00286e                  _SPI1_Initialize
-                  0x002880                  _SPI1_Exchange
-                  0x0028b0                  _SPI1_ExchangeBuffer
-                  0x00297a                  _SPI1_Exchange8bit
-                  0x00298a                  _SPI1_Exchange8bitBuffer
-                  0x00299e                  _SPI1_TransferModeGet
-                  0x0029b4                  _SPI1_StatusGet
- .text            0x0029bc         0xcc build/default/production/mcc_generated_files/pin_manager.o
-                  0x0029bc                  _PIN_MANAGER_Initialize
- .text            0x002a88         0xb8 build/default/production/mcc_generated_files/tmr3.o
-                  0x002a88                  _TMR3_Initialize
-                  0x002aac                  _TMR3_Period16BitSet
-                  0x002abe                  _TMR3_Period16BitGet
-                  0x002ac6                  _TMR3_Counter16BitSet
-                  0x002ad8                  _TMR3_Counter16BitGet
-                  0x002ae0                  _TMR3_CallBack
-                  0x002ae6                  _TMR3_SetInterruptHandler
-                  0x002af6                  _TMR3_Start
-                  0x002b06                  _TMR3_Stop
-                  0x002b10                  _TMR3_GetElapsedThenClear
-                  0x002b28                  _TMR3_SoftwareCounterGet
-                  0x002b34                  _TMR3_SoftwareCounterClear
- .text            0x002b40         0x8c build/default/production/main.o
-                  0x002b40                  _EX_INT1_CallBack
-                  0x002b48                  _Delay_ms
-                  0x002b6a                  _Delay_us
-                  0x002b8c                  _main
+.text             0x0006e2       0x2546
+ .text            0x0006e2       0x116e build/default/production/gen2.o
+                  0x000728                  _gen2Select
+                  0x0008c2                  _gen2QueryMeasureRSSI
+                  0x000cce                  _gen2AccessTag
+                  0x000d78                  _gen2LockTag
+                  0x000df0                  _gen2KillTag
+                  0x000ec8                  _gen2WriteWordToTag
+                  0x000fe0                  _gen2ReadFromTag
+                  0x001080                  _gen2PrintGen2Settings
+                  0x00108e                  _gen2SearchForTags
+                  0x00124e                  _gen2SearchForTagsAutoAck
+                  0x0013b2                  _gen2Configure
+                  0x0015f8                  _gen2Open
+                  0x001604                  _gen2Close
+                  0x00160a                  _u32ToEbv
+                  0x00168c                  _checkAndSetSession
+                  0x0016bc                  _insertBitStream
+                  0x001790                  build/default/production/gen2.o:_continueCheckTimeout
+                  0x001798                  _performSelects
+                  0x0017bc                  _inventoryGen2
+ .text            0x001850       0x10a6 build/default/production/as3993.o
+                  0x001850                  _RFID_AS3993_load_callbacks
+                  0x00188a                  _RFID_AS3993_delay_ms
+                  0x001898                  _RFID_AS3993_delay_us
+                  0x0018a6                  _RFID_AS3993_SPI_readWrite
+                  0x0018bc                  _RFID_AS3993_enableExtInterrupt
+                  0x0018c6                  _RFID_AS3993_disableExtInterrupt
+                  0x0018d0                  _RFID_AS3993_clearExtInterrupt
+                  0x0018da                  _RFID_AS3993_setEnablePin
+                  0x0018e8                  _RFID_AS3993_isEnabled
+                  0x0018f2                  _RFID_AS3993_setSpiEnablePin
+                  0x001900                  _writeReadAS3993
+                  0x001944                  _writeReadAS3993Isr
+                  0x001972                  _as3993Initialize
+                  0x001b0e                  _as3993Isr
+                  0x001b3e                  _as3993ReadChipVersion
+                  0x001b56                  _as3993SingleCommand
+                  0x001b70                  _as3993SingleWriteNoStop
+                  0x001b90                  _as3993ContinuousRead
+                  0x001bb6                  _as3993FifoRead
+                  0x001bd4                  _as3993SingleRead
+                  0x001bf6                  _as3993ContinuousWrite
+                  0x001c24                  _as3993SingleWrite
+                  0x001c48                  _as3993CommandContinuousAddress
+                  0x001c86                  _as3993WaitForResponseTimed
+                  0x001cb8                  _as3993WaitForResponse
+                  0x001cec                  _as3993SelectLinkFrequency
+                  0x001d90                  _as3993SetBaseFrequency
+                  0x001ef0                  _as3993EnterPowerDownMode
+                  0x001f9e                  _as3993ExitPowerDownMode
+                  0x002040                  _as3993Reset
+                  0x002050                  _as3993ResetDoNotPreserveRegisters
+                  0x00206a                  _as3993EnterPowerNormalMode
+                  0x002084                  _as3993ExitPowerNormalMode
+                  0x00208a                  _as3993EnterPowerNormalRfMode
+                  0x0020a4                  _as3993ExitPowerNormalRfMode
+                  0x0020aa                  _as3993EnterPowerStandbyMode
+                  0x0020c4                  _as3993ExitPowerStandbyMode
+                  0x0020da                  _as3993WaitForStartup
+                  0x002122                  _as3993AntennaPower
+                  0x0021c4                  _as3993SaveSensitivity
+                  0x0021d0                  _as3993RestoreSensitivity
+                  0x0021de                  _as3993GetSensitivity
+                  0x002282                  _as3993SetSensitivity
+                  0x002364                  _as3993GetRSSI
+                  0x0024d8                  _as3993GetADC
+                  0x002502                  _as3993GetReflectedPower
+                  0x002570                  _as3993GetReflectedPowerNoiseLevel
+                  0x0025de                  _as3993TxRxGen2Bytes
+                  0x00288e                  _powerDownReader
+                  0x0028c2                  _powerUpReader
+ .text            0x0028f6        0x14e build/default/production/mcc_generated_files/spi1.o
+                  0x0028f6                  _SPI1_Initialize
+                  0x002908                  _SPI1_Exchange
+                  0x002938                  _SPI1_ExchangeBuffer
+                  0x002a02                  _SPI1_Exchange8bit
+                  0x002a12                  _SPI1_Exchange8bitBuffer
+                  0x002a26                  _SPI1_TransferModeGet
+                  0x002a3c                  _SPI1_StatusGet
+ .text            0x002a44         0xcc build/default/production/mcc_generated_files/pin_manager.o
+                  0x002a44                  _PIN_MANAGER_Initialize
+ .text            0x002b10         0xb8 build/default/production/mcc_generated_files/tmr3.o
+                  0x002b10                  _TMR3_Initialize
+                  0x002b34                  _TMR3_Period16BitSet
+                  0x002b46                  _TMR3_Period16BitGet
+                  0x002b4e                  _TMR3_Counter16BitSet
+                  0x002b60                  _TMR3_Counter16BitGet
+                  0x002b68                  _TMR3_CallBack
+                  0x002b6e                  _TMR3_SetInterruptHandler
+                  0x002b7e                  _TMR3_Start
+                  0x002b8e                  _TMR3_Stop
+                  0x002b98                  _TMR3_GetElapsedThenClear
+                  0x002bb0                  _TMR3_SoftwareCounterGet
+                  0x002bbc                  _TMR3_SoftwareCounterClear
+ .text            0x002bc8         0x60 build/default/production/bsp.o
+                  0x002bc8                  _EX_INT1_CallBack
+                  0x002bd0                  _enableExtInterrupt
+                  0x002bd8                  _disableExtInterrupt
+                  0x002be0                  _clearExtInterrupt
+                  0x002be8                  _setAS3993_enablePin
+                  0x002c02                  _AS3993_isEnabled
+                  0x002c0e                  _setAS3993_SPI_enablePin
 
-.dinit            0x002bcc         0x5a
- .dinit           0x002bcc         0x5a data_init
+.dinit            0x002c28         0x5a
+ .dinit           0x002c28         0x5a data_init
 
-.text             0x002c26         0x4c
- .text            0x002c26         0x4c build/default/production/mcc_generated_files/clock.o
-                  0x002c26                  _CLOCK_Initialize
+.text             0x002c82         0xde
+ .text            0x002c82         0x4e build/default/production/main.o
+                  0x002c82                  _main
+ .text            0x002cd0         0x4c build/default/production/mcc_generated_files/clock.o
+                  0x002cd0                  _CLOCK_Initialize
+ .text            0x002d1c         0x44 build/default/production/delay.o
+                  0x002d1c                  _delay_ms
+                  0x002d3e                  _delay_us
 
-.init.delay32     0x002c72         0x1c
- .init.delay32    0x002c72         0x1c c:/program files/microchip/xc16/v1.61/bin/bin/../../lib\liblega-pic30-elf.a(delay32da.Leo)
-                  0x002c72                  ___delay32
+.init.delay32     0x002d60         0x1c
+ .init.delay32    0x002d60         0x1c c:/programfiles/microchip/xc16/v1.61/bin/bin/../../lib\liblega-pic30-elf.a(delay32da.Leo)
+                  0x002d60                  ___delay32
 
-.text             0x002c8e         0x56
- .text            0x002c8e         0x1a build/default/production/mcc_generated_files/interrupt_manager.o
-                  0x002c8e                  _INTERRUPT_Initialize
- .text            0x002ca8         0x18 build/default/production/mcc_generated_files/traps.o
-                  0x002ca8                  _TRAPS_halt_on_error
- .text            0x002cc0         0x12 build/default/production/mcc_generated_files/system.o
-                  0x002cc0                  _SYSTEM_Initialize
- .text            0x002cd2         0x12 build/default/production/mcc_generated_files/ext_int.o
-                  0x002cd8                  _EXT_INT_Initialize
+.text             0x002d7c         0x56
+ .text            0x002d7c         0x1a build/default/production/mcc_generated_files/interrupt_manager.o
+                  0x002d7c                  _INTERRUPT_Initialize
+ .text            0x002d96         0x18 build/default/production/mcc_generated_files/traps.o
+                  0x002d96                  _TRAPS_halt_on_error
+ .text            0x002dae         0x12 build/default/production/mcc_generated_files/system.o
+                  0x002dae                  _SYSTEM_Initialize
+ .text            0x002dc0         0x12 build/default/production/mcc_generated_files/ext_int.o
+                  0x002dc6                  _EXT_INT_Initialize

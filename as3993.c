@@ -1,8 +1,6 @@
 
 #include "as3993.h"
-//#include "gen2.h"
 #include <string.h>
-#include "mcc_generated_files/system.h"
 
 /** Definition high */
 #define HIGH                      1
@@ -66,15 +64,46 @@ void (*RFID_AS3993_wrapper_delay_ms) (uint16_t delay);
 
 void (*RFID_AS3993_wrapper_delay_us) (uint16_t delay);
 
+void (*RFID_AS3993_wrapper_enableExtInterrupt)(void);
+
+void (*RFID_AS3993_wrapper_disableExtInterrupt)(void);
+
+void (*RFID_AS3993_wrapper_clearExtInterrupt)(void);
+
+void (*RFID_AS3993_wrapper_setEnablePin)(uint8_t);
+
+uint8_t (*RFID_AS3993_wrapper_isEnabled)(void);
+
+void (*RFID_AS3993_wrapper_setSpiEnablePin)(uint8_t);
+
 void RFID_AS3993_load_callbacks(void* spi_write,
                                 void* delay_ms,
-                                void* delay_us){
+                                void* delay_us,
+                                void* enableExtInterrupt,
+                                void* disableExtInterrupt,
+                                void* clearExtInterrupt,
+                                void* setEnablePin,
+                                void* isEnabledPin,
+                                void* setSpiEnablePin){
     
     RFID_AS3993_SPI_wrapper_readWrite = (uint16_t(*)(uint8_t*, uint16_t, uint8_t*)) spi_write;
     
     RFID_AS3993_wrapper_delay_ms = (void (*) (uint16_t)) delay_ms;
     
     RFID_AS3993_wrapper_delay_us = (void (*) (uint16_t)) delay_us;
+    
+    RFID_AS3993_wrapper_enableExtInterrupt = (void (*)(void)) enableExtInterrupt;
+    
+    RFID_AS3993_wrapper_disableExtInterrupt = (void (*)(void)) disableExtInterrupt;
+    
+    RFID_AS3993_wrapper_clearExtInterrupt = (void (*)(void)) clearExtInterrupt;
+    
+    RFID_AS3993_wrapper_setEnablePin = (void (*) (uint8_t)) setEnablePin;
+            
+    RFID_AS3993_wrapper_isEnabled = (uint8_t (*) (void)) isEnabledPin;
+    
+    RFID_AS3993_wrapper_setSpiEnablePin = (void (*) (uint8_t)) setSpiEnablePin;
+    
 }
 
 void RFID_AS3993_delay_ms(uint16_t delay){
@@ -89,10 +118,34 @@ uint16_t RFID_AS3993_SPI_readWrite(uint8_t *wbuf, uint16_t wrlen, uint8_t *rbuf)
     return (*RFID_AS3993_SPI_wrapper_readWrite)(wbuf, wrlen, rbuf);
 }
 
+void RFID_AS3993_enableExtInterrupt(void){
+    (*RFID_AS3993_wrapper_enableExtInterrupt)();
+}
+
+void RFID_AS3993_disableExtInterrupt(void){
+    (*RFID_AS3993_wrapper_disableExtInterrupt)();
+}
+
+void RFID_AS3993_clearExtInterrupt(void){
+    (*RFID_AS3993_wrapper_clearExtInterrupt)();
+}
+
+void RFID_AS3993_setEnablePin(uint8_t val){
+    (*RFID_AS3993_wrapper_setEnablePin)(val);
+}
+
+uint8_t RFID_AS3993_isEnabled(void){
+    return (*RFID_AS3993_wrapper_isEnabled)();
+}
+
+void RFID_AS3993_setSpiEnablePin(uint8_t val){
+    (*RFID_AS3993_wrapper_setSpiEnablePin)(val);
+}
+
 /*------------------------------------------------------------------------- */
 void writeReadAS3993( const uint8_t* wbuf, uint8_t wlen, uint8_t* rbuf, uint8_t rlen, uint8_t stopMode, uint8_t doStart )
 {
-    if (doStart) NCS_SELECT();
+    if (doStart) RFID_AS3993_setSpiEnablePin(0);
     
     //WriteReadSPI1(wbuf, 0, wlen);
     RFID_AS3993_SPI_readWrite((uint8_t *)wbuf,(uint16_t)wlen,0);
@@ -101,18 +154,18 @@ void writeReadAS3993( const uint8_t* wbuf, uint8_t wlen, uint8_t* rbuf, uint8_t 
         //WriteReadSPI1(0, rbuf, rlen);
         RFID_AS3993_SPI_readWrite(0,(uint16_t)rlen,rbuf);
         //WriteReadSPI1(0,rbuf,rlen);
-    if (stopMode != STOP_NONE) NCS_DESELECT();
+    if (stopMode != STOP_NONE) RFID_AS3993_setSpiEnablePin(1);
 }
 
 /*------------------------------------------------------------------------- */
 void writeReadAS3993Isr( const uint8_t* wbuf, uint8_t wlen, uint8_t* rbuf, uint8_t rlen )
 {
-    NCS_SELECT();
+    RFID_AS3993_setSpiEnablePin(0);
 
     RFID_AS3993_SPI_readWrite((uint8_t *)wbuf,(uint16_t)wlen,0);
     RFID_AS3993_SPI_readWrite(0,(uint16_t)rlen,rbuf);
 
-    NCS_DESELECT();
+    RFID_AS3993_setSpiEnablePin(1);
 }
 
 /*------------------------------------------------------------------------- */
@@ -311,7 +364,7 @@ void as3993Isr(void)
     writeReadAS3993Isr(&addr, 1, regs, 2);
     as3993Response |= (regs[0] | (regs[1] << 8));
 
-    CLREXTIRQ();
+    RFID_AS3993_clearExtInterrupt();
     //LOG("isr: %hx\n", as3993Response);
 }
 
@@ -328,9 +381,9 @@ uint8_t as3993ReadChipVersion(void)
 /*------------------------------------------------------------------------- */
 void as3993SingleCommand(uint8_t command)
 {
-    DISEXTIRQ();
+    RFID_AS3993_disableExtInterrupt();
     writeReadAS3993( &command, 1, 0 , 0 , STOP_SGL, 1);
-    ENEXTIRQ();
+    RFID_AS3993_enableExtInterrupt();
 }
 /*------------------------------------------------------------------------- */
 void as3993SingleWriteNoStop(uint8_t address, uint8_t value)
@@ -344,19 +397,19 @@ void as3993SingleWriteNoStop(uint8_t address, uint8_t value)
 /*------------------------------------------------------------------------- */
 void as3993ContinuousRead(uint8_t address, int8_t len, uint8_t *readbuf)
 {
-    DISEXTIRQ();
+    RFID_AS3993_disableExtInterrupt();
     address |= READ;
     writeReadAS3993( &address, 1, readbuf , len , STOP_CONT, 1);
-    ENEXTIRQ();
+    RFID_AS3993_enableExtInterrupt();
 }
 
 /*------------------------------------------------------------------------- */
 void as3993FifoRead(int8_t len, uint8_t *readbuf)
 {
     static uint8_t address = AS3993_REG_FIFO | READ ;
-    DISEXTIRQ();
+    RFID_AS3993_disableExtInterrupt();
     writeReadAS3993( &address, 1, readbuf , len , STOP_CONT, 1);
-    ENEXTIRQ();
+    RFID_AS3993_enableExtInterrupt();
 }
 
 /* Function is called from interrupt and normal level, therefore this 
@@ -365,20 +418,20 @@ uint8_t as3993SingleRead(uint8_t address)
 {
     uint8_t readdata;
 
-    DISEXTIRQ();
+    RFID_AS3993_disableExtInterrupt();
     address |= READ;
     writeReadAS3993( &address, 1, &readdata , 1 , STOP_SGL, 1);
 
-    ENEXTIRQ();
+    RFID_AS3993_enableExtInterrupt();
     return(readdata);
 }
 
 void as3993ContinuousWrite(uint8_t address, uint8_t *buf, int8_t len)
 {
-    DISEXTIRQ();
+    RFID_AS3993_disableExtInterrupt();
     writeReadAS3993( &address, 1, 0 , 0 , STOP_NONE, 1);
     writeReadAS3993( buf, len, 0 , 0 , STOP_CONT, 0);
-    ENEXTIRQ();
+    RFID_AS3993_enableExtInterrupt();
 }
 
 void as3993SingleWrite(uint8_t address, uint8_t value)
@@ -386,20 +439,20 @@ void as3993SingleWrite(uint8_t address, uint8_t value)
     uint8_t buf[2];
     buf[0] = address;
     buf[1] = value;
-    DISEXTIRQ();
+    RFID_AS3993_disableExtInterrupt();
     writeReadAS3993( buf, 2, 0 , 0 , STOP_SGL, 1);
-    ENEXTIRQ();
+    RFID_AS3993_enableExtInterrupt();
 }
 
 /*------------------------------------------------------------------------- */
 void as3993CommandContinuousAddress(uint8_t *command, uint8_t com_len,
                              uint8_t address, uint8_t *buf, uint8_t buf_len)
 {
-    DISEXTIRQ();
+    RFID_AS3993_disableExtInterrupt();
     writeReadAS3993( command, com_len, 0 , 0 , STOP_NONE, 1);
     writeReadAS3993( &address, 1, 0 , 0 , STOP_NONE, 0);
     writeReadAS3993( buf, buf_len, 0 , 0 , STOP_CONT, 0);
-    ENEXTIRQ();
+    RFID_AS3993_enableExtInterrupt();
 }
 
 void as3993WaitForResponseTimed(uint16_t waitMask, uint16_t counter)
@@ -573,10 +626,10 @@ void as3993EnterPowerDownMode()
     uint8_t i;
     int count;
     
-    if (!ENABLE) return;
+    if (!RFID_AS3993_isEnabled()) return;
 
-    DISEXTIRQ();
-    CLREXTIRQ();
+    RFID_AS3993_disableExtInterrupt();
+    RFID_AS3993_clearExtInterrupt();
     /* Switch off antenna */
     as3993PowerDownRegs[0] = as3993SingleRead(AS3993_REG_STATUSCTRL);
     as3993SingleWrite(0, as3993PowerDownRegs[0] & (~0x03));
@@ -597,7 +650,7 @@ void as3993EnterPowerDownMode()
     {
         RFID_AS3993_wrapper_delay_ms(1);
     }
-    EN(LOW);
+    RFID_AS3993_setEnablePin(LOW);
 }
 
 void as3993ExitPowerDownMode()
@@ -605,9 +658,9 @@ void as3993ExitPowerDownMode()
     uint8_t i;
     uint8_t buf[2];
     
-    if (ENABLE) return;
+    if (RFID_AS3993_isEnabled()) return;
 
-    EN(HIGH);
+    RFID_AS3993_setEnablePin(HIGH);
     RFID_AS3993_delay_us(10);
     as3993WaitForStartup();
 
@@ -637,8 +690,8 @@ void as3993ExitPowerDownMode()
     {
        //LOG("/********* PLL not locked */\n");
     }
-    CLREXTIRQ();
-    ENEXTIRQ();
+    RFID_AS3993_clearExtInterrupt();
+    RFID_AS3993_enableExtInterrupt();
 }
 
 void as3993Reset(void)
@@ -650,9 +703,9 @@ void as3993Reset(void)
 
 void as3993ResetDoNotPreserveRegisters(void)
 {
-    EN(LOW);
+    RFID_AS3993_setEnablePin(LOW);
     RFID_AS3993_wrapper_delay_ms(1);
-    EN(HIGH);
+    RFID_AS3993_setEnablePin(HIGH);
     RFID_AS3993_delay_us(10);
     as3993WaitForStartup();
 }
