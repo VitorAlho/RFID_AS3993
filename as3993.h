@@ -3,7 +3,6 @@
 #define _AS3993_H_
 
 #include <stdint.h>
-#include "mcc_generated_files/system.h"
 
 ///** Definition of the maximum frequencies for the hopping */
 #define MAXFREQ                 53
