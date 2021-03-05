@@ -136,6 +136,8 @@ struct TagInfo_
 /** Type definition struct: TagInfo_ is named Tag */
 typedef struct TagInfo_ Tag;
 
+extern Tag __attribute__((far)) tags_[MAXTAG];
+
 /*------------------------------------------------------------------------- */
 /** Search for tags (aka do an inventory round). Before calling any other
   * gen2 functions this routine has to be called. It first selects using the 
